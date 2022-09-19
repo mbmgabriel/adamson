@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Auth from "../../api/Auth";
 import { Form, Button, InputGroup } from 'react-bootstrap'
-import { Link, useHistory, redirect } from 'react-router-dom'
+import { Link, useHistory, redirect, BrowserRouter } from 'react-router-dom'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -13,6 +13,7 @@ function Login() {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false);
+  const history = useHistory();
 
   const login = async(e) => {
     e.preventDefault();
@@ -20,7 +21,7 @@ function Login() {
     console.log({response})
     if(response.ok){
       alert("Success")
-      
+      return history.push('/login')
     }else{
       alert(response.data.errorMessage)
     }
