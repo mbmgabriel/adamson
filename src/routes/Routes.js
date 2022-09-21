@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 import Login from '../views/login/Login'
 import Home from '../views/home/Home'
+import Users from "../views/users/Users";
 
 export default function Routing() {
   return (
@@ -15,6 +16,7 @@ export default function Routing() {
           {/* <Route path='/' element={<Home/>}/> */}
           <Route path='/' element={<Login/>}/>
           <Route path='/home' element={<Home/>}/>
+          <Route path='/users' element={<Users/>}/>
         </Routes>
       </BrowserRouter>
     </div>

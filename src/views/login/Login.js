@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Auth from "../../api/Auth";
 import { Form, Button, InputGroup } from 'react-bootstrap'
-import { Link, useHistory, redirect, BrowserRouter } from 'react-router-dom'
+import { Link, redirect, BrowserRouter, useNavigate } from 'react-router-dom'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -13,7 +13,7 @@ function Login() {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const login = async(e) => {
     e.preventDefault();
@@ -21,19 +21,19 @@ function Login() {
     console.log({response})
     if(response.ok){
       alert("Success")
-      return history.push('/login')
+      navigate('/home')
     }else{
       alert(response.data.errorMessage)
     }
   }
 
   return (
-    <Container fluid vh-100>
-    <Row>
-      <Col md={6} className='login-screen-left'>
-        <Image fluid src={bg}></Image>
+    <Container fluid style={{height:'100vh'}}>
+    <Row style={{height:'100vh'}}>
+      <Col md={8} className='login-screen-left'>
+        <Image fluid style={{height:'100vh'}} src={bg}></Image>
       </Col>
-      <Col md={6} className='login-screen-right'>
+      <Col md={4} className='login-screen-right'>
         <Row>
           <Col md={3}></Col>
           <Col md={6}>

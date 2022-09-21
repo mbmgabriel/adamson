@@ -10,7 +10,7 @@
   }
   
   body{
-    --primary-color: #EE9337;
+    --primary-color: #367588;
     margin: 0;
     background-color: #F5F5F5;
   }
@@ -90,6 +90,10 @@
     padding: 20px;
     margin-top: 31px;
   }
+
+  .m-b-100 {
+    margin-bottom: 100px;
+   }
   
   .m-b-20 {
    margin-bottom: 20px;
@@ -1788,4 +1792,13 @@
     padding:20px;
     justify-content: center;
   }
-  
+
+  .main-title-pages {
+    font-size: 24px !important;
+    font-weight: bold;
+  }
+
+  .header-bg {
+    background-color: #367588 !important;
+    color: white !important;
+  }
