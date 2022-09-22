@@ -129,6 +129,7 @@ export default function Users() {
                     <button
                       onClick={() => {
                         setValue('username', row.original.username)
+                        setValue('password', row.original.passwordgit )
                         setSelectedUser(row.original);
                         setShowForm(true);
                       }}
