@@ -20,6 +20,8 @@ function Login() {
     let response = await new Auth().login({username, password})
     console.log({response})
     if(response.ok){
+      console.log(response.data)
+      await window.localStorage.setItem('token', response.data.token)
       alert("Success")
       navigate('/home')
     }else{

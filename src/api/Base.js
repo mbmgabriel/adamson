@@ -45,11 +45,11 @@ export default class Base {
       responseData = JSON.parse(responseData);
     }
 
-    if(response.status == 401){
-      await localStorage.removeItem("token")
-      window.location.href = '/login?message=You have been logged out! Please login again'
-      return
-    }
+    // if(response.status == 401){
+    //   await localStorage.removeItem("token")
+    //   window.location.href = '/login?message=You have been logged out! Please login again'
+    //   return
+    // }
 
     let output = {
       res: response,
