@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Modal } from "react-bootstrap";
+import { Link, redirect, BrowserRouter, useNavigate } from 'react-router-dom'
+import { Modal, Form, Button, Select } from "react-bootstrap";
 import ReactTable from "react-table-v6";
 import "react-table-v6/react-table.css";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import PrescriptionAPI from "../../api/PrescriptionAPI"
+import MedicinesAPI from "../../api/MedicinesAPI"
+import AnimalsAPI from "../../api/AnimalsAPI"
+import PatientsAPI from "../../api/PatientsAPI"
 import SweetAlert from "react-bootstrap-sweetalert";
 import HeaderMain from "../headers/header";
 import "../../../node_modules/font-awesome/css/font-awesome.css"
@@ -12,9 +16,15 @@ import "../../../node_modules/font-awesome/css/font-awesome.css"
 export default function Prescriptions() {
   const [loading, setLoading] = useState(true);
   const [prescriptionData, setPrescriptionData] = useState([]);
+  const [medicineData, setMedicineData] = useState([]);
+  const [animalData, setAnimalData] = useState([]);
+  const [patientData, setPatientData] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [resetNotify, setResetNotify] = useState(false);
-  const [selectedMedicine, setSelectedMedicine] = useState(null);
+  const [selectedPrescription, setSelectedPrescription] = useState(null);
+  const [showUploadModal, setShowUploadModal] = useState(false);
+  const [filesToUpload, setFilesToUpload] = useState({});
+  const navigate = useNavigate();
 
   const {
     register,
@@ -26,11 +36,52 @@ export default function Prescriptions() {
 
   useEffect(() => {
     handleGetAllPrescriptions();
+    handleGetAllMedicines();
+    handleGetAllAnimals();
+    handleGetAllPatients();
   }, []);   
+
+  const handleGetUploadedFile = (file) => {
+    getBase64(file).then(
+      data => {
+        console.log(file.name)
+        let toUpload = {
+          // classId: id,
+          data: {"base64String": data,
+          "fileName": file.name}
+        };
+        setFilesToUpload(toUpload)
+      }
+    );
+  }
+
+  const getBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+    });
+  }
+
+  const handleUploadFile = async(e) => {
+    e.preventDefault();
+    setShowUploadModal(false);
+    setLoading(true);
+    let response = await new PrescriptionAPI().uploadHealthRecord(filesToUpload)
+    if(response.ok){
+      setLoading(false);
+      handleGetAllPrescriptions();
+      toast.success("Successfully uploaded the class list.")
+    }else{
+      setLoading(false);
+      alert("Something went wrong while uploading class list")
+    }
+  }
 
   const handleGetAllPrescriptions = async () => {
     setLoading(true);
-    const response = await new PrescriptionAPI().medicines();
+    const response = await new PrescriptionAPI().prescriptions();
     if (response.ok) {
         setPrescriptionData(response.data);
     } else {
@@ -39,21 +90,54 @@ export default function Prescriptions() {
     setLoading(false);
   };
 
+  const handleGetAllMedicines = async () => {
+    setLoading(true);
+    const response = await new MedicinesAPI().medicines();
+    if (response.ok) {
+        setMedicineData(response.data);
+    } else {
+      toast.error("Something went wrong while fetching user");
+    }
+    setLoading(false);
+  };
+
+  const handleGetAllAnimals = async () => {
+    setLoading(true);
+    const response = await new AnimalsAPI().animals();
+    if (response.ok) {
+        setAnimalData(response.data);
+    } else {
+      toast.error("Something went wrong while fetching user");
+    }
+    setLoading(false);
+  };
+
+  const handleGetAllPatients = async () => {
+    setLoading(true);
+    const response = await new PatientsAPI().patients();
+    if (response.ok) {
+        setPatientData(response.data);
+    } else {
+      toast.error("Something went wrong while fetching user");
+    }
+    setLoading(false);
+  };
+
   const submitForm = async (data) => {
     setLoading(true);
-    if (selectedMedicine != null) {
-      const response = await new PrescriptionAPI().updateMedicine(selectedMedicine.id, data);
+    if (selectedPrescription != null) {
+      const response = await new PrescriptionAPI().updatePrescriptions(selectedPrescription.id, data);
       if(response.ok) {
         toast.success("Successfully Updated Animal Data")
         handleGetAllPrescriptions()
         reset()
         setShowForm(false)
-        setSelectedMedicine(null)
+        setSelectedPrescription(null)
       }else{
         toast.error("Something went wrong while updating the term");
       }
     } else {
-      const response = await new PrescriptionAPI().createMedicine(data);
+      const response = await new PrescriptionAPI().createPrescriptions(data);
       if (response.ok) {
         toast.success("Successfully Created Term");
         handleGetAllPrescriptions();
@@ -69,21 +153,43 @@ export default function Prescriptions() {
   const handleDeleteAnimal = async (id) => {
     setLoading(true);
     setResetNotify(false);
-    const response = await new PrescriptionAPI().deleteMedicine(id);
+    const response = await new PrescriptionAPI().deletePrescriptions(id);
     if (response.ok) {
       toast.success("Successfully Deleted Animal");
       handleGetAllPrescriptions();
     } else {
       toast.error("Something went wrong while deleting user");
     }
-    setSelectedMedicine(null);
+    setSelectedPrescription(null);
     setLoading(false);
   };
 
   const handleCloseModal = () => {
     setShowForm(false);
-    setSelectedMedicine(null);
+    setSelectedPrescription(null);
   };
+
+  const handleShowUploadModal = () => {
+    return(
+      <Modal  size="lg" show={showUploadModal} onHide={()=> setShowUploadModal(false)} aria-labelledby="example-modal-sizes-title-lg">
+        <Modal.Header className='class-modal-header' closeButton>
+          <Modal.Title id="example-modal-sizes-title-lg" >
+            Upload Health Record
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmit={(e) => handleUploadFile(e)} >  
+            <Form.Group className="mb-3">
+              <Form.Control type="file" accept=".xls,.xlsx,.png,.jpg" onChange={(e) => handleGetUploadedFile(e.target.files[0])} />
+            </Form.Group>
+            <Form.Group className='right-btn'>
+              <Button className='tficolorbg-button' type='submit'>Upload</Button>
+            </Form.Group>
+          </Form> 
+        </Modal.Body>
+      </Modal>
+    )
+  }
 
   return (
     <>
@@ -93,13 +199,15 @@ export default function Prescriptions() {
           <HeaderMain/>
         </header>
       <div className="container m-t-10">
-        <div className="main-title-pages m-b-10"> Medicines 
+        <div className="main-title-pages m-b-10"> Prescriptions 
           <span className="m-l-10"> 
             <button className='btn btn-primary' size="sm" onClick={() => setShowForm(true)}>
               <i className="fa fa-plus fa-2xl"></i>
             </button> 
           </span>
         </div>
+        {handleShowUploadModal()}
+
       <ReactTable
         pageCount={100}
         list={prescriptionData}
@@ -110,9 +218,9 @@ export default function Prescriptions() {
             Header: "",
             columns: [
               {
-                Header: "Name",
-                id: "name",
-                accessor: (d) => d.name,
+                Header: "Title",
+                id: "title",
+                accessor: (d) => d.title,
               },
               {
                 Header: "Description",
@@ -130,7 +238,7 @@ export default function Prescriptions() {
                       onClick={() => {
                         setValue('name', row.original.name)
                         setValue('description', row.original.description)
-                        setSelectedMedicine(row.original);
+                        setSelectedPrescription(row.original);
                         setShowForm(true);
                       }}
                       className='btn btn-info btn-sm m-r-5'
@@ -139,7 +247,26 @@ export default function Prescriptions() {
                     </button>
                     <button
                       onClick={() => {
-                        setSelectedMedicine(row.original);
+                        
+                        setSelectedPrescription(row.original);
+                        window.open(`http://localhost:3000/generate/${row.original.id}`, '_blank')
+                        localStorage.setItem("pId", row.original.id)
+                      }}
+                      className='btn btn-info btn-sm m-r-5'
+                    >
+                      Generate
+                    </button>
+                    <button
+                      onClick={() => {
+                        setShowUploadModal(true)
+                      }}
+                      className='btn btn-info btn-sm m-r-5'
+                    >
+                      Upload HRecord
+                    </button>
+                    <button
+                      onClick={() => {
+                        setSelectedPrescription(row.original);
                         setResetNotify(true);
                       }}
                       className='btn btn-danger btn-sm m-r-5'
@@ -161,7 +288,7 @@ export default function Prescriptions() {
       <SweetAlert
         showCancel
         show={resetNotify}
-        onConfirm={() => handleDeleteAnimal(selectedMedicine.id)}
+        onConfirm={() => handleDeleteAnimal(selectedPrescription.id)}
         confirmBtnText='Confirm'
         confirmBtnBsStyle='danger'
         cancelBtnBsStyle='secondary'
@@ -169,28 +296,28 @@ export default function Prescriptions() {
         onCancel={() => setResetNotify(false)}
       >
       </SweetAlert>
-      <Modal show={showForm} onHide={() => handleCloseModal()}>
+      <Modal size="lg" show={showForm} onHide={() => handleCloseModal()}>
         <form onSubmit={handleSubmit(submitForm)}>
           <Modal.Header className='font-10' closeButton>
             <span className='font-20'>
-              {selectedMedicine != null
-                ? `Update ${selectedMedicine.name}`
-                : "Create Animal"}
+              {selectedPrescription != null
+                ? `Update ${selectedPrescription.name}`
+                : "Create Prescription"}
             </span>
           </Modal.Header>
           <Modal.Body>
             <div className='col-md-12 m-b-15'>
-              <label className='control-label mb-2'>Name</label>
+              <label className='control-label mb-2'>Title</label>
                 <input
-                {...register("name", {
-                  required: "Name is required",
+                {...register("title", {
+                  required: "Title is required",
                 })}
                 type='text'
                 size='30'
                 className='form-control'
                 placeholder='Enter text here'
               />
-              <p className='text-danger'>{errors.name?.message}</p>
+              <p className='text-danger'>{errors.title?.message}</p>
 
               <label className='control-label mb-2'>Description</label>
                 <input
@@ -204,22 +331,96 @@ export default function Prescriptions() {
               />
               <p className='text-danger'>{errors.description?.message}</p>
 
+              <label className='control-label mb-2'>Amount</label>
+                <input
+                {...register("amount", {
+                  required: "Amount is required",
+                })}
+                type='text'
+                size='30'
+                className='form-control'
+                placeholder='Enter text here'
+              />
+              <p className='text-danger'>{errors.amount?.message}</p>
+
+              <label className='control-label mb-2'>Frequency</label>
+                <input
+                {...register("frequency", {
+                  required: "Frequency is required",
+                })}
+                type='text'
+                size='30'
+                className='form-control'
+                placeholder='Enter text here'
+              />
+              <p className='text-danger'>{errors.frequency?.message}</p>
+
+              <label className='control-label mb-2'>Animal Type</label>
+              <Form.Select {...register("petTypeId", { required: true })}>
+                  <option value="">Select Animal</option>
+                  {animalData && 
+                    animalData.map((item, index) => (
+                        <option key={index} value={item.id}>
+                            {item.name}
+                        </option>
+                    ))}
+              </Form.Select>
+
+              <label className='control-label mb-2 m-t-20'>No. of Animals</label>
+                <input
+                {...register("noOfPets", {
+                  required: "No. of Animals is required",
+                })}
+                type='text'
+                size='30'
+                className='form-control'
+                placeholder='Enter text here'
+              />
+              <p className='text-danger'>{errors.noOfPets?.message}</p>
+
+
+              <label className='control-label mb-2'>Drug</label>
+              <Form.Select {...register("drugProduct", { required: true })}>
+                  <option value="">Select Drug</option>
+                  {medicineData && 
+                    medicineData.map((item, index) => (
+                        <option key={index} value={item.id}>
+                            {item.name}
+                        </option>
+                    ))}
+              </Form.Select>
+
+              <label className='control-label mb-2'>Patient</label>
+              <Form.Select {...register("patientId", { required: true })}>
+                  <option value="">Select Patient</option>
+                  {patientData && 
+                    patientData.map((item, index) => (
+                        <option key={index} value={item.id}>
+                            {item.patientName}
+                        </option>
+                    ))}
+              </Form.Select>
+
               
             </div>
           </Modal.Body>
           <Modal.Footer>
-            {selectedMedicine != null ? 
+            {selectedPrescription != null ? 
                 <button type='submit' className='btn btn-primary'>
                 Update Save
               </button>  
               :
               <button type='submit' className='btn btn-primary'>
-              Save Animal
+              Save Prescription
             </button>
             }
           </Modal.Footer>
         </form>
       </Modal>
+
+      
+
+
       </div>
       </div>
     </>

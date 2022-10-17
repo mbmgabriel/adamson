@@ -11,6 +11,8 @@ import Animals from "../views/animals/Animals";
 import Medicines from "../views/medicines/Medicines";
 import Dispensers from "../views/dispensers/Dispensers";
 import Prescriptions from "../views/prescriptions/Prescriptions";
+import Patients from "../views/patients/Patients"
+import PrescriptionCerttificate from "../views/prescriptions/PrescriptionCertificate";
 
 export default function Routing() {
   return (
@@ -25,6 +27,8 @@ export default function Routing() {
           <Route path='/medicines' element={<Medicines/>}/>
           <Route path='/dispensers' element={<Dispensers/>}/>
           <Route path='/prescriptions' element={<Prescriptions/>}/>
+          <Route path='/patients' element={<Patients/>}/>
+          <Route path='/generate/:id' element={<PrescriptionCerttificate/>}/>
         </Routes>
       </BrowserRouter>
     </div>

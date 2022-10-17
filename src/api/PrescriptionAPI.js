@@ -8,6 +8,13 @@ export default class Auth extends Base {
     });
   };
 
+  getPrescription = async (id) => {
+    return this.sendRequest({
+      path: `/api/Prescription/${id}`,
+      method: 'GET',
+    });
+  };
+
   createPrescriptions = async data => {
     return this.sendRequest({
       path: `/api/Prescription`,
@@ -16,7 +23,15 @@ export default class Auth extends Base {
     });
   };
 
-  updateDispenser = async (id, data) => {
+  uploadHealthRecord = async (id, data) => {
+    return this.sendRequest({
+      path: `/api/Prescription/${id}/upload`,
+      method: 'POST',
+      data,
+    });
+  };
+
+  updatePrescriptions = async (id, data) => {
     return this.sendRequest({
       path: `/api/Prescription/${id}`,
       method: 'PUT',
@@ -24,7 +39,7 @@ export default class Auth extends Base {
     });
   };
 
-  deleteDispenser = async (id) => {
+  deletePrescriptions = async (id) => {
     return this.sendRequest({
       path: `/api/Prescription/${id}`,
       method: 'DELETE'

@@ -4,17 +4,17 @@ import ReactTable from "react-table-v6";
 import "react-table-v6/react-table.css";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
-import MedicinesAPI from "../../api/MedicinesAPI"
+import PatientsAPI from "../../api/PatientsAPI"
 import SweetAlert from "react-bootstrap-sweetalert";
 import HeaderMain from "../headers/header";
 import "../../../node_modules/font-awesome/css/font-awesome.css"
 
-export default function Medicines() {
+export default function Patients() {
   const [loading, setLoading] = useState(true);
-  const [medicineData, setMedicineData] = useState([]);
+  const [patient, setPatient] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [resetNotify, setResetNotify] = useState(false);
-  const [selectedMedicine, setSelectedMedicine] = useState(null);
+  const [selectedPatient, setSelectedPatient] = useState(null);
 
   const {
     register,
@@ -25,14 +25,14 @@ export default function Medicines() {
   } = useForm();
 
   useEffect(() => {
-    handleGetAllMedicines();
-  }, []);   
+    handleGetAllPatients();
+  }, []);
 
-  const handleGetAllMedicines = async () => {
+  const handleGetAllPatients = async () => {
     setLoading(true);
-    const response = await new MedicinesAPI().medicines();
+    const response = await new PatientsAPI().patients();
     if (response.ok) {
-        setMedicineData(response.data);
+      setPatient(response.data);
     } else {
       toast.error("Something went wrong while fetching user");
     }
@@ -41,22 +41,22 @@ export default function Medicines() {
 
   const submitForm = async (data) => {
     setLoading(true);
-    if (selectedMedicine != null) {
-      const response = await new MedicinesAPI().updateMedicine(selectedMedicine.id, data);
+    if (selectedPatient != null) {
+      const response = await new PatientsAPI().createPatient(selectedPatient.id, data);
       if(response.ok) {
-        toast.success("Successfully Updated Animal Data")
-        handleGetAllMedicines()
+        toast.success("Successfully Updated Term")
+        handleGetAllPatients()
         reset()
         setShowForm(false)
-        setSelectedMedicine(null)
+        setSelectedPatient(null)
       }else{
         toast.error("Something went wrong while updating the term");
       }
     } else {
-      const response = await new MedicinesAPI().createMedicine(data);
+      const response = await new PatientsAPI().createPatient(data);
       if (response.ok) {
         toast.success("Successfully Created Term");
-        handleGetAllMedicines();
+        handleGetAllPatients();
         reset();
         setShowForm(false);
       } else {
@@ -66,23 +66,23 @@ export default function Medicines() {
     setLoading(false);
   };
 
-  const handleDeleteMedicine = async (id) => {
+  const handleDeleteUser = async (id) => {
     setLoading(true);
     setResetNotify(false);
-    const response = await new MedicinesAPI().deleteMedicine(id);
+    const response = await new PatientsAPI().deleteUser(id);
     if (response.ok) {
-      toast.success("Successfully Deleted Animal");
-      handleGetAllMedicines();
+      toast.success("Successfully Deleted Term");
+      handleGetAllPatients();
     } else {
       toast.error("Something went wrong while deleting user");
     }
-    setSelectedMedicine(null);
+    setSelectedPatient(null);
     setLoading(false);
   };
 
   const handleCloseModal = () => {
     setShowForm(false);
-    setSelectedMedicine(null);
+    setSelectedPatient(null);
   };
 
   return (
@@ -93,7 +93,7 @@ export default function Medicines() {
           <HeaderMain/>
         </header>
       <div className="container m-t-10">
-        <div className="main-title-pages m-b-10"> Medicines 
+        <div className="main-title-pages m-b-10"> Patients 
           <span className="m-l-10"> 
             <button className='btn btn-primary' size="sm" onClick={() => setShowForm(true)}>
               <i className="fa fa-plus fa-2xl"></i>
@@ -102,22 +102,32 @@ export default function Medicines() {
         </div>
       <ReactTable
         pageCount={100}
-        list={medicineData}
+        list={patient}
         filterable
-        data={medicineData}
+        data={patient}
         columns={[
           {
             Header: "",
             columns: [
               {
-                Header: "Name",
-                id: "name",
-                accessor: (d) => d.name,
+                Header: "Patient Name",
+                id: "patientName",
+                accessor: (d) => d.patientName,
               },
               {
-                Header: "Description",
-                id: "description",
-                accessor: (d) => d.description,
+                Header: "Address",
+                id: "address",
+                accessor: (d) => d.address,
+              },
+              {
+                Header: "Birth Date",
+                id: "birthDate",
+                accessor: (d) => d.birthDate,
+              },
+              {
+                Header: "Contact",
+                id: "contactNumber",
+                accessor: (d) => d.contactNumber,
               },
 
               {
@@ -128,9 +138,11 @@ export default function Medicines() {
                   <div style={{textAlign:'center'}} className=''>
                     <button
                       onClick={() => {
-                        setValue('name', row.original.name)
-                        setValue('description', row.original.description)
-                        setSelectedMedicine(row.original);
+                        setValue('patientName', row.original.patientName)
+                        setValue('address', row.original.address)
+                        setValue('birthDate', row.original.birthDate)
+                        setValue('contactNumber', row.original.contactNumber)
+                        setSelectedPatient(row.original);
                         setShowForm(true);
                       }}
                       className='btn btn-info btn-sm m-r-5'
@@ -139,7 +151,7 @@ export default function Medicines() {
                     </button>
                     <button
                       onClick={() => {
-                        setSelectedMedicine(row.original);
+                        setSelectedPatient(row.original);
                         setResetNotify(true);
                       }}
                       className='btn btn-danger btn-sm m-r-5'
@@ -153,7 +165,7 @@ export default function Medicines() {
           },
         ]}
         csv
-        edited={medicineData}
+        edited={patient}
         defaultPageSize={10}
         className='-highlight'
       />
@@ -161,11 +173,11 @@ export default function Medicines() {
       <SweetAlert
         showCancel
         show={resetNotify}
-        onConfirm={() => handleDeleteMedicine(selectedMedicine.id)}
+        onConfirm={() => handleDeleteUser(selectedPatient.id)}
         confirmBtnText='Confirm'
         confirmBtnBsStyle='danger'
         cancelBtnBsStyle='secondary'
-        title='Are you sure to delete this animal?'
+        title='Are you sure to delete this term?'
         onCancel={() => setResetNotify(false)}
       >
       </SweetAlert>
@@ -173,48 +185,72 @@ export default function Medicines() {
         <form onSubmit={handleSubmit(submitForm)}>
           <Modal.Header className='font-10' closeButton>
             <span className='font-20'>
-              {selectedMedicine != null
-                ? `Update ${selectedMedicine.name}`
-                : "Create Animal"}
+              {selectedPatient != null
+                ? `Update ${selectedPatient.patientName}`
+                : "Create Patient"}
             </span>
           </Modal.Header>
           <Modal.Body>
             <div className='col-md-12 m-b-15'>
-              <label className='control-label mb-2'>Name</label>
+              <label className='control-label mb-2'>Patient Name</label>
                 <input
-                {...register("name", {
-                  required: "Name is required",
+                {...register("patientName", {
+                  required: "Username is required",
                 })}
                 type='text'
                 size='30'
                 className='form-control'
                 placeholder='Enter text here'
               />
-              <p className='text-danger'>{errors.name?.message}</p>
+              <p className='text-danger'>{errors.patientName?.message}</p>
 
-              <label className='control-label mb-2'>Description</label>
+              <label className='control-label mb-2'>Address</label>
                 <input
-                {...register("description", {
-                  required: "Description is required",
+                {...register("address", {
+                  required: "Address is required",
                 })}
                 type='text'
                 size='30'
                 className='form-control'
                 placeholder='Enter text here'
               />
-              <p className='text-danger'>{errors.description?.message}</p>
+              <p className='text-danger'>{errors.address?.message}</p>
+
+              <label className='control-label mb-2'>Birthdate</label>
+                <input
+                {...register("birthDate", {
+                  required: "Birthdate is required",
+                })}
+                type='date'
+                size='30'
+                className='form-control'
+                placeholder='Enter text here'
+              />
+              <p className='text-danger'>{errors.birthDate?.message}</p>
+
+              <label className='control-label mb-2'>Contact Number</label>
+                <input
+                {...register("contactNumber", {
+                  required: "Contact Number is required",
+                })}
+                type='text'
+                size='30'
+                className='form-control'
+                placeholder='Enter text here'
+              />
+              <p className='text-danger'>{errors.contactNumber?.message}</p>
 
               
             </div>
           </Modal.Body>
           <Modal.Footer>
-            {selectedMedicine != null ? 
+            {selectedPatient != null ? 
                 <button type='submit' className='btn btn-primary'>
                 Update Save
               </button>  
               :
               <button type='submit' className='btn btn-primary'>
-              Save Animal
+              Save Patient
             </button>
             }
           </Modal.Footer>

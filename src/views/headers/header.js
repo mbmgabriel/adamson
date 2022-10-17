@@ -11,12 +11,16 @@ function HeaderMain() {
         <Navbar.Toggle aria-controls="responsive-navbar-nav"/>
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
+          <Nav.Link href="/prescriptions">Prescriptions</Nav.Link>
             <Nav.Link href="/users">Users</Nav.Link>
             <Nav.Link href="/animals">Animals</Nav.Link>
             <NavDropdown title="Others" id="collasible-nav-dropdown">
               <NavDropdown.Item href="/medicines">Medicines</NavDropdown.Item>
               <NavDropdown.Item href="/dispensers">
                 Dispenser
+              </NavDropdown.Item>
+              <NavDropdown.Item href="/patients">
+                Patients
               </NavDropdown.Item>
             </NavDropdown>
           </Nav>
