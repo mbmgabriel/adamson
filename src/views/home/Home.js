@@ -13,6 +13,7 @@ function Home() {
 
   const [loading, setLoading] = useState(true);
   const [medicineData, setMedicineData] = useState([]);
+  const userfullname = localStorage.getItem("name")
 
   useEffect(() => {
     handleGetAllMedicines();
@@ -45,7 +46,7 @@ function Home() {
               <Card.Body>
                 <Row>
                   <Col md={6}>
-                    Welcome Back! 
+                    Welcome Back! <span>{userfullname}</span>
                   </Col>
                   <Col md={6}>
                     

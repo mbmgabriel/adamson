@@ -31,6 +31,13 @@ export default class Auth extends Base {
     });
   };
 
+  getHealthRecord = async (id) => {
+    return this.sendRequest({
+      path: `/api/Prescription/${id}/upload`,
+      method: 'GET',
+    });
+  };
+
   updatePrescriptions = async (id, data) => {
     return this.sendRequest({
       path: `/api/Prescription/${id}`,

@@ -23,6 +23,9 @@ function Login() {
       console.log(response.data)
       await window.localStorage.setItem('token', response.data.token)
       await window.localStorage.setItem('user', response.data.username)
+      await window.localStorage.setItem('userID', response.data.id)
+      await window.localStorage.setItem('userType', response.data.userTypeName)
+      await window.localStorage.setItem('name', response.data.fullname)
       alert("Success")
       navigate('/home')
     }else{
@@ -112,6 +115,7 @@ function Login() {
         </Form.Group>
         <Link className="link-orange font-24 d-none" to="/forgot_password" >Forgot Password</Link>
         <Button className="btn btn-md btn-primary btn-auth w-100 d-block mt-4 mb-4" size="md" variant="primary" type="submit">Log In</Button>
+        <div>Don't have an account yet? <span style={{fontWeight:"bold"}}><a href="/register">Sign up here</a></span></div>
       </Form>
     </Col> 
   </Row>

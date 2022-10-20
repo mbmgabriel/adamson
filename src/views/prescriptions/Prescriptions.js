@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link, redirect, BrowserRouter, useNavigate } from 'react-router-dom'
-import { Modal, Form, Button, Select } from "react-bootstrap";
+import { Modal, Form, Button, Select, Toast } from "react-bootstrap";
 import ReactTable from "react-table-v6";
 import "react-table-v6/react-table.css";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { useForm } from "react-hook-form";
+import 'react-toastify/dist/ReactToastify.css';
 import PrescriptionAPI from "../../api/PrescriptionAPI"
 import MedicinesAPI from "../../api/MedicinesAPI"
 import AnimalsAPI from "../../api/AnimalsAPI"
@@ -25,6 +26,8 @@ export default function Prescriptions() {
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [filesToUpload, setFilesToUpload] = useState({});
   const navigate = useNavigate();
+  const presId = localStorage.getItem("pId")
+
 
   const {
     register,
@@ -41,14 +44,38 @@ export default function Prescriptions() {
     handleGetAllPatients();
   }, []);   
 
+  
+
+  const notifyUpload = () => 
+  toast("Wow so easy !");
+
+
   const handleGetUploadedFile = (file) => {
     getBase64(file).then(
       data => {
         console.log(file.name)
         let toUpload = {
           // classId: id,
-          data: {"base64String": data,
-          "fileName": file.name}
+          
+          "prescriptionId": JSON.parse(presId),
+          "base64String": data,
+          "filename": file.name
+        };
+        setFilesToUpload(toUpload)
+      }
+    );
+  }
+
+  const handleGetUploadedUserFile = (file) => {
+    getBase64(file).then(
+      data => {
+        console.log(file.name)
+        let toUpload = {
+          // classId: id,
+          data: {
+          "userId": JSON.parse(presId),
+          "base64String": data,
+          "filename": file.name}
         };
         setFilesToUpload(toUpload)
       }
@@ -68,11 +95,14 @@ export default function Prescriptions() {
     e.preventDefault();
     setShowUploadModal(false);
     setLoading(true);
-    let response = await new PrescriptionAPI().uploadHealthRecord(filesToUpload)
+    let response = await new PrescriptionAPI().uploadHealthRecord(presId, filesToUpload)
     if(response.ok){
       setLoading(false);
       handleGetAllPrescriptions();
-      toast.success("Successfully uploaded the class list.")
+      // toast.success("Successfully uploaded the class list.")
+      alert('success')
+      notifyUpload()
+      
     }else{
       setLoading(false);
       alert("Something went wrong while uploading class list")
@@ -85,7 +115,7 @@ export default function Prescriptions() {
     if (response.ok) {
         setPrescriptionData(response.data);
     } else {
-      toast.error("Something went wrong while fetching user");
+      // toast.error("Something went wrong while fetching user");
     }
     setLoading(false);
   };
@@ -96,7 +126,7 @@ export default function Prescriptions() {
     if (response.ok) {
         setMedicineData(response.data);
     } else {
-      toast.error("Something went wrong while fetching user");
+      // toast.error("Something went wrong while fetching user");
     }
     setLoading(false);
   };
@@ -107,7 +137,7 @@ export default function Prescriptions() {
     if (response.ok) {
         setAnimalData(response.data);
     } else {
-      toast.error("Something went wrong while fetching user");
+      // toast.error("Something went wrong while fetching user");
     }
     setLoading(false);
   };
@@ -118,7 +148,7 @@ export default function Prescriptions() {
     if (response.ok) {
         setPatientData(response.data);
     } else {
-      toast.error("Something went wrong while fetching user");
+      // toast.error("Something went wrong while fetching user");
     }
     setLoading(false);
   };
@@ -194,6 +224,7 @@ export default function Prescriptions() {
   return (
     <>
       {/* {loading && <FullScreenLoader />} */}
+      
       <div className="App">
         <header className="App-header">
           <HeaderMain/>
@@ -243,7 +274,7 @@ export default function Prescriptions() {
                       }}
                       className='btn btn-info btn-sm m-r-5'
                     >
-                      Edit
+                      <i className="fa fa-edit"></i>
                     </button>
                     <button
                       onClick={() => {
@@ -259,11 +290,23 @@ export default function Prescriptions() {
                     <button
                       onClick={() => {
                         setShowUploadModal(true)
+                        localStorage.setItem("pId", row.original.id)
                       }}
                       className='btn btn-info btn-sm m-r-5'
                     >
                       Upload HRecord
                     </button>
+
+                    <button
+                      onClick={() => {
+                        window.open(`http://localhost:3000/viewrecord/${row.original.id}`, '_blank')
+                        localStorage.setItem("pId", row.original.id)
+                      }}
+                      className='btn btn-info btn-sm m-r-5'
+                    >
+                      View Health Record
+                    </button>
+                    
                     <button
                       onClick={() => {
                         setSelectedPrescription(row.original);
@@ -284,7 +327,19 @@ export default function Prescriptions() {
         defaultPageSize={10}
         className='-highlight'
       />
-     
+     <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+      <ToastContainer />
       <SweetAlert
         showCancel
         show={resetNotify}

@@ -8,6 +8,13 @@ export default class Auth extends Base {
     });
   };
 
+  userfile = async (id) => {
+    return this.sendRequest({
+      path: `/api/User/${id}/file`,
+      method: 'GET',
+    });
+  };
+
   createUser = async data => {
     return this.sendRequest({
       path: `/api/User`,
@@ -28,6 +35,14 @@ export default class Auth extends Base {
     return this.sendRequest({
       path: `/api/User/${id}`,
       method: 'DELETE'
+    })
+  }
+
+  uploadFile = async (id, data) => {
+    return this.sendRequest({
+      path: `/api/User/${id}/file/upload`,
+      method: 'POST',
+      data,
     })
   }
 }
