@@ -28,7 +28,6 @@ export default function Prescriptions() {
   const navigate = useNavigate();
   const presId = localStorage.getItem("pId")
 
-
   const {
     register,
     handleSubmit,
@@ -46,8 +45,8 @@ export default function Prescriptions() {
 
   
 
-  const notifyUpload = () => 
-  toast("Wow so easy !");
+  const notifySuccessPrescription = () => 
+  toast("Successfully created Prescription");
 
 
   const handleGetUploadedFile = (file) => {
@@ -101,7 +100,6 @@ export default function Prescriptions() {
       handleGetAllPrescriptions();
       // toast.success("Successfully uploaded the class list.")
       alert('success')
-      notifyUpload()
       
     }else{
       setLoading(false);
@@ -116,6 +114,7 @@ export default function Prescriptions() {
         setPrescriptionData(response.data);
     } else {
       // toast.error("Something went wrong while fetching user");
+      handleGetAllPrescriptions()
     }
     setLoading(false);
   };
@@ -169,7 +168,7 @@ export default function Prescriptions() {
     } else {
       const response = await new PrescriptionAPI().createPrescriptions(data);
       if (response.ok) {
-        toast.success("Successfully Created Term");
+        notifySuccessPrescription()
         handleGetAllPrescriptions();
         reset();
         setShowForm(false);
@@ -232,13 +231,28 @@ export default function Prescriptions() {
       <div className="container m-t-10">
         <div className="main-title-pages m-b-10"> Prescriptions 
           <span className="m-l-10"> 
-            <button className='btn btn-primary' size="sm" onClick={() => setShowForm(true)}>
-              <i className="fa fa-plus fa-2xl"></i>
+            {/* <button className='btn btn-primary' size="sm" onClick={() => setShowForm(true)}> */}
+            <button className='btn btn-primary' size="sm" >
+              <a style={{textDecoration:"none !important", color:"white"}} href="/prescribed"><i className="fa fa-plus fa-2xl"></i></a>
             </button> 
           </span>
         </div>
         {handleShowUploadModal()}
 
+        {/* Haru
+        {
+          prescriptionData.map((pd, index)=>
+          <p>
+            <div>{pd.address}</div>
+            {
+            pd.prescriptionProduct.map((pp, index)=>
+              <p>{pp.productName }</p>
+            )
+            }
+          </p>
+          )
+        } */}
+        
       <ReactTable
         pageCount={100}
         list={prescriptionData}
@@ -258,24 +272,30 @@ export default function Prescriptions() {
                 id: "description",
                 accessor: (d) => d.description,
               },
-
+              {
+                Header: "Status",
+                id: "status",
+                accessor: (d) => d.trackingNo === null && "Dispensed",
+              },
               {
                 Header: "Actions",
                 id: "edit",
                 accessor: (d) => d.id,
                 Cell: (row) => (
                   <div style={{textAlign:'center'}} className=''>
-                    <button
-                      onClick={() => {
-                        setValue('name', row.original.name)
-                        setValue('description', row.original.description)
-                        setSelectedPrescription(row.original);
-                        setShowForm(true);
-                      }}
-                      className='btn btn-info btn-sm m-r-5'
-                    >
-                      <i className="fa fa-edit"></i>
-                    </button>
+                    {row.original.trackingNo !== null &&
+                      <button
+                        onClick={() => {
+                          setValue('name', row.original.name)
+                          setValue('description', row.original.description)
+                          setSelectedPrescription(row.original);
+                          setShowForm(true);
+                        }}
+                        className='btn btn-info btn-sm m-r-5'
+                      >
+                        <i className="fa fa-edit"></i>
+                      </button>
+                    }
                     <button
                       onClick={() => {
                         
@@ -285,7 +305,7 @@ export default function Prescriptions() {
                       }}
                       className='btn btn-info btn-sm m-r-5'
                     >
-                      Generate
+                      <i className="fa fa-book"></i>
                     </button>
                     <button
                       onClick={() => {
@@ -294,7 +314,7 @@ export default function Prescriptions() {
                       }}
                       className='btn btn-info btn-sm m-r-5'
                     >
-                      Upload HRecord
+                      <i className="fa fa-upload"></i>
                     </button>
 
                     <button
@@ -304,7 +324,7 @@ export default function Prescriptions() {
                       }}
                       className='btn btn-info btn-sm m-r-5'
                     >
-                      View Health Record
+                      <i className="fa fa-eye"></i>
                     </button>
                     
                     <button
@@ -314,7 +334,7 @@ export default function Prescriptions() {
                       }}
                       className='btn btn-danger btn-sm m-r-5'
                     >
-                      Delete
+                      <i className="fa fa-trash"></i>
                     </button>
                   </div>
                 ),

@@ -16,6 +16,9 @@ import PrescriptionCerttificate from "../views/prescriptions/PrescriptionCertifi
 import HealthRecord from "../views/prescriptions/HealthRecord";
 import Register from "../views/login/Register";
 import Profile from "../views/users/Profile";
+import Prescribed from "../views/prescriptions/Prescribed";
+import DispensingDrugs from "../views/dispensers/DispensingDrugs";
+import Dispensed from "../views/dispensers/CreateDispense";
 
 export default function Routing() {
   return (
@@ -35,6 +38,9 @@ export default function Routing() {
           <Route path='/viewrecord/:id' element={<HealthRecord/>}/>
           <Route path='/register' element={<Register/>}/>
           <Route path='/profile' element={<Profile/>}/>
+          <Route path='/prescribed' element={<Prescribed/>}/>
+          <Route path='/dispensingdrugs' element={<DispensingDrugs/>}/>
+          <Route path='/dispensed' element={<Dispensed/>}/>
         </Routes>
       </BrowserRouter>
     </div>

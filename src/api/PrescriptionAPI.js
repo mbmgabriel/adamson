@@ -15,12 +15,12 @@ export default class Auth extends Base {
     });
   };
 
-  createPrescriptions = async data => {
+  createPrescriptions = async (data) => {
     return this.sendRequest({
       path: `/api/Prescription`,
       method: 'POST',
       data,
-    });
+    })
   };
 
   uploadHealthRecord = async (id, data) => {

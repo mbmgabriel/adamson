@@ -58,16 +58,18 @@ export default function HealthRecord() {
       {/* {loading && <FullScreenLoader />} */}
       <div className="App">
         <div className="container m-t-10">
-			<header className="App-header">
-                Health Record
-                <div>{prescriptionData.title}</div>
-        	</header>
-            <div className="cert-border">
-			{healthRecord.map((hr,index)=>(
-                <div>
-                    {hr.filename}
-                    <p><a href={hr.path}>D</a></p>
-                </div>  
+          <header className="App-header">
+            <div className="header-presciption">
+              Health Record
+            <div>{prescriptionData.title}</div>
+            </div>
+          </header>
+          <div className="cert-border">
+            {healthRecord.map((hr,index)=>(
+              <div>
+                  {hr.filename}
+                  <p><a href={hr.path}>D</a></p>
+              </div>  
             ))}		
           </div>
         </div>

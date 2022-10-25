@@ -2,6 +2,8 @@ import { useState } from "react";
 import Auth from "../../api/Auth";
 import { Form, Button, InputGroup } from 'react-bootstrap'
 import { Link, redirect, BrowserRouter, useNavigate } from 'react-router-dom'
+import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -15,6 +17,9 @@ function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
+  const notifyUpload = () => 
+  toast("Success");
+
   const login = async(e) => {
     e.preventDefault();
     let response = await new Auth().login({username, password})
@@ -26,7 +31,7 @@ function Login() {
       await window.localStorage.setItem('userID', response.data.id)
       await window.localStorage.setItem('userType', response.data.userTypeName)
       await window.localStorage.setItem('name', response.data.fullname)
-      alert("Success")
+      notifyUpload()
       navigate('/home')
     }else{
       alert(response.data.errorMessage)

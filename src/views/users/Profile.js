@@ -12,6 +12,7 @@ import SweetAlert from "react-bootstrap-sweetalert";
 import HeaderMain from "../headers/header";
 import "../../../node_modules/font-awesome/css/font-awesome.css"
 import UsersAPI from "../../api/UsersAPI"
+import Prescriptions from "../prescriptions/Prescriptions";
 
 export default function Profile() {
   const [loading, setLoading] = useState(true);

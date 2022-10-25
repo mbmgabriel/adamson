@@ -8,6 +8,30 @@ export default class Auth extends Base {
     });
   };
 
+  getDispense = async data => {
+    return this.sendRequest({
+      path: `/api/Prescription/trackingno/${data}`,
+      method: 'GET',
+    });
+  };
+
+  getDispensed = async id => {
+    return this.sendRequest({
+      path: `/api/Store/${id}/product/disperse`,
+      method: 'GET',
+    });
+  };
+
+  createDispense = async data => {
+    return this.sendRequest({
+      path: `/api/Prescription/trackingno/${data}/dispense`,
+      method: 'POST',
+      data,
+    });
+  };
+
+  
+
   createDispenser = async data => {
     return this.sendRequest({
       path: `/api/Store`,
@@ -30,4 +54,6 @@ export default class Auth extends Base {
       method: 'DELETE'
     })
   }
+
+  
 }

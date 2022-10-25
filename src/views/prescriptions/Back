@@ -1,0 +1,135 @@
+<form onSubmit={handleSubmit(submitForm)}>
+              <label className='control-label mb-2'>Title</label>
+                <input
+                {...register("title", {
+                  required: "Title is required",
+                })}
+                type='text'
+                size='30'
+                className='form-control'
+                placeholder='Enter text here'
+              />
+              <p className='text-danger'>{errors.title?.message}</p>
+
+              <label className='control-label mb-2'>Description</label>
+                <input
+                {...register("description", {
+                  required: "Description is required",
+                })}
+                type='text'
+                size='30'
+                className='form-control'
+                placeholder='Enter text here'
+              />
+              <p className='text-danger'>{errors.description?.message}</p>
+
+              {/* <label className='control-label mb-2'>Amount</label>
+                <input
+                {...register("amount", {
+                  required: "Amount is required",
+                })}
+                type='text'
+                size='30'
+                className='form-control'
+                placeholder='Enter text here'
+              /> */}
+              <p className='text-danger'>{errors.amount?.message}</p>
+
+              <label className='control-label mb-2'>Frequency</label>
+                <input
+                {...register("frequency", {
+                  required: "Frequency is required",
+                })}
+                type='text'
+                size='30'
+                className='form-control'
+                placeholder='Enter text here'
+              />
+              <p className='text-danger'>{errors.frequency?.message}</p>
+
+              <label className='control-label mb-2'>Animal Type</label>
+              <Form.Select {...register("petTypeId", { required: true })}>
+                  <option value="">Select Animal</option>
+                  {
+                    animalData.map((item, index) => (
+                        <option key={index} value={item.id}>
+                            {item.name}
+                        </option>
+                    ))}
+              </Form.Select>
+
+              <label className='control-label mb-2 m-t-20'>No. of Animals</label>
+                <input
+                {...register("noOfPets", {
+                  required: "No. of Animals is required",
+                })}
+                type='text'
+                size='30'
+                className='form-control'
+                placeholder='Enter text here'
+              />
+              <p className='text-danger'>{errors.noOfPets?.message}</p>
+
+
+              <label className='control-label mb-2'>Drug</label>
+              {/* <Form.Select {...register("drugProduct", { required: true })}>
+                  <option value="">Select Drug</option>
+                  {
+                    medicineData.map((item, index) => (
+                        <option key={index} value={item.id}>
+                            {item.name}
+                        </option>
+                    ))}
+              </Form.Select> */}
+
+							{fields.map((item, index) => (
+								<li key={item.id}>
+									<Form.Select {...register(`productId`)} >
+										<option value="">Select Drug</option>
+										{
+											medicineData.map((item, index) => (
+													<option key={index} value={item.id}>
+															{item.name}
+													</option>
+											))}
+									</Form.Select>
+									<label className='control-label mb-2'>Amount</label>
+										<input
+										{...register("amount", {
+											required: "Amount is required",
+										})}
+										type='text'
+										size='30'
+										className='form-control'
+										placeholder='Enter text here'
+									/>
+									{/* <Controller
+										render={({ field }) => <input {...field} />}
+										name={`test.${index}.lastName`}
+										control={control}
+									/> */}
+									<button type="button" onClick={() => remove(index)}>Delete</button>
+								</li>
+							))}
+							<button
+							type="button"
+							onClick={() => append({ firstName: "bill", lastName: "luo" })}
+							>
+							append
+							</button>
+							<br></br>
+							<br></br>
+              <label className='control-label mb-2'>Patient</label>
+              <Form.Select {...register("patientId", { required: true })}>
+                  <option value="">Select Patient</option>
+                  {
+                    patientData.map((item, index) => (
+                        <option key={index} value={item.id}>
+                            {item.patientName}
+                        </option>
+                    ))}
+              </Form.Select>
+							<button type='submit' className='btn btn-primary'>
+              Save Prescription
+            </button>
+						</form>
