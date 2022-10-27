@@ -156,7 +156,17 @@ export default function Profile() {
 									{fileData.map((fd,index)=>(
 									<tr>
 										<td>{fd.filename}</td>
-										<td>{fd.path}</td>
+										<td>{fd.path}
+                    <button
+												onClick={() => {
+													window.open(`${fd.path}`, '_blank')
+												}}
+												className='btn btn-danger btn-sm m-r-5'
+											>
+												<i className="fa fa-arrow-eye"></i>View / Download
+											</button>
+                    </td>
+                    
 									</tr>
 									))}
 									</tbody>

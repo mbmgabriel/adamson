@@ -928,8 +928,16 @@
   
 
   .login-bg-image{
-    background-image: url("../assets/images/56693.jpg");
-    background-size: cover;
+    background-image: url("../assets/images/bgve1.jpeg");
+    /* background-size:700px,500px; */
+    /* background-repeat: no-repeat; */
+    background-color: #cccccc;
+  }
+
+  .register-bg-image{
+    background-image: url("../assets/images/bgregister.jpeg");
+    /* background-size:300,500; */
+    /* background-repeat: no-repeat; */
     background-color: #cccccc;
   }
   
@@ -1846,6 +1854,10 @@
 
   .border-1px {
     border: 1px solid black;
+  }
+
+  .nav-link:hover {
+    color:red !important;
   }
 
 

@@ -8,6 +8,14 @@ export default class Auth extends Base {
     });
   };
 
+  types = async data => {
+    return this.sendRequest({
+      path: `/api/ProductFormat`,
+      method: 'GET',
+    });
+  };
+
+
   createMedicine = async data => {
     return this.sendRequest({
       path: `/api/Product`,

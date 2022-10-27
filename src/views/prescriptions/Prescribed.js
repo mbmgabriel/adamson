@@ -78,6 +78,7 @@ export default function Prescribed() {
         setPatientData(response.data);
     } else {
       // toast.error("Something went wrong while fetching user");
+      handleGetAllPatients();
     }
     setLoading(false);
   };
@@ -123,6 +124,10 @@ export default function Prescribed() {
 				navigate('/prescriptions')
       } else {
         toast.error(response.data.errorMessage);
+        handleGetPrescription();
+		handleGetAllMedicines();
+    handleGetAllAnimals();
+    handleGetAllPatients();
       }
     setLoading(false);
   };
@@ -238,9 +243,7 @@ export default function Prescribed() {
               </Form.Select> */}
 
 							{/* field array */}
-							{fields.map((item, index) => (
-								<div key={item.id}> <span style={{fontWeight:"bold"}}>{index + 1}.</span>
-									<Form.Select {...register(`${index}_prescriptionProduct.productId`)} >
+									<Form.Select {...register(`prescriptionProduct.productId`)} >
 										<option value="">Select Drug</option>
 										{
 											medicineData.map((item, index) => (
@@ -251,7 +254,7 @@ export default function Prescribed() {
 									</Form.Select>
 									<label className='control-label mb-2'>Amount</label>
 										<input
-										{...register(`${index}_prescriptionProduct.amount`, {
+										{...register(`prescriptionProduct.amount`, {
 											required: "Amount is required",
 										})}
 										type='text'
@@ -261,7 +264,7 @@ export default function Prescribed() {
 									/>
 									<label className='control-label mb-2'>Unit Size</label>
 										<input
-										{...register(`${index}_prescriptionProduct.unitSize`, {
+										{...register(`prescriptionProduct.unitSize`, {
 											required: "Unit Size is required",
 										})}
 										type='text'
@@ -271,7 +274,7 @@ export default function Prescribed() {
 									/>
 									<label className='control-label mb-2'>Strength</label>
 										<input
-										{...register(`${index}_prescriptionProduct.strength`, {
+										{...register(`prescriptionProduct.strength`, {
 											required: "Strength is required",
 										})}
 										type='text'
@@ -279,34 +282,19 @@ export default function Prescribed() {
 										className='form-control m-b-10'
 										placeholder='Enter text here'
 									/>
-
-									{/* <Controller
-										render={({ field }) => <input {...field} />}
-										name={`test.${index}.lastName`}
-										control={control}
-									/> */}
-									<button type="button" onClick={() => remove(index)} className='btn btn-danger'><i className="fa fa-trash"></i></button>
 									<hr></hr>
-								</div>
-							))}
-							<button
-								type="button"
-								className='btn btn-primary'
-								onClick={() => append({ firstName: "bill", lastName: "luo" })}
-								>
-								<i className="fa fa-plus"></i>
-							</button>
-							{/* end field array */}
-
 							<br></br>
 							<br></br>
               <label className='control-label mb-2 m-b-10'>Patient</label>
               <Form.Select {...register("patientId", { required: true })}>
-                  <option value="">Select Patient</option>
+                  <option value="">Select Client/Farmer</option>
                   {
                     patientData.map((item, index) => (
+                        // <option key={index} value={item.id}>
+                        //     {item.userTypeId === 1 && item.fullname}
+                        // </option>
                         <option key={index} value={item.id}>
-                            {item.patientName}
+                          {item.patientName}
                         </option>
                     ))}
               </Form.Select>

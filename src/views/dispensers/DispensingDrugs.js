@@ -45,16 +45,22 @@ export default function DispensingDrugs() {
 
   useEffect(() => {
     handleGetAllPrescriptions();
-    handleGetAllMedicines();
-    handleGetAllAnimals();
-    handleGetAllPatients();
-		handleGetDispensed();
+    // handleGetAllMedicines();
+    // handleGetAllAnimals();
+    // handleGetAllPatients();
+		handleStoreDispensed();
   }, []);   
 
   
 
   const notifyUpload = () => 
   toast("Wow so easy !");
+
+  const notifyAlreadyDispensed = () => 
+  toast.warning("Already Dispensed");
+
+  const notifyNoTrack = () => 
+  toast.warning("Please input VDO no.");
 
 
   const handleGetUploadedFile = (file) => {
@@ -112,7 +118,7 @@ export default function DispensingDrugs() {
       
     }else{
       setLoading(false);
-      alert("Something went wrong while uploading class list")
+      // alert("Something went wrong while uploading class list")
     }
   }
 
@@ -129,22 +135,27 @@ export default function DispensingDrugs() {
 
 	const handleGetDispense = async (e) => {
 		e.preventDefault()
+    console.log(trackingNo)
     setLoading(true);
     const response = await new DispensersAPI().getDispense(trackingNo);
     if (response.ok) {
         setDispenseData(response.data);
 				setPresDrugs(response.data.prescriptionProduct)
-				// console.log(response.data)
+				console.log(response.data.prescriptionProduct)
     } else {
-      // toast.error("Something went wrong while fetching user");
+      if(trackingNo === ""){
+        notifyNoTrack();
+      }else{
+        notifyAlreadyDispensed();
+      }
     }
     setLoading(false);
   };
 
-	const handleGetDispensed = async () => {
+	const handleStoreDispensed = async () => {
     setLoading(true);
 		
-    const response = await new DispensersAPI().getDispensed(storeId);
+    const response = await new DispensersAPI().getStoreDispensed(storeId);
     if (response.ok) {
         setDrugDispensed(response.data);
 				console.log(response.data)
@@ -154,38 +165,38 @@ export default function DispensingDrugs() {
     setLoading(false);
   };
 
-  const handleGetAllMedicines = async () => {
-    setLoading(true);
-    const response = await new MedicinesAPI().medicines();
-    if (response.ok) {
-        setMedicineData(response.data);
-    } else {
-      // toast.error("Something went wrong while fetching user");
-    }
-    setLoading(false);
-  };
+  // const handleGetAllMedicines = async () => {
+  //   setLoading(true);
+  //   const response = await new MedicinesAPI().medicines();
+  //   if (response.ok) {
+  //       setMedicineData(response.data);
+  //   } else {
+  //     // toast.error("Something went wrong while fetching user");
+  //   }
+  //   setLoading(false);
+  // };
 
-  const handleGetAllAnimals = async () => {
-    setLoading(true);
-    const response = await new AnimalsAPI().animals();
-    if (response.ok) {
-        setAnimalData(response.data);
-    } else {
-      // toast.error("Something went wrong while fetching user");
-    }
-    setLoading(false);
-  };
+  // const handleGetAllAnimals = async () => {
+  //   setLoading(true);
+  //   const response = await new AnimalsAPI().animals();
+  //   if (response.ok) {
+  //       setAnimalData(response.data);
+  //   } else {
+  //     // toast.error("Something went wrong while fetching user");
+  //   }
+  //   setLoading(false);
+  // };
 
-  const handleGetAllPatients = async () => {
-    setLoading(true);
-    const response = await new PatientsAPI().patients();
-    if (response.ok) {
-        setPatientData(response.data);
-    } else {
-      // toast.error("Something went wrong while fetching user");
-    }
-    setLoading(false);
-  };
+  // const handleGetAllPatients = async () => {
+  //   setLoading(true);
+  //   const response = await new PatientsAPI().patients();
+  //   if (response.ok) {
+  //       setPatientData(response.data);
+  //   } else {
+  //     // toast.error("Something went wrong while fetching user");
+  //   }
+  //   setLoading(false);
+  // };
 
   const submitForm = async (data) => {
     setLoading(true);
@@ -198,7 +209,7 @@ export default function DispensingDrugs() {
         setShowForm(false)
         setSelectedPrescription(null)
       }else{
-        toast.error("Something went wrong while updating the term");
+        // toast.error("Something went wrong while updating the term");
       }
     } else {
       const response = await new PrescriptionAPI().createPrescriptions(data);
@@ -222,7 +233,7 @@ export default function DispensingDrugs() {
       toast.success("Successfully Deleted Animal");
       handleGetAllPrescriptions();
     } else {
-      toast.error("Something went wrong while deleting user");
+      // toast.error("Something went wrong while deleting user");
     }
     setSelectedPrescription(null);
     setLoading(false);
@@ -265,18 +276,19 @@ export default function DispensingDrugs() {
         <div className="container m-t-10">
 					<Form onSubmit={handleGetDispense}>
             <div className="main-title-pages m-b-10"> Prescription to Dispense 
-							<span className="m-l-10"> 
+							<div className="m-b-20"> 
 								<input
 									type='text'
 									size='30'
-									className='form-control'
-									placeholder='Enter text here'
+									className='form-control m-b-10'
+									placeholder='Enter VDO No. here'
+                  name="vdo"
 									onChange={(e) => setTrackingNo(e.target.value)}
 								/>
 								<button type='submit' className='btn btn-primary'>
 									Search
 								</button> 
-							</span>
+							</div>
 							<div>
 								<table className="table table-bordered">
 									<tr>
@@ -312,6 +324,9 @@ export default function DispensingDrugs() {
 												onClick={() => {
 													setSelectedPrescription(dispenseData);
 													localStorage.setItem("trackingNo", dispenseData.trackingNo)
+                          localStorage.setItem("productid", presDrugs[0].productId)
+                          localStorage.setItem("pname", presDrugs[0].productName)
+                          localStorage.setItem("amount", presDrugs[0].amount)
 													window.open(`http://localhost:3000/dispensed`, '_blank')
 													// window.open(`http://localhost:3000/dispensed/${row.original.id}`, '_blank')
 												}}
@@ -345,8 +360,8 @@ export default function DispensingDrugs() {
               },
               {
                 Header: "Date Dispensed",
-                id: "dispenserDate",
-                accessor: (d) => d.dispenserDate,
+                id: "dispersedDate",
+                accessor: (d) => d.dispersedDate,
               },
 							{
                 Header: "Drug",
@@ -365,6 +380,18 @@ export default function DispensingDrugs() {
         edited={drugDispensed}
         defaultPageSize={10}
         className='-highlight'
+      />
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
       />
         </div>
       </div>

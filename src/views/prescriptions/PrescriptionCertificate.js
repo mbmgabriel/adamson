@@ -53,6 +53,7 @@ export default function PrescriptionCerttificate() {
         	</div>
           <div className="">
 						<Row>
+              <Col md={4} className="header-title">VDO No.</Col><Col md={8}>{prescriptionData.trackingNo}</Col>
 							<Col md={4} className="header-title">Date</Col><Col md={8}>{prescriptionData.datePrescribed}</Col>
 							<Col md={4} className="header-title">Name of Client / Farm</Col><Col md={8}>{prescriptionData.patientName}</Col>
 							<Col md={4} className="header-title">Address</Col><Col md={8}>{prescriptionData.address}</Col>
@@ -65,7 +66,7 @@ export default function PrescriptionCerttificate() {
                   <div>Drug: {pp.productName}</div>
                   <div>Unit Size: {pp.unitSize}</div>
                   <div>Amount: {pp.amount}</div>
-                  <div>Strength: {pp.stregnth}</div>
+                  <div>Strength: {pp.strength}</div>
                   <hr></hr>
                   </div>
                 ))

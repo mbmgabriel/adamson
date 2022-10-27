@@ -93,7 +93,7 @@ export default function Patients() {
           <HeaderMain/>
         </header>
       <div className="container m-t-10">
-        <div className="main-title-pages m-b-10"> Patients 
+        <div className="main-title-pages m-b-10"> Clients / Farmer 
           <span className="m-l-10"> 
             <button className='btn btn-primary' size="sm" onClick={() => setShowForm(true)}>
               <i className="fa fa-plus fa-2xl"></i>
@@ -110,7 +110,7 @@ export default function Patients() {
             Header: "",
             columns: [
               {
-                Header: "Patient Name",
+                Header: "Client Name",
                 id: "patientName",
                 accessor: (d) => d.patientName,
               },
@@ -192,7 +192,7 @@ export default function Patients() {
           </Modal.Header>
           <Modal.Body>
             <div className='col-md-12 m-b-15'>
-              <label className='control-label mb-2'>Patient Name</label>
+              <label className='control-label mb-2'>Client Name</label>
                 <input
                 {...register("patientName", {
                   required: "Username is required",
@@ -250,7 +250,7 @@ export default function Patients() {
               </button>  
               :
               <button type='submit' className='btn btn-primary'>
-              Save Patient
+              Save Client
             </button>
             }
           </Modal.Footer>

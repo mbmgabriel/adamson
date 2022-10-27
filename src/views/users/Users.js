@@ -234,7 +234,7 @@ export default function Users() {
               </button>  
               :
               <button type='submit' className='btn btn-primary'>
-              Save Term
+              Save User
             </button>
             }
           </Modal.Footer>

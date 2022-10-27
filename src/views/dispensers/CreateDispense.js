@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Modal, Form, Button, Select, Row, Col } from "react-bootstrap";
 import ReactTable from "react-table-v6";
 import "react-table-v6/react-table.css";
-import { toast } from "react-toastify";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import PrescriptionAPI from "../../api/PrescriptionAPI"
 import MedicinesAPI from "../../api/MedicinesAPI"
@@ -12,6 +11,8 @@ import SweetAlert from "react-bootstrap-sweetalert";
 import HeaderMain from "../headers/header";
 import "../../../node_modules/font-awesome/css/font-awesome.css"
 import DispensersAPI from "../../api/DispensersAPI"
+import { toast, ToastContainer } from "react-toastify";
+import { Link, redirect, BrowserRouter, useNavigate } from 'react-router-dom'
 
 export default function Dispensed({setSelectedPrescription, selectedPrescription}) {
   const [loading, setLoading] = useState(true);
@@ -21,13 +22,10 @@ export default function Dispensed({setSelectedPrescription, selectedPrescription
   const [animalData, setAnimalData] = useState([]);
   const [patientData, setPatientData] = useState([]);
 	const presId = localStorage.getItem("pId")
-
 	const [presDrugs, setPresDrugs] = useState([]);
 	const [trackingNo, setTrackingNo] = useState('');
 	const [dispenseData, setDispenseData] = useState([]);
-
-
-
+	const navigate = useNavigate();
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
 	const [patientId, setPatientId] = useState('');
@@ -47,7 +45,13 @@ export default function Dispensed({setSelectedPrescription, selectedPrescription
   });
 
 	const trackId = localStorage.getItem("trackingNo")
-	const storeId = localStorage.getItem("userID")
+	const storeId = JSON.parse(localStorage.getItem("userID"))
+	const productid = localStorage.getItem("productid")
+	const pname = localStorage.getItem("pname")
+	const amountD = localStorage.getItem("amount")
+
+	const notifySuccess = () => 
+  toast("Successfully dispensed");
 
 
   const {
@@ -89,7 +93,6 @@ export default function Dispensed({setSelectedPrescription, selectedPrescription
 
 	const submitForm = async (data) => {
     setLoading(true);
-    alert('test')
 			console.log({data})
 			let formattedData = {}
 			let dispenseProduct = []
@@ -107,12 +110,13 @@ export default function Dispensed({setSelectedPrescription, selectedPrescription
 
 
 
-      const response = await new DispensersAPI().createDispense(formattedData);
+      const response = await new DispensersAPI().createDispense(trackId, formattedData);
       if (response.ok) {
-        toast.success("Successfully Created Term");
+        notifySuccess();
         handleGetDispense();
         reset();
         // setShowForm(false);
+				navigate('/dispensingdrugs')
       } else {
         toast.error(response.data.errorMessage);
       }
@@ -122,6 +126,19 @@ export default function Dispensed({setSelectedPrescription, selectedPrescription
   return (
     <>
       {/* {loading && <FullScreenLoader />} */}
+			<ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+      <ToastContainer />
       <div className="App">
 			<header className="App-header">
           <HeaderMain/>
@@ -133,7 +150,7 @@ export default function Dispensed({setSelectedPrescription, selectedPrescription
           <div className="">
 					<form onSubmit={handleSubmit(submitForm)}>
           <div className='col-md-12 m-b-15'>
-              <label className='control-label mb-2'>Tracking No.</label>
+              <label className='control-label mb-2' style={{fontWeight:"bold"}}>Tracking No.</label>
                 <input
                 {...register("trackingNo", {
                   required: "Tracking is required",
@@ -142,11 +159,11 @@ export default function Dispensed({setSelectedPrescription, selectedPrescription
                 type='text'
                 size='30'
 								// disabled
-                className='form-control'
+                className='form-control  m-b-10'
                 placeholder='Enter text here'
               />
 
-							<label className='control-label mb-2'>Dispense ID.</label>
+							<label className='control-label mb-2' style={{fontWeight:"bold"}}>Dispense ID.</label>
                 <input
                 {...register("storeId", {
                   required: "Dispense Id is required",
@@ -155,11 +172,38 @@ export default function Dispensed({setSelectedPrescription, selectedPrescription
                 type='text'
                 size='30'
 								// disabled
-                className='form-control'
+                className='form-control m-b-10'
                 placeholder='Enter text here'
               />
 
-              <label className='control-label mb-2 m-r-5'>Drug</label>
+							<label className='control-label mb-2' style={{fontWeight:"bold"}}>Drug</label>
+							<div>
+							<label className='control-label mb-2'>{pname}</label>
+							</div>
+								<input
+								{...register(`dispenseProduct.productId`, {
+									required: "Drug is required",
+								})}
+								value={productid}
+								type='text'
+								size='30'
+								className='form-control m-b-10'
+								placeholder='Enter text here'
+							/>
+
+							<label className='control-label mb-2' style={{fontWeight:"bold"}}>Amount</label>
+								<input
+								{...register(`dispenseProduct.amount`, {
+									required: "Amount is required",
+								})}
+								value={amountD}
+								type='text'
+								size='30'
+								className='form-control m-b-10'
+								placeholder='Enter text here'
+							/>
+
+              {/* <label className='control-label mb-2 m-r-5'>Drug</label>
 							{fields.map((item, index) => (
 								<div key={item.id}> <span style={{fontWeight:"bold"}}>{index + 1}.</span>
 									<Form.Select {...register(`${index}_dispenseProduct.productId`)} >
@@ -194,9 +238,6 @@ export default function Dispensed({setSelectedPrescription, selectedPrescription
 									<i className="fa fa-plus"></i>
 								</button>
 								{/* end field array */}
-
-								<br></br>
-								<br></br>
 								<button type='submit' className='btn btn-primary'>
 								Dispense
 							</button>

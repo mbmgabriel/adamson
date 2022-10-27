@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Modal } from "react-bootstrap";
+import { Modal, Form } from "react-bootstrap";
 import ReactTable from "react-table-v6";
 import "react-table-v6/react-table.css";
 import { toast } from "react-toastify";
@@ -12,6 +12,7 @@ import "../../../node_modules/font-awesome/css/font-awesome.css"
 export default function Medicines() {
   const [loading, setLoading] = useState(true);
   const [medicineData, setMedicineData] = useState([]);
+  const [typeData, setTypeData] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [resetNotify, setResetNotify] = useState(false);
   const [selectedMedicine, setSelectedMedicine] = useState(null);
@@ -26,6 +27,7 @@ export default function Medicines() {
 
   useEffect(() => {
     handleGetAllMedicines();
+    handleGetAllTypes();
   }, []);   
 
   const handleGetAllMedicines = async () => {
@@ -35,6 +37,17 @@ export default function Medicines() {
         setMedicineData(response.data);
     } else {
       toast.error("Something went wrong while fetching user");
+    }
+    setLoading(false);
+  };
+
+  const handleGetAllTypes = async () => {
+    setLoading(true);
+    const response = await new MedicinesAPI().types();
+    if (response.ok) {
+        setTypeData(response.data);
+    } else {
+      // toast.error("Something went wrong while fetching user");
     }
     setLoading(false);
   };
@@ -119,6 +132,11 @@ export default function Medicines() {
                 id: "description",
                 accessor: (d) => d.description,
               },
+              {
+                Header: "Type",
+                id: "formatType",
+                accessor: (d) => d.formatType,
+              },
 
               {
                 Header: "Actions",
@@ -130,6 +148,7 @@ export default function Medicines() {
                       onClick={() => {
                         setValue('name', row.original.name)
                         setValue('description', row.original.description)
+                        setValue('formatType', row.original.formatType)
                         setSelectedMedicine(row.original);
                         setShowForm(true);
                       }}
@@ -175,7 +194,7 @@ export default function Medicines() {
             <span className='font-20'>
               {selectedMedicine != null
                 ? `Update ${selectedMedicine.name}`
-                : "Create Animal"}
+                : "Create Drug"}
             </span>
           </Modal.Header>
           <Modal.Body>
@@ -204,6 +223,17 @@ export default function Medicines() {
               />
               <p className='text-danger'>{errors.description?.message}</p>
 
+              <label className='control-label mb-2'>Type</label>
+              <Form.Select {...register("productFormatId", { required: true })}>
+                  <option value="">Select Type</option>
+                  {typeData && 
+                    typeData.map((item, index) => (
+                        <option key={index} value={item.id}>
+                            {item.name}
+                        </option>
+                    ))}
+              </Form.Select>
+
               
             </div>
           </Modal.Body>
@@ -214,7 +244,7 @@ export default function Medicines() {
               </button>  
               :
               <button type='submit' className='btn btn-primary'>
-              Save Animal
+              Save Drug
             </button>
             }
           </Modal.Footer>

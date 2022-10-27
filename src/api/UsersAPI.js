@@ -8,6 +8,14 @@ export default class Auth extends Base {
     });
   };
 
+  userregister = async data => {
+    return this.sendRequest({
+      path: `/api/User/register`,
+      method: 'POST',
+      data,
+    });
+  };
+
   userfile = async (id) => {
     return this.sendRequest({
       path: `/api/User/${id}/file`,

@@ -137,6 +137,7 @@ export default function Prescriptions() {
         setAnimalData(response.data);
     } else {
       // toast.error("Something went wrong while fetching user");
+      handleGetAllAnimals();
     }
     setLoading(false);
   };
@@ -179,12 +180,12 @@ export default function Prescriptions() {
     setLoading(false);
   };
 
-  const handleDeleteAnimal = async (id) => {
+  const handleDeletePrescription = async (id) => {
     setLoading(true);
     setResetNotify(false);
     const response = await new PrescriptionAPI().deletePrescriptions(id);
     if (response.ok) {
-      toast.success("Successfully Deleted Animal");
+      toast.success("Successfully Deleted Prescription");
       handleGetAllPrescriptions();
     } else {
       toast.error("Something went wrong while deleting user");
@@ -232,9 +233,11 @@ export default function Prescriptions() {
         <div className="main-title-pages m-b-10"> Prescriptions 
           <span className="m-l-10"> 
             {/* <button className='btn btn-primary' size="sm" onClick={() => setShowForm(true)}> */}
+            <a style={{textDecoration:"none !important", color:"white"}} href="/prescribed">
             <button className='btn btn-primary' size="sm" >
-              <a style={{textDecoration:"none !important", color:"white"}} href="/prescribed"><i className="fa fa-plus fa-2xl"></i></a>
-            </button> 
+              <i className="fa fa-plus fa-2xl"></i>
+            </button>
+            </a>
           </span>
         </div>
         {handleShowUploadModal()}
@@ -283,7 +286,7 @@ export default function Prescriptions() {
                 accessor: (d) => d.id,
                 Cell: (row) => (
                   <div style={{textAlign:'center'}} className=''>
-                    {row.original.trackingNo !== null &&
+                    {/* {row.original.trackingNo !== null &&
                       <button
                         onClick={() => {
                           setValue('name', row.original.name)
@@ -295,7 +298,7 @@ export default function Prescriptions() {
                       >
                         <i className="fa fa-edit"></i>
                       </button>
-                    }
+                    } */}
                     <button
                       onClick={() => {
                         
@@ -363,11 +366,11 @@ export default function Prescriptions() {
       <SweetAlert
         showCancel
         show={resetNotify}
-        onConfirm={() => handleDeleteAnimal(selectedPrescription.id)}
+        onConfirm={() => handleDeletePrescription(selectedPrescription.id)}
         confirmBtnText='Confirm'
         confirmBtnBsStyle='danger'
         cancelBtnBsStyle='secondary'
-        title='Are you sure to delete this animal?'
+        title='Are you sure to delete this prescription?'
         onCancel={() => setResetNotify(false)}
       >
       </SweetAlert>

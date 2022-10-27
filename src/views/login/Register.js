@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Modal, Form, Button, Select } from "react-bootstrap";
 import ReactTable from "react-table-v6";
 import "react-table-v6/react-table.css";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { useForm } from "react-hook-form";
 import PrescriptionAPI from "../../api/PrescriptionAPI"
 import MedicinesAPI from "../../api/MedicinesAPI"
@@ -28,6 +28,9 @@ export default function Register() {
     formState: { errors },
   } = useForm();
 
+	const notifySuccess = () => 
+  toast.success("Successfully Created User");
+
   useEffect(() => {
     handleGetPrescription();
   }, []);   
@@ -35,9 +38,10 @@ export default function Register() {
 	const submitForm = async (data) => {
     setLoading(true);
     
-      const response = await new UsersAPI().createUser(data);
+      const response = await new UsersAPI().userregister(data);
       if (response.ok) {
-        toast.success("Successfully Created Term");
+        // toast.success("Successfully Created User");
+				notifySuccess();
         reset();
         setShowForm(false);
       } else {
@@ -53,7 +57,7 @@ export default function Register() {
     if (response.ok) {
         setPrescriptionData(response.data);
     } else {
-      toast.error("Something went wrong while fetching user");
+      // toast.error("Something went wrong while fetching user");
     }
     setLoading(false);
   };
@@ -61,14 +65,27 @@ export default function Register() {
   return (
     <>
       {/* {loading && <FullScreenLoader />} */}
-      <div className="App">
-        <div className="container m-t-10">
-					
+			<ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+        <div className="container-fluid">
+					<div className="auth-container">
           <div className="row">
-						<div className='col-md-3 m-b-15'></div>
-							<div className='col-md-6 m-b-15' style={{position:"center"}}>
+							<div className='col-md-8 m-b-15'>
+								<div className="login-container register-bg-image"></div>
+							</div>
+							<div className='col-md-4' style={{position:"center"}}>
 							<form onSubmit={handleSubmit(submitForm)}>
-								<header className="App-header m-t-50" style={{fontSize:"30px", marginBottom:"30px", marginTop:"100px", fontWeight:"bold"}}>
+								<header className="App-header" style={{fontSize:"30px", marginBottom:"30px", marginTop:"20px", fontWeight:"bold"}}>
 									Sign Up for your account!
 									<span style={{marginLeft:10}} className="blue">VETDRUMS</span>
 								</header>
@@ -118,10 +135,11 @@ export default function Register() {
 								<p className='text-danger'>{errors.userTypeId?.message}</p>
 
 
-								<Button className="btn btn-md btn-primary btn-auth w-100 d-block mt-4 mb-4" size="md" variant="primary" type="submit">Log In</Button>
+								<Button className="btn btn-md btn-primary btn-auth w-100 d-block mt-4 mb-4" size="md" variant="primary" type="submit">Register</Button>
 							</form>
+							<div>Back to Login Page <span style={{fontWeight:"bold"}}><a href="/">Click here</a></span></div>
 							</div>
-						<div className='col-md-3 m-b-15'></div>
+							
           </div>
         </div>
       </div>

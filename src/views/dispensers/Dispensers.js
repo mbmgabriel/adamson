@@ -44,7 +44,7 @@ export default function Dispensers() {
     if (selectedDispenser != null) {
       const response = await new DispensersAPI().updateDispenser(selectedDispenser.id, data);
       if(response.ok) {
-        toast.success("Successfully Updated Animal Data")
+        toast.success("Successfully Updated Dispensing Data")
         handleGetAllDispensers()
         reset()
         setShowForm(false)
@@ -66,12 +66,12 @@ export default function Dispensers() {
     setLoading(false);
   };
 
-  const handleDeleteAnimal = async (id) => {
+  const handleDeleteDispensing = async (id) => {
     setLoading(true);
     setResetNotify(false);
     const response = await new DispensersAPI().deleteDispenser(id);
     if (response.ok) {
-      toast.success("Successfully Deleted Animal");
+      toast.success("Successfully Deleted Dispensing");
       handleGetAllDispensers();
     } else {
       toast.error("Something went wrong while deleting user");
@@ -93,7 +93,7 @@ export default function Dispensers() {
           <HeaderMain/>
         </header>
       <div className="container m-t-10">
-        <div className="main-title-pages m-b-10"> Medicines 
+        <div className="main-title-pages m-b-10"> Dispenser / Pharmacy 
           <span className="m-l-10"> 
             <button className='btn btn-primary' size="sm" onClick={() => setShowForm(true)}>
               <i className="fa fa-plus fa-2xl"></i>
@@ -161,11 +161,11 @@ export default function Dispensers() {
       <SweetAlert
         showCancel
         show={resetNotify}
-        onConfirm={() => handleDeleteAnimal(selectedDispenser.id)}
+        onConfirm={() => handleDeleteDispensing(selectedDispenser.id)}
         confirmBtnText='Confirm'
         confirmBtnBsStyle='danger'
         cancelBtnBsStyle='secondary'
-        title='Are you sure to delete this animal?'
+        title='Are you sure to delete this Dispensing?'
         onCancel={() => setResetNotify(false)}
       >
       </SweetAlert>
@@ -175,7 +175,7 @@ export default function Dispensers() {
             <span className='font-20'>
               {selectedDispenser != null
                 ? `Update ${selectedDispenser.name}`
-                : "Create Animal"}
+                : "Create Dispensing"}
             </span>
           </Modal.Header>
           <Modal.Body>
@@ -214,7 +214,7 @@ export default function Dispensers() {
               </button>  
               :
               <button type='submit' className='btn btn-primary'>
-              Save Animal
+              Save Dispensing
             </button>
             }
           </Modal.Footer>

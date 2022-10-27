@@ -17,11 +17,12 @@ function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
-  const notifyUpload = () => 
+  const notifySuccess= () => 
   toast("Success");
 
   const login = async(e) => {
     e.preventDefault();
+    notifySuccess();
     let response = await new Auth().login({username, password})
     console.log({response})
     if(response.ok){
@@ -31,10 +32,11 @@ function Login() {
       await window.localStorage.setItem('userID', response.data.id)
       await window.localStorage.setItem('userType', response.data.userTypeName)
       await window.localStorage.setItem('name', response.data.fullname)
-      notifyUpload()
+      await window.localStorage.setItem('prc', response.data.prcNo)
+      await window.localStorage.setItem('ptr', response.data.ptrNo)
       navigate('/home')
     }else{
-      alert(response.data.errorMessage)
+      toast.error(response.data.errorMessage)
     }
   }
 
@@ -88,11 +90,11 @@ function Login() {
 <div className="container-fluid">
 <div className="auth-container">
   <Row>
-    <Col md={9}>
+    <Col md={8}>
       <div className="login-container login-bg-image"></div>
     </Col>
-    <Col md={3}>
-    <h1 className="title"><span className="blue">VET</span>DRUMS</h1>
+    <Col md={4}>
+    <h1 className="title">VETDRUMS</h1>
       <p className="subtitle">Welcome!</p>
         <Form onSubmit={login}>
           <Form.Group controlId="exampleForm.ControlInput1">
@@ -125,7 +127,20 @@ function Login() {
     </Col> 
   </Row>
 </div>
+<ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
 </div>
+
   );
 }
 

@@ -8,12 +8,26 @@ import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import MedicinesAPI from "../../api/MedicinesAPI"
 import {Doughnut, Bar, Line} from 'react-chartjs-2';
+import DispensersAPI from "../../api/DispensersAPI"
+import Alert from 'react-bootstrap/Alert';
 
 function Home() {
 
   const [loading, setLoading] = useState(true);
   const [medicineData, setMedicineData] = useState([]);
+  const [dateFrom, setDateFrom] = useState([])
+  const [dateTo, setDateTo] = useState([])
   const userfullname = localStorage.getItem("name")
+  const prc = localStorage.getItem("prc")
+  const storeId = localStorage.getItem("userID")
+  const [drugDispensed, setDrugDispensed] = useState([])
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { errors },
+  } = useForm();
 
   useEffect(() => {
     handleGetAllMedicines();
@@ -30,12 +44,40 @@ function Home() {
     setLoading(false);
   };
 
+  const handleStoreDispensed = async () => {
+    setLoading(true);
+		
+    const response = await new DispensersAPI().getStoreDispensed(storeId);
+    if (response.ok) {
+        setDrugDispensed(response.data);
+				console.log(response.data)
+    } else {
+      // toast.error("Something went wrong while fetching user");
+    }
+    setLoading(false);
+  };
+
+  const submitForm = async (data) => {
+    setLoading(true);
+      const response = await new DispensersAPI().getDispensedReport(data);
+      if (response.ok) {
+        reset();
+        // setShowForm(false);
+      } else {
+        toast.error(response.data.errorMessage);
+      }
+    setLoading(false);
+  };
+
   return (
     <div className="App">
       <header className="App-header">
         {/* <img src={logo} className="App-logo" alt="logo" /> */}
         <HeaderMain/>
       </header>
+      {prc === "" && <Alert variant="warning">
+          You need to Fill up your PRC license no. <a href="/profile">Click Here</a>
+      </Alert>}
       <div className="container">
         <div className="main-title-pages m-t-10 m-b-10">
           Dashboard
@@ -79,7 +121,7 @@ function Home() {
                     Total No.
                   </Col>
                   <Col md={6}>
-                    {medicineData.length}
+                    {drugDispensed.length}
 
                   </Col>
                 </Row>
@@ -130,6 +172,26 @@ function Home() {
             </Card>
           </Col>
         </Row>
+        <span className="m-l-10"> Date To:
+          <input
+            type='date'
+            size='30'
+            className='form-control'
+            placeholder='Enter text here'
+            onChange={(e) => setDateTo(e.target.value)}
+          />
+          Date From:
+          <input
+            type='date'
+            size='30'
+            className='form-control'
+            placeholder='Enter text here'
+            onChange={(e) => setDateFrom(e.target.value)}
+          />
+          <button type='submit' className='btn btn-primary'>
+            Search
+          </button> 
+        </span>
       </div>
     </div>
   );

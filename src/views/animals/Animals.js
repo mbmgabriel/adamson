@@ -53,7 +53,7 @@ export default function Animals() {
         toast.error("Something went wrong while updating the term");
       }
     } else {
-      const response = await new AnimalsAPI().createUser(data);
+      const response = await new AnimalsAPI().createAnimal(data);
       if (response.ok) {
         toast.success("Successfully Created Term");
         handleGetAllAnimals();
@@ -109,11 +109,6 @@ export default function Animals() {
           {
             Header: "",
             columns: [
-              {
-                Header: "ID",
-                id: "id",
-                accessor: (d) => d.id,
-              },
               {
                 Header: "Name",
                 id: "name",
