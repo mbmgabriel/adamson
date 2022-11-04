@@ -163,6 +163,7 @@ export default function Dispensed({setSelectedPrescription, selectedPrescription
                 placeholder='Enter text here'
               />
 
+							
 							<label className='control-label mb-2' style={{fontWeight:"bold"}}>Dispense ID.</label>
                 <input
                 {...register("storeId", {
@@ -178,9 +179,12 @@ export default function Dispensed({setSelectedPrescription, selectedPrescription
 
 							<label className='control-label mb-2' style={{fontWeight:"bold"}}>Drug</label>
 							<div>
-							<label className='control-label mb-2'>{pname}</label>
+							<label className='control-label mb-2' style={{fontWeight:"bold", color:"blue"}}>{pname}</label>
 							</div>
-								<input
+
+							<span style={{visibility:"hidden"}}>
+							<label className='control-label mb-2' style={{fontWeight:"bold"}}>Product ID</label>
+							<input
 								{...register(`dispenseProduct.productId`, {
 									required: "Drug is required",
 								})}
@@ -190,6 +194,7 @@ export default function Dispensed({setSelectedPrescription, selectedPrescription
 								className='form-control m-b-10'
 								placeholder='Enter text here'
 							/>
+							</span>
 
 							<label className='control-label mb-2' style={{fontWeight:"bold"}}>Amount</label>
 								<input

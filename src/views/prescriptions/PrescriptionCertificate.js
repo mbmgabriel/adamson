@@ -11,6 +11,7 @@ import PatientsAPI from "../../api/PatientsAPI"
 import SweetAlert from "react-bootstrap-sweetalert";
 import HeaderMain from "../headers/header";
 import "../../../node_modules/font-awesome/css/font-awesome.css"
+import sig from "../../assets/images/signature.png"
 
 export default function PrescriptionCerttificate() {
   const [loading, setLoading] = useState(true);
@@ -18,6 +19,8 @@ export default function PrescriptionCerttificate() {
   const [prescriptionDrug, setPrescriptionDrug] = useState([]);
 	const presId = localStorage.getItem("pId")
   const fullname = localStorage.getItem("name")
+  const prc = localStorage.getItem("prc")
+  const ptr = localStorage.getItem("ptr")
 
   const {
     register,
@@ -74,8 +77,8 @@ export default function PrescriptionCerttificate() {
               <p></p>
               <Col md={4} className="header-title">Veterinarian</Col><Col md={8}>{fullname}</Col>
 							<Col md={4} className="header-title">Profession</Col><Col md={8}>Veterinarian</Col>
-							<Col md={4} className="header-title">PRC No.</Col><Col md={8}>123-456-900</Col>
-							<Col md={4} className="header-title">PTR No.</Col><Col md={8}>220-222-000</Col>
+							<Col md={4} className="header-title">PRC No.</Col><Col md={8}>{prc}</Col>
+							<Col md={4} className="header-title">PTR No.</Col><Col md={8}>{ptr}</Col>
 						</Row>
             <br></br>
             <Row>
@@ -105,6 +108,9 @@ export default function PrescriptionCerttificate() {
                 </span>
                 <br></br>
                 <br></br>
+                <div className="t-a-c">
+                  <img src={sig} width="150" height="100" alt=""/>
+                </div>
                 <div className="t-a-c">
                   {fullname}
                 </div>

@@ -22,7 +22,6 @@ function Login() {
 
   const login = async(e) => {
     e.preventDefault();
-    notifySuccess();
     let response = await new Auth().login({username, password})
     console.log({response})
     if(response.ok){
@@ -34,6 +33,7 @@ function Login() {
       await window.localStorage.setItem('name', response.data.fullname)
       await window.localStorage.setItem('prc', response.data.prcNo)
       await window.localStorage.setItem('ptr', response.data.ptrNo)
+      await window.localStorage.setItem('lto', response.data.ltoNo)
       navigate('/home')
     }else{
       toast.error(response.data.errorMessage)
@@ -95,10 +95,10 @@ function Login() {
     </Col>
     <Col md={4}>
     <h1 className="title">VETDRUMS</h1>
-      <p className="subtitle">Welcome!</p>
+      <p className="subtitle" style={{fontWeight:"bold", color:"#0981D1"}}>Welcome! Veterrinary Drug Monitoring System</p>
         <Form onSubmit={login}>
           <Form.Group controlId="exampleForm.ControlInput1">
-            <Form.Label className="custom-label">E-mail / Username</Form.Label>
+            <Form.Label className="custom-label">Username</Form.Label>
             <Form.Control 
             className="custom-input" 
             size="md" 

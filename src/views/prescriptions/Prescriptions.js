@@ -13,6 +13,7 @@ import PatientsAPI from "../../api/PatientsAPI"
 import SweetAlert from "react-bootstrap-sweetalert";
 import HeaderMain from "../headers/header";
 import "../../../node_modules/font-awesome/css/font-awesome.css"
+import Badge from 'react-bootstrap/Badge';
 
 export default function Prescriptions() {
   const [loading, setLoading] = useState(true);
@@ -278,7 +279,15 @@ export default function Prescriptions() {
               {
                 Header: "Status",
                 id: "status",
-                accessor: (d) => d.trackingNo === null && "Dispensed",
+                accessor: (d) => d.trackingNo === null 
+                ? 
+                <Badge pill bg="success">
+                  Dispensed
+                </Badge>
+                : 
+                <Badge pill bg="info">
+                  Not Dispensed
+                </Badge>,
               },
               {
                 Header: "Actions",
@@ -308,9 +317,9 @@ export default function Prescriptions() {
                       }}
                       className='btn btn-info btn-sm m-r-5'
                     >
-                      <i className="fa fa-book"></i>
+                      <i className="fa fa-book"></i> Generate Prescription
                     </button>
-                    <button
+                    {/* <button
                       onClick={() => {
                         setShowUploadModal(true)
                         localStorage.setItem("pId", row.original.id)
@@ -328,9 +337,9 @@ export default function Prescriptions() {
                       className='btn btn-info btn-sm m-r-5'
                     >
                       <i className="fa fa-eye"></i>
-                    </button>
+                    </button> */}
                     
-                    <button
+                    {/* <button
                       onClick={() => {
                         setSelectedPrescription(row.original);
                         setResetNotify(true);
@@ -338,7 +347,7 @@ export default function Prescriptions() {
                       className='btn btn-danger btn-sm m-r-5'
                     >
                       <i className="fa fa-trash"></i>
-                    </button>
+                    </button> */}
                   </div>
                 ),
               },

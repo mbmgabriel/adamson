@@ -48,9 +48,10 @@ function HeaderMain() {
             </NavDropdown>}
           </Nav>
           <Nav>
-            <Nav.Link href="#deets"></Nav.Link>
             <Nav.Link eventKey={3} href="/profile">
-              Profile
+            {usertype === "Veterenarian" && 'Veterinarian Account Profile'} 
+            {usertype === "Dispenser" && 'Dispensing Account Profile'} 
+            {usertype === "Client" && 'Client Account Profile'} 
             </Nav.Link>
             <Nav.Link eventKey={2} href="/" onClick={() => {
                         localStorage.removeItem("name");

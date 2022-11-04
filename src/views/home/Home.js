@@ -19,6 +19,8 @@ function Home() {
   const [dateTo, setDateTo] = useState([])
   const userfullname = localStorage.getItem("name")
   const prc = localStorage.getItem("prc")
+  const lto = localStorage.getItem("lto")
+  const usertype = localStorage.getItem("userType")
   const storeId = localStorage.getItem("userID")
   const [drugDispensed, setDrugDispensed] = useState([])
   const {
@@ -75,8 +77,11 @@ function Home() {
         {/* <img src={logo} className="App-logo" alt="logo" /> */}
         <HeaderMain/>
       </header>
-      {prc === "" && <Alert variant="warning">
+      {prc === "" && usertype === "Veterenarian" && <Alert variant="warning">
           You need to Fill up your PRC license no. <a href="/profile">Click Here</a>
+      </Alert>}
+      {lto === "" && usertype === "Dispenser" && <Alert variant="warning">
+          You need to Fill up your LTO license no. <a href="/profile">Click Here</a>
       </Alert>}
       <div className="container">
         <div className="main-title-pages m-t-10 m-b-10">

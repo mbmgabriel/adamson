@@ -89,7 +89,7 @@ export default function Register() {
 									Sign Up for your account!
 									<span style={{marginLeft:10}} className="blue">VETDRUMS</span>
 								</header>
-								<label className='control-label mb-2'>Email</label>
+								<label className='control-label mb-2'>Username</label>
 									<input
 									{...register("username", {
 										required: "email is required",
@@ -106,7 +106,7 @@ export default function Register() {
 									{...register("password", {
 										required: "Password is required",
 									})}
-									type='text'
+									type='password'
 									size='30'
 									className='form-control'
 									placeholder=''
