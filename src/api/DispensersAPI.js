@@ -69,4 +69,13 @@ export default class Auth extends Base {
     })
   }
 
+  rangeReport = async (id,data) => {
+    return this.sendRequest({
+      path: `/api/Product/${id}/dispense/report`,
+      method: 'POST',
+      data,
+    });
+  };
+
+
 }
