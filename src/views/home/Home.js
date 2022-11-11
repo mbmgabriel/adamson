@@ -12,6 +12,7 @@ import {Doughnut, Bar, Line} from 'react-chartjs-2';
 import DispensersAPI from "../../api/DispensersAPI"
 import UsersAPI from "../../api/UsersAPI"
 import Alert from 'react-bootstrap/Alert';
+import ReactTable from "react-table-v6";
 
 function Home() {
 
@@ -20,12 +21,16 @@ function Home() {
   const [dispensersData, setDispenserData] = useState([]);
   const [dateFrom, setDateFrom] = useState([])
   const [dateTo, setDateTo] = useState([])
+  const [medLabel, setMedLabel] = useState([])
+  const [disLabel, setDisLabel] = useState([])
+  const [disData, setDisData] = useState([])
   const userfullname = localStorage.getItem("name")
   const prc = localStorage.getItem("prc")
   const lto = localStorage.getItem("lto")
   const usertype = localStorage.getItem("userType")
+  const storeid = localStorage.getItem("storeID")
   // const storeId = localStorage.getItem("userID")
-  const [drugDispensed, setRangeData] = useState([])
+  const [drugDispensed, setdrugDispensed] = useState([])
 
   const handleAddrTypeChange = (e) => { 
     // console.clear(); 
@@ -34,8 +39,18 @@ function Home() {
       }
 
   const getStoreID = (e) => {
-    alert(e.target.value)
-    console.log(e.target.value)
+    localStorage.setItem('storeID', e.target.value)
+  }
+
+  const productsSet = () => {
+    const p =
+    dispensersData.map((item, index)=>(
+      item.productName
+    ))
+
+    return(
+      p
+    )
   }
 
   const {
@@ -49,6 +64,9 @@ function Home() {
   useEffect(() => {
     handleGetAllMedicines();
     handleGetDispensers();
+    getLabelMedicine();
+    getLabelDispensed();
+    getDataDispensed();
   }, []);   
 
   const handleGetAllMedicines = async () => {
@@ -61,6 +79,39 @@ function Home() {
     }
     setLoading(false);
   };
+
+  const getLabelMedicine = () => {
+    let tempData = []
+    medicineData.map((ta, index) =>{
+      let temp = '';
+      let name = `${ta?.name}`
+      temp  = name;
+      tempData.push(temp)
+    })
+    setMedLabel(tempData)
+  }
+
+  const getLabelDispensed = () => {
+    let tempData = []
+    drugDispensed.map((ta, index) =>{
+      let temp = '';
+      let name = `${ta?.productName}`
+      temp  = name;
+      tempData.push(temp)
+    })
+    setDisLabel(tempData)
+  }
+  const getDataDispensed = () => {
+    let tempData = []
+    drugDispensed.map((ta, index) =>{
+      let temp = '';
+      let name = `${ta?.totalDispersed}`
+      temp  = name;
+      tempData.push(temp)
+    })
+    setDisData(tempData)
+  }
+
 
   const handleGetDispensers = async () => {
     setLoading(true);
@@ -75,9 +126,9 @@ function Home() {
 
   const submitForm = async (data) => {
     setLoading(true);
-    const response = await new DispensersAPI().rangeReport(data);
+    const response = await new DispensersAPI().rangeReport(storeid, data);
       if (response.ok) {
-        setRangeData(response.data);
+        setdrugDispensed(response.data);
 				console.log(response.data)
         reset();
         // setShowForm(false);
@@ -86,6 +137,8 @@ function Home() {
       }
     setLoading(false);
   };
+
+  
 
   return (
     <div className="App">
@@ -150,20 +203,20 @@ function Home() {
             </Card>
           </Col>
         </Row>
-        
         <Row>
           <Col md={6}>
             <Card className="dash-card">
               <Card.Body>
               <Doughnut 
-                data={{labels: [
-                  'Red',
-                  'Blue',
-                  'Yellow'
-                ],
+                // data={{labels: [
+                //   'Red',
+                //   'Blue',
+                //   'Yellow'
+                // ],
+                data={{labels:disLabel,
                 datasets: [{
-                  label: 'My First Dataset',
-                  data: [300, 50, 100],
+                  label: 'My Dataset',
+                  data: disData,
                   backgroundColor: [
                     'rgb(255, 99, 132)',
                     'rgb(54, 162, 235)',
@@ -180,7 +233,10 @@ function Home() {
               <Card.Body>
                 <Line
                   data={{
-                    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                    // labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                    labels: [dispensersData.map((item, index)=>(
+                      item.productName
+                    ))],
                     datasets: [{
                       label: 'My First dataset',
                       backgroundColor: 'rgb(255, 99, 132)',
@@ -193,44 +249,77 @@ function Home() {
             </Card>
           </Col>
         </Row>
+        {usertype === "Admin" &&
+        <>
         <form onSubmit={handleSubmit(submitForm)}>
-
-        <label className='control-label mb-2'>Type</label>
-          <Form.Select onChange={getStoreID}>
-            <option value="">Select Dispensing</option>
-            {
-              dispensersData.map((item, index) => (
-                  <option key={index} value={item.storeId}>
-                      {item.userTypeId === 3 && item.fullname}
-                  </option>
-              ))}
-          </Form.Select>
-        <label className='control-label mb-2'>Date To</label>
+          <label className='control-label mb-2'>Type</label>
+            <Form.Select onChange={getStoreID}>
+              <option value="">Select Dispensing</option>
+              {
+                dispensersData.map((item, index) => (
+                    <option key={index} value={item.storeId}>
+                        {item.userTypeId === 3 && item.fullname}
+                    </option>
+                ))}
+            </Form.Select>
+          
+          <p className='text-danger'>{errors.name?.message}</p>
+          <label className='control-label mb-2'>Date From</label>
           <input
-          {...register("dateTo", {
-            required: "Date To is required",
-          })}
-          type='date'
-          size='30'
-          className='form-control'
-          placeholder='Enter text here'
+            {...register("dateFrom", {
+              required: "Date From is required",
+            })}
+            type='date'
+            size='30'
+            className='form-control'
+            placeholder='Enter text here'
           />
-        <p className='text-danger'>{errors.name?.message}</p>
-        <label className='control-label mb-2'>Date From</label>
-        <input
-          {...register("dateFrom", {
-            required: "Date From is required",
-          })}
-          type='date'
-          size='30'
-          className='form-control'
-          placeholder='Enter text here'
-        />
-        <p className='text-danger'>{errors.name?.message}</p>
-          <button type='submit' className='btn btn-primary'>
-            Search
-          </button> 
+
+          <label className='control-label mb-2'>Date To</label>
+            <input
+            {...register("dateTo", {
+              required: "Date To is required",
+            })}
+            type='date'
+            size='30'
+            className='form-control'
+            placeholder='Enter text here'
+          />
+          <p className='text-danger'>{errors.name?.message}</p>
+            <button type='submit' className='btn btn-primary'>
+              Search
+            </button> 
         </form>
+
+          <ReactTable
+          pageCount={100}
+          list={drugDispensed}
+          filterable
+          data={drugDispensed}
+          columns={[
+            {
+              Header: "",
+              columns: [
+                {
+                  Header: "Drug Name",
+                  id: "productName",
+                  accessor: (d) => d.productName,
+                },
+                {
+                  Header: "Total Dispense",
+                  id: "totalDispersed",
+                  accessor: (d) => d.totalDispersed,
+                },
+              ],
+            },
+          ]}
+          csv
+          edited={drugDispensed}
+          defaultPageSize={10}
+          className='-highlight'
+        />
+        </>
+      }
       </div>
     </div>
   );
