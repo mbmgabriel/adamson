@@ -119,6 +119,11 @@ export default function Users() {
                 id: "fullname",
                 accessor: (d) => d.fullname,
               },
+              {
+                Header: "Type",
+                id: "userTypeId",
+                accessor: (d) => d.userTypeId,
+              },
 
               {
                 Header: "Actions",

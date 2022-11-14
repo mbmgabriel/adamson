@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, redirect, BrowserRouter, useNavigate } from 'react-router-dom'
-import { Modal, Form, Button, Select, Toast } from "react-bootstrap";
+import { Modal, Form, Button, Select, Toast, Alert } from "react-bootstrap";
 import ReactTable from "react-table-v6";
 import "react-table-v6/react-table.css";
 import { toast, ToastContainer } from "react-toastify";
@@ -18,6 +18,7 @@ import Badge from 'react-bootstrap/Badge';
 export default function Prescriptions() {
   const [loading, setLoading] = useState(true);
   const [prescriptionData, setPrescriptionData] = useState([]);
+  const [prescriptionUserData, setPrescriptionUserData] = useState([]);
   const [medicineData, setMedicineData] = useState([]);
   const [animalData, setAnimalData] = useState([]);
   const [patientData, setPatientData] = useState([]);
@@ -28,7 +29,12 @@ export default function Prescriptions() {
   const [filesToUpload, setFilesToUpload] = useState({});
   const navigate = useNavigate();
   const presId = localStorage.getItem("pId")
-
+  const userid = localStorage.getItem("userID")
+  const userfullname = localStorage.getItem("name")
+  const prc = localStorage.getItem("prc")
+  const lto = localStorage.getItem("lto")
+  const usertype = localStorage.getItem("userType")
+  const storeid = localStorage.getItem("storeID")
   const {
     register,
     handleSubmit,
@@ -42,6 +48,7 @@ export default function Prescriptions() {
     handleGetAllMedicines();
     handleGetAllAnimals();
     handleGetAllPatients();
+    handleGetAllPrescriptionsUser();
   }, []);   
 
   
@@ -113,6 +120,18 @@ export default function Prescriptions() {
     const response = await new PrescriptionAPI().prescriptions();
     if (response.ok) {
         setPrescriptionData(response.data);
+    } else {
+      // toast.error("Something went wrong while fetching user");
+      handleGetAllPrescriptions()
+    }
+    setLoading(false);
+  };
+
+  const handleGetAllPrescriptionsUser = async () => {
+    setLoading(true);
+    const response = await new PrescriptionAPI().getPrescriptionUser(userid);
+    if (response.ok) {
+        setPrescriptionUserData(response.data);
     } else {
       // toast.error("Something went wrong while fetching user");
       handleGetAllPrescriptions()
@@ -230,11 +249,21 @@ export default function Prescriptions() {
         <header className="App-header">
           <HeaderMain/>
         </header>
+        {prc === "" && usertype === "Veterenarian" && <Alert variant="warning">
+          You need to Fill up your PRC license no. <a href="/profile">Click Here</a>
+        </Alert>}
+        {lto === "" && usertype === "Dispenser" && <Alert variant="warning">
+            You need to Fill up your LTO license no. <a href="/profile">Click Here</a>
+        </Alert>}
       <div className="container m-t-10">
         <div className="main-title-pages m-b-10"> Prescriptions 
           <span className="m-l-10"> 
             {/* <button className='btn btn-primary' size="sm" onClick={() => setShowForm(true)}> */}
             <a style={{textDecoration:"none !important", color:"white"}} href="/prescribed">
+            {prc !== "" && usertype === "Veterenarian" && <button className='btn btn-primary' size="sm" >
+              <i className="fa fa-plus fa-2xl"></i>
+            </button>}
+
             <button className='btn btn-primary' size="sm" >
               <i className="fa fa-plus fa-2xl"></i>
             </button>
@@ -259,9 +288,9 @@ export default function Prescriptions() {
         
       <ReactTable
         pageCount={100}
-        list={prescriptionData}
+        list={prescriptionUserData}
         filterable
-        data={prescriptionData}
+        data={prescriptionUserData}
         columns={[
           {
             Header: "",
@@ -355,7 +384,7 @@ export default function Prescriptions() {
           },
         ]}
         csv
-        edited={prescriptionData}
+        edited={prescriptionUserData}
         defaultPageSize={10}
         className='-highlight'
       />

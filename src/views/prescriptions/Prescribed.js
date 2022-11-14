@@ -132,6 +132,11 @@ export default function Prescribed() {
     setLoading(false);
   };
 
+  const clickFile = (link) => {
+    navigator.clipboard.writeText(link)
+    toast.success('File link copied to clipboard.')
+  }
+
   return (
     <>
       {/* {loading && <FullScreenLoader />} */}
@@ -203,7 +208,7 @@ export default function Prescribed() {
                 type='text'
                 size='30'
                 className='form-control'
-                placeholder='Enter text here'
+                placeholder='Enter link here'
               />
               <p className='text-danger'>{errors.signatureLink?.message}</p>
 

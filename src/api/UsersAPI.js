@@ -53,4 +53,22 @@ export default class Auth extends Base {
       data,
     })
   }
+
+  uploadSignature = async (id, data) => {
+    return this.sendRequest({
+      path: `/api/User/${id}/file/upload/signature`,
+      method: 'POST',
+      data,
+    })
+  }
+
+  uploadPRC = async (id, data) => {
+    return this.sendRequest({
+      path: `/api/User/${id}/file/upload/id`,
+      method: 'POST',
+      data,
+    })
+  }
+
+  
 }
