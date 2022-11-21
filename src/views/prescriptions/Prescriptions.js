@@ -263,10 +263,10 @@ export default function Prescriptions() {
             {prc !== "" && usertype === "Veterenarian" && <button className='btn btn-primary' size="sm" >
               <i className="fa fa-plus fa-2xl"></i>
             </button>}
-
+            {/* 
             <button className='btn btn-primary' size="sm" >
               <i className="fa fa-plus fa-2xl"></i>
-            </button>
+            </button> */}
             </a>
           </span>
         </div>

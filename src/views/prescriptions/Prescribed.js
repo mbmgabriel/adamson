@@ -21,6 +21,8 @@ export default function Prescribed() {
   const [animalData, setAnimalData] = useState([]);
   const [patientData, setPatientData] = useState([]);
 	const presId = localStorage.getItem("pId")
+  const userid = localStorage.getItem("userID")
+  const siglink = `http://tfismartasp-001-site18.btempurl.com/user/${userid}/Signature/Signature.png`
 
 	
 	const navigate = useNavigate()
@@ -210,6 +212,9 @@ export default function Prescribed() {
                 className='form-control'
                 placeholder='Enter link here'
               />
+              <br></br>
+              <i className="fa fa-copy" onClick={() => clickFile(siglink)} style={{paddingRight: 5}}/>
+              Copy your signature
               <p className='text-danger'>{errors.signatureLink?.message}</p>
 
               <label className='control-label mb-2'>Animal Type</label>
@@ -290,7 +295,7 @@ export default function Prescribed() {
 									<hr></hr>
 							<br></br>
 							<br></br>
-              <label className='control-label mb-2 m-b-10'>Patient</label>
+              <label className='control-label mb-2 m-b-10'>Client</label>
               <Form.Select {...register("patientId", { required: true })}>
                   <option value="">Select Client/Farmer</option>
                   {

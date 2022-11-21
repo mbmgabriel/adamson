@@ -196,12 +196,25 @@ export default function Dispensed({setSelectedPrescription, selectedPrescription
 							/>
 							</span>
 
+							<label className='control-label mb-2' style={{fontWeight:"bold"}}>Brand</label>
+								<input
+								{...register(`dispenseProduct.brand`, {
+									required: "Brand is not required",
+								})}
+								// value={amountD}
+								type='text'
+								size='30'
+								className='form-control m-b-10'
+								placeholder='Enter text here'
+							/>
+
 							<label className='control-label mb-2' style={{fontWeight:"bold"}}>Amount</label>
 								<input
 								{...register(`dispenseProduct.amount`, {
 									required: "Amount is required",
 								})}
-								value={amountD}
+								// value={amountD}
+								defaultValue={amountD}
 								type='text'
 								size='30'
 								className='form-control m-b-10'

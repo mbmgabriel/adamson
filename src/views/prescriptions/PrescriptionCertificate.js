@@ -21,6 +21,8 @@ export default function PrescriptionCerttificate() {
   const fullname = localStorage.getItem("name")
   const prc = localStorage.getItem("prc")
   const ptr = localStorage.getItem("ptr")
+  const userid = localStorage.getItem("userID")
+  const siglink = `http://tfismartasp-001-site18.btempurl.com/user/${userid}/Signature/Signature.png`
 
   const {
     register,
@@ -82,7 +84,7 @@ export default function PrescriptionCerttificate() {
 						</Row>
             <br></br>
             <Row>
-              <Col md={12} className="header-title t-a-c border-1px m-b-10">VETERINARY-PATIENT-CLIENT-RELATIONSHIP</Col>
+              <Col md={12} className="header-title t-a-c border-1px m-b-10">VETERINARY-CLIENT-PATIENT-RELATIONSHIP</Col>
               <Col md={6} className="border-1px">
                 <span>
                   I have contracted the services of Dr. {fullname} to diagnose and treat disease problems of the animals
@@ -109,7 +111,7 @@ export default function PrescriptionCerttificate() {
                 <br></br>
                 <br></br>
                 <div className="t-a-c">
-                  <img src={sig} width="150" height="100" alt=""/>
+                  <img src={siglink} width="150" height="100" alt=""/>
                 </div>
                 <div className="t-a-c">
                   {fullname}

@@ -7,6 +7,7 @@ import logo from "../../assets/images/image001.jpg"
 
 function HeaderMain() {
   const usertype = localStorage.getItem("userType")
+  const prcno = localStorage.getItem("prc")
   const [headerColor, setHeaderColor] = ('')
 
   // const getColor = () => {
@@ -32,7 +33,7 @@ function HeaderMain() {
         <Navbar.Toggle aria-controls="responsive-navbar-nav"/>
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-          {usertype === "Veterenarian" && <Nav.Link href="/prescriptions">VDO</Nav.Link>}
+          {usertype === "Veterenarian" && prcno !== "" && <Nav.Link href="/prescriptions">VDO</Nav.Link>}
           {usertype === "Dispenser" && <Nav.Link href="/dispensingdrugs">Dispensing</Nav.Link>}
             
             {usertype === "Admin" && <Nav.Link href="/users">Users</Nav.Link>}

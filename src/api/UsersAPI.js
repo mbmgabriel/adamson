@@ -70,5 +70,13 @@ export default class Auth extends Base {
     })
   }
 
+  uploadPic = async (id, data) => {
+    return this.sendRequest({
+      path: `/api/User/${id}/file/upload/profilepic`,
+      method: 'POST',
+      data,
+    })
+  }
+
   
 }

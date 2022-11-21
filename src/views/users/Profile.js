@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Modal, Form, Button, Select, Col, Row } from "react-bootstrap";
 import ReactTable from "react-table-v6";
 import "react-table-v6/react-table.css";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { useForm } from "react-hook-form";
 import PrescriptionAPI from "../../api/PrescriptionAPI"
 import MedicinesAPI from "../../api/MedicinesAPI"
@@ -22,15 +22,21 @@ export default function Profile() {
 	const [filesToUpload, setFilesToUpload] = useState({});
 	const [showUploadModal, setShowUploadModal] = useState(false);
   const [showUploadModalPRC, setShowUploadModalPRC] = useState(false);
+  const [showUploadModalPic, setShowUploadModalPic] = useState(false);
   const [sigLinkData, setSigLinkData] = useState(false);
+  const [picLinkData, setPicLinkData] = useState(false);
   const [prcId, setPrcId] = useState("");
+  const [cardExp, setCardExp] = useState("");
 	const userid = localStorage.getItem("userID")
   const userfullname = localStorage.getItem("name")
   const prc = localStorage.getItem("prc")
+  const prcimage = localStorage.getItem("prcimage")
   const lto = localStorage.getItem("lto")
   const usertype = localStorage.getItem("userType")
   const siglink = `http://tfismartasp-001-site18.btempurl.com/user/${userid}/Signature/Signature.png`
+  const piclink = `http://tfismartasp-001-site18.btempurl.com/user/${userid}/Profile/Profile.png`
   const [sigLinkDataError, setSigLinkDataError] = useState('');
+  const [picLinkDataError, setPicLinkDataError] = useState('');
 
   const {
     register,
@@ -43,10 +49,8 @@ export default function Profile() {
   useEffect(() => {
     handleGetUserFile();
     getSigLink();
+    getPicLink();
   }, []);   
-
-	const notifyUpload = () => 
-  toast("Wow so easy !");
 
   const handleGetUploadedUserFile = (file) => {
     getBase64(file).then(
@@ -72,9 +76,24 @@ export default function Profile() {
           "userId": JSON.parse(userid),
           "base64String": data,
           "filename": file.name,
-          "cardNo":prcId,
+          
           "cardType":1,
-          "cardExpiration": "2022-11-14T08:43:20.918Z",
+         
+      	};
+				setFilesToUpload(toUpload)
+			}
+    );
+  }
+
+  const handleGetUploadedUserFilePic = (file) => {
+    getBase64(file).then(
+      data => {
+        console.log(file.name)
+        let toUpload = {
+          // classId: id,
+          "userId": JSON.parse(userid),
+          "base64String": data,
+          "filename": file.name
       	};
 				setFilesToUpload(toUpload)
 			}
@@ -89,6 +108,27 @@ export default function Profile() {
       console.log(response.data)
   } else {
     toast.error("Something went wrong while fetching siglink");
+  }
+  }
+  const getPicLink = async () => {
+    let response = await fetch(piclink)
+    if (response.ok) {
+      setPicLinkData(response.data);
+      console.log(response.data.status)
+      console.log(response.data)
+  } else {
+    toast.error("Something went wrong while fetching picLink");
+  }
+  }
+
+  const getPrcLink = async () => {
+    let response = await fetch(piclink)
+    if (response.ok) {
+      setPicLinkData(response.data);
+      console.log(response.data.status)
+      console.log(response.data)
+  } else {
+    toast.error("Something went wrong while fetching picLink");
   }
   }
 
@@ -109,11 +149,11 @@ export default function Profile() {
     if(response.ok){
       setLoading(false);
       handleGetUserFile();
-      toast.success("Successfully uploaded the class list.")
-      notifyUpload()
+      toast.success("Successfully uploaded signature.")
     }else{
       setLoading(false);
-      alert("Something went wrong while uploading class list")
+      toast.error("Something went wrong while uploading signature")
+      // toast.error(response.data.errorMessage);
     }
   }
 
@@ -121,14 +161,31 @@ export default function Profile() {
     e.preventDefault();
     setShowUploadModalPRC(false);
     setLoading(true);
-    let response = await new UsersAPI().uploadPRC(userid, filesToUpload)
+    let temp = {...filesToUpload, "cardNo": prcId, "cardExpiration":cardExp}
+    let response = await new UsersAPI().uploadPRC(userid, temp)
     if(response.ok){
       setLoading(false);
       toast.success("Successfully uploaded PRC ID.")
-      notifyUpload()
     }else{
       setLoading(false);
-      alert("Something went wrong while uploading class list")
+      alert("Something went wrong while uploading prc id")
+      toast.error(response.data.errorMessage);
+    }
+  }
+
+  const handleUploadFilePic = async(e) => {
+    e.preventDefault();
+    setShowUploadModalPic(false);
+    setLoading(true);
+    let temp = {...filesToUpload, "cardNo": prcId, "cardExpiration":cardExp}
+    let response = await new UsersAPI().uploadPic(userid, temp)
+    if(response.ok){
+      setLoading(false);
+      toast.success("Successfully uploaded profile picture.")
+    }else{
+      setLoading(false);
+      toast.error("Something went wrong uploading profile picture.")
+      toast.error(response.data.errorMessage);
     }
   }
 
@@ -161,9 +218,20 @@ export default function Profile() {
 
 
   const handleImageError = (e) => {
-    // console.log = "https://en.wikipedia.org/wiki/Pluto#/media/File:Pluto_in_True_Color_-_High-Res.jpg"
-    // e.target.src = "https://en.wikipedia.org/wiki/Pluto#/media/File:Pluto_in_True_Color_-_High-Res.jpg"
     setSigLinkDataError('No Signature, Upload a signature')
+  }
+
+  const handleImageErrorPic = (e) => {
+    setPicLinkDataError("No Profile Pic, Upload a picture")
+  }
+
+  const handleImageErrorPRC = (e) => {
+    setPicLinkDataError("No Profile Pic, Upload a picture")
+  }
+
+  const clickFile = (link) => {
+    navigator.clipboard.writeText(link)
+    toast.success('File link copied to clipboard.')
   }
 
 	const handleShowUploadModal = () => {
@@ -201,8 +269,34 @@ export default function Profile() {
             <Form.Group className="mb-3">
               <Form.Control type="file" accept=".png,.jpg" onChange={(e) => handleGetUploadedUserFilePRC(e.target.files[0])} />
               <br></br>
-              <label>PRC ID</label>
+              <label>PRC No</label>
               <Form.Control type="text" value={prcId} onChange={(e) => setPrcId(e.target.value)}/>
+              <br></br>
+              <label>PRC Expiration Date</label>
+              <Form.Control type="date" value={cardExp} onChange={(e) => setCardExp(e.target.value)}/>
+            </Form.Group>
+            <Form.Group className='right-btn'>
+              <Button className='tficolorbg-button' type='submit'>Upload</Button>
+            </Form.Group>
+          </Form> 
+        </Modal.Body>
+      </Modal>
+    )
+  }
+
+  const handleShowUploadModalPic = () => {
+    return(
+      <Modal  size="lg" show={showUploadModalPic} onHide={()=> setShowUploadModalPic(false)} aria-labelledby="example-modal-sizes-title-lg">
+        <Modal.Header className='class-modal-header' closeButton>
+          <Modal.Title id="example-modal-sizes-title-lg" >
+            Upload Profile Picture
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmit={(e) => handleUploadFilePic(e)} >  
+            <Form.Group className="mb-3">
+              <Form.Control type="file" accept=".png,.jpg" onChange={(e) => handleGetUploadedUserFilePic(e.target.files[0])} />
+              <br></br>
             </Form.Group>
             <Form.Group className='right-btn'>
               <Button className='tficolorbg-button' type='submit'>Upload</Button>
@@ -216,6 +310,18 @@ export default function Profile() {
   return (
     <>
       {/* {loading && <FullScreenLoader />} */}
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div className="App">
 				<header className="App-header">
           <HeaderMain/>
@@ -230,6 +336,7 @@ export default function Profile() {
 								</header>
 								{handleShowUploadModal()}
                 {handleShowUploadModalPRC()}
+                {handleShowUploadModalPic()}
                 {/* <Row style={{fontWeight:"bold"}}>
                   <Col style={{textAlign:"left"}} md={2}>Signature:</Col>
                   <Col style={{textAlign:"left"}} md={10}>
@@ -250,8 +357,12 @@ export default function Profile() {
                   <Col md={4}>
                     <div className="card mb-4">
                       <div className="card-body text-center">
-                        {<img className="img-fluid img-thumbnail" src={siglink} 
-                        onError={handleImageError}
+                        {picLinkDataError === "No Profile Pic, Upload a picture" ? 
+                        <button className='btn btn-primary m-l-10' size="xs" onClick={() =>  setShowUploadModalPic(true)}> 
+                          <i className="fa fa-plus fa-2xl"></i> Upload Profile Pic
+                        </button>  
+                        : <img className="img-fluid img-thumbnail" src={piclink} 
+                        onError={handleImageErrorPic}
                         ></img>}
                         <h5 className="my-3">{userfullname}</h5>
                         <p className="text-muted mb-1">{usertype}</p>
@@ -278,14 +389,13 @@ export default function Profile() {
                     <div className="card mb-4">
                       <div className="card-body text-center">
                         {
-                        // <img className="img-fluid img-thumbnail" src={siglink} 
-                        // onError={handleImageError}
-                        // ></img>
+                        prcimage === "" ? 
                         <button className='btn btn-primary m-l-10' size="xs" onClick={() =>  setShowUploadModalPRC(true)}> 
                           <i className="fa fa-plus fa-2xl"></i> Upload PRC ID
-                        </button>
-                        }
-                        <h5 className="my-3">PRC ID</h5>
+                        </button> 
+                        : <img className="img-fluid img-thumbnail" src={prcimage} 
+                        ></img>}
+                        <h5 className="my-3">PRC No.</h5>
                         <p className="text-muted mb-1">{prc}</p>
                         {/* <div className="d-flex justify-content-center mb-2">
                           <button type="button" className="btn btn-primary">Follow</button>
@@ -313,11 +423,13 @@ export default function Profile() {
                         <button className='btn btn-primary m-l-10' size="xs" onClick={() =>  setShowUploadModal(true)}> 
                           <i className="fa fa-plus fa-2xl"></i> Upload signature
                         </button>  
-                        : <img className="img-fluid img-thumbnail" src={siglink} 
+                        : <><img className="img-fluid img-thumbnail" src={siglink} 
                         onError={handleImageError}
-                        ></img>}
+                        ></img>
+                        <i className="fa fa-copy" onClick={() => clickFile(siglink)} style={{paddingRight: 5}}/></>}
                         <h5 className="my-3">Signature</h5>
-                        <p className="text-muted mb-1">{prc}</p>
+                        {}
+                        {/* <p className="text-muted mb-1">{prc}</p> */}
                         {/* <div className="d-flex justify-content-center mb-2">
                           <button type="button" className="btn btn-primary">Follow</button>
                           <button type="button" className="btn btn-outline-primary ms-1">Message</button>

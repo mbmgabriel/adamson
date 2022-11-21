@@ -31,6 +31,7 @@ function Home() {
   const storeid = localStorage.getItem("storeID")
   // const storeId = localStorage.getItem("userID")
   const [drugDispensed, setdrugDispensed] = useState([])
+ 
 
   const handleAddrTypeChange = (e) => { 
     // console.clear(); 
@@ -126,10 +127,12 @@ function Home() {
 
   const submitForm = async (data) => {
     setLoading(true);
+    
     const response = await new DispensersAPI().rangeReport(storeid, data);
       if (response.ok) {
         setdrugDispensed(response.data);
 				console.log(response.data)
+        getDataDispensed();
         reset();
         // setShowForm(false);
       } else {
@@ -203,8 +206,10 @@ function Home() {
             </Card>
           </Col>
         </Row>
-        <Row>
+        {/* {disData} */}
+        {/* <Row>
           <Col md={6}>
+          <div>{disData}</div>
             <Card className="dash-card">
               <Card.Body>
               <Doughnut 
@@ -248,7 +253,8 @@ function Home() {
               </Card.Body>
             </Card>
           </Col>
-        </Row>
+        </Row> */}
+        
         {usertype === "Admin" &&
         <>
         <form onSubmit={handleSubmit(submitForm)}>
@@ -290,7 +296,6 @@ function Home() {
               Search
             </button> 
         </form>
-
           <ReactTable
           pageCount={100}
           list={drugDispensed}
