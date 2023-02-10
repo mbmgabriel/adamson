@@ -163,34 +163,39 @@ export default function Prescribed() {
 					<div className="header-presciption">
           Create Prescription	
         	</div>
-          <div className="">
-          <div className='col-md-12 m-b-15'>
 					<form onSubmit={handleSubmit(submitForm)}>
-              <label className='control-label mb-2'>Title</label>
+            <div class="mb-3 row">
+              <label className='col-sm-2 col-form-label'>Title</label>
+                <div class="col-sm-10">
                 <input
-                {...register("title", {
-                  required: "Title is required",
-                })}
-                type='text'
-                size='30'
-                className='form-control'
-                placeholder='Enter text here'
-              />
-              <p className='text-danger'>{errors.title?.message}</p>
+                  {...register("title", {
+                    required: "Title is required",
+                  })}
+                  type='text'
+                  size='30'
+                  className='form-control'
+                  placeholder='Enter text here'
+                />
+                <p className='text-danger'>{errors.title?.message}</p>
+              </div>
+            </div>
+            <div class="mb-3 row">
+              <label className='col-sm-2 col-form-label'>Description</label>
+              <div class="col-sm-10">
+                <textarea
+                  {...register("description", {
+                    required: "Description is required",
+                  })}
+                  type='text'
+                  size='30'
+                  className='form-control'
+                  placeholder='Enter text here'
+                />
+                <p className='text-danger'>{errors.description?.message}</p>
+              </div>
+            </div>
 
-              <label className='control-label mb-2'>Description</label>
-                <input
-                {...register("description", {
-                  required: "Description is required",
-                })}
-                type='text'
-                size='30'
-                className='form-control'
-                placeholder='Enter text here'
-              />
-              <p className='text-danger'>{errors.description?.message}</p>
-
-              {/* <label className='control-label mb-2'>Amount</label>
+              {/* <label className='col-sm-2 col-form-label'>Amount</label>
                 <input
                 {...register("amount", {
                   required: "Amount is required",
@@ -202,7 +207,9 @@ export default function Prescribed() {
               /> */}
               <p className='text-danger'>{errors.amount?.message}</p>
 
-              <label className='control-label mb-2'>Signature Link</label>
+              <div class="mb-3 row">
+              <label className='col-sm-2 col-form-label'>Signature Link</label>
+              <div class="col-sm-10">
                 <input
                 {...register("signatureLink", {
                   required: "signatureLink is required",
@@ -216,8 +223,12 @@ export default function Prescribed() {
               <i className="fa fa-copy" onClick={() => clickFile(siglink)} style={{paddingRight: 5}}/>
               Copy your signature
               <p className='text-danger'>{errors.signatureLink?.message}</p>
+              </div>
+              </div>
 
-              <label className='control-label mb-2'>Animal Type</label>
+              <div class="mb-3 row">
+              <label className='col-sm-2 col-form-label'>Animal Type</label>
+              <div class="col-sm-10">
               <Form.Select {...register("petTypeId", { required: true })}>
                   <option value="">Select Animal</option>
                   {
@@ -227,8 +238,12 @@ export default function Prescribed() {
                         </option>
                     ))}
               </Form.Select>
+              </div>
+              </div>
 
-              <label className='control-label mb-2 m-t-20'>No. of Animals</label>
+              <div class="mb-3 row">
+              <label className='col-sm-2 col-form-label'>No. of Animals</label>
+              <div class="col-sm-10">
                 <input
                 {...register("noOfPets", {
                   required: "No. of Animals is required",
@@ -239,30 +254,28 @@ export default function Prescribed() {
                 placeholder='Enter text here'
               />
               <p className='text-danger'>{errors.noOfPets?.message}</p>
+              </div>
+              </div>
 
-
-              <label className='control-label mb-2 m-r-5'>Drug</label>
-              {/* <Form.Select {...register("drugProduct", { required: true })}>
-                  <option value="">Select Drug</option>
-                  {
-                    medicineData.map((item, index) => (
-                        <option key={index} value={item.id}>
-                            {item.name}
-                        </option>
-                    ))}
-              </Form.Select> */}
-
+              <div class="mb-3 row">
+              <label className='col-sm-2 col-form-label'>Drug</label>
 							{/* field array */}
+                <div class="col-sm-10">
 									<Form.Select {...register(`prescriptionProduct.productId`)} >
 										<option value="">Select Drug</option>
 										{
 											medicineData.map((item, index) => (
 													<option key={index} value={item.id}>
-															{item.name}
+															{item.name}<span>{item.description}</span>{item.formatType}
 													</option>
 											))}
 									</Form.Select>
-									<label className='control-label mb-2'>Amount</label>
+                </div>
+                </div>
+
+                <div class="mb-3 row">
+									<label className='col-sm-2 col-form-label'>Quantity</label>
+                  <div class="col-sm-10">
 										<input
 										{...register(`prescriptionProduct.amount`, {
 											required: "Amount is required",
@@ -270,9 +283,21 @@ export default function Prescribed() {
 										type='text'
 										size='30'
 										className='form-control m-b-10'
-										placeholder='Enter text here'
+										placeholder='quantity of products'
 									/>
-									<label className='control-label mb-2'>Unit Size</label>
+                  {/* <Form.Select {...register(`prescriptionProduct.measurement`)} >
+										<option value="">Select </option>
+                    <option value="milligram">bag</option>
+                    <option value="gram">cannister</option>
+                    <option value="kilogram">bottle</option>
+									</Form.Select> */}
+                  <span style={{color:"blue", fontSize:"12px"}}>*Number of product unit sizes to dispense</span>
+                </div>
+                </div>
+
+                <div class="mb-3 row">
+									<label className='col-sm-2 col-form-label'>Unit Size</label>
+                  <div class="col-sm-10">
 										<input
 										{...register(`prescriptionProduct.unitSize`, {
 											required: "Unit Size is required",
@@ -280,9 +305,24 @@ export default function Prescribed() {
 										type='text'
 										size='30'
 										className='form-control m-b-10'
-										placeholder='Enter text here'
+										placeholder='volume of product in each bag...'
 									/>
-									<label className='control-label mb-2'>Strength</label>
+                  
+                  <Form.Select {...register(`prescriptionProduct.measurement`)} >
+										<option value="">Select Measurement</option>
+                    <option value="milligram">milligram</option>
+                    <option value="gram">gram</option>
+                    <option value="kilogram">kilogram</option>
+                    <option value="milliliter">milliliter</option>
+                    <option value="liter">liter</option>
+                    <option value="sack">sack</option>
+									</Form.Select>
+                  <span style={{color:"blue", fontSize:"12px"}}>Volume of product in each format bag, cannister, bottle etc...</span>
+                  </div></div>
+
+                  <div class="mb-3 row">
+									<label className='col-sm-2 col-form-label'>Strength</label>
+                  <div class="col-sm-10">
 										<input
 										{...register(`prescriptionProduct.strength`, {
 											required: "Strength is required",
@@ -290,12 +330,17 @@ export default function Prescribed() {
 										type='text'
 										size='30'
 										className='form-control m-b-10'
-										placeholder='Enter text here'
+										placeholder='active ingredient content in percent'
 									/>
+                  <span style={{color:"blue", fontSize:"12px"}}>Active ingredient content in %</span>
+                  </div></div>
 									<hr></hr>
 							<br></br>
 							<br></br>
-              <label className='control-label mb-2 m-b-10'>Client</label>
+
+              <div class="mb-3 row">
+              <label className='col-sm-2 col-form-label m-b-10'>Client</label>
+              <div class="col-sm-10">
               <Form.Select {...register("patientId", { required: true })}>
                   <option value="">Select Client/Farmer</option>
                   {
@@ -308,14 +353,13 @@ export default function Prescribed() {
                         </option>
                     ))}
               </Form.Select>
+              </div></div>
 							<br></br>
 							<button type='submit' className='btn btn-primary'>
               Save Prescription
             </button>
 						</form>
             </div>		
-          </div>
-        </div>
       </div>
     </>
   );

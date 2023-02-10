@@ -8,7 +8,8 @@ import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image'
-import bg from '../../assets/images/56693.jpg'
+import bg from '../../assets/images/bgve1.jpeg'
+import bg1 from '../../assets/images/pattern.jpg'
 
 function Login() {
 
@@ -142,20 +143,30 @@ function Login() {
 </> */
    <div className="container-fluid">
      <div className="row" style={{display:"flex", minHeight:"100vh"}}>
-       <div className="col-lg-5 col-xl-4 d-none d-lg-flex justify-content-center align-items-center min-vh-lg-100 position-relative bg-light">
-         a
+       <div className="col-lg-5 col-xl-4 d-none d-lg-flex justify-content-center align-items-center min-vh-lg-100 
+       position-relative bg-light login-bg-image"
+       >
+      {/* <Image fluid style={{minHeight:"100vh", display:"flex  !important", backgroundRepeat:"repeat !important"}} src={bg1}></Image> */}
+        <div className="flex-grow-1 mx-auto" style={{maxWidth: '28rem'}}>
+            <div className="text-center mb-5 mb-md-7">
+              <h1 className="title">VETDRUMS</h1>
+              <p className="" style={{fontWeight:"bold", color:"gray !important"}}>Login to your account </p>
+            </div>
+        </div>
        </div>
        <div className="col-lg-7 col-xl-8 d-flex justify-content-center align-items-center min-vh-lg-100">
+         
           <div className="flex-grow-1 mx-auto" style={{maxWidth: '28rem'}}>
+          <Image fluid style={{minHeight:"20vh", display:"flex"}} src={bg}></Image>
             <div className="text-center mb-5 mb-md-7">
-              <h1 classNameName="title">VETDRUMS</h1>
-              <p classNameName="subtitle" style={{fontWeight:"bold", color:"#0981D1"}}>Welcome! Veterrinary Drug Monitoring System</p>
+              {/* <h1 className="title">Welcome Back</h1> */}
+              {/* <p className="subtitle" style={{fontWeight:"bold", color:"#7daafb"}}>Login to your account </p> */}
             </div>
                   <Form onSubmit={login}>
-                    <Form.Group controlId="exampleForm.ControlInput1">
+                    <Form.Group controlId="exampleForm.ControlInput1" className="m-b-20">
                       <Form.Label classNameName="custom-label">Username</Form.Label>
                       <Form.Control 
-                      classNameName="custom-input" 
+                      className="custom-input" 
                       size="md" 
                       type="text" 
                       placeholder="Enter e-mail or username here"
@@ -163,20 +174,20 @@ function Login() {
                     />
                   </Form.Group>
                   <Form.Group controlId="exampleForm.ControlInput1">
-                    <Form.Label classNameName="custom-label">Password</Form.Label>
+                    <Form.Label className="custom-label">Password</Form.Label>
                     <InputGroup>
                       <Form.Control 
-                        classNameName="custom-input" 
+                        className="custom-input" 
                         size="md" 
                         type={showPassword ? 'text' : "password"} 
                         placeholder="Enter password here"
                         onChange={(e) => setPassword(e.target.value)}
                       />
-                      <InputGroup.Text classNameName='custom-input border-0'><i classNameName={showPassword ? 'fa fa-eye' : 'fa fa-eye-slash'} onClick={()=> setShowPassword(!showPassword)}/></InputGroup.Text>
+                      <InputGroup.Text className='custom-input border-0'><i className={showPassword ? 'fa fa-eye' : 'fa fa-eye-slash'} onClick={()=> setShowPassword(!showPassword)}/></InputGroup.Text>
                     </InputGroup>
                   </Form.Group>
-                  <Link classNameName="link-orange font-24 d-none" to="/forgot_password" >Forgot Password</Link>
-                  <Button classNameName="btn btn-md btn-primary btn-auth w-100 d-block mt-4 mb-4" size="md" variant="primary" type="submit">Log In</Button>
+                  <Link className="link-orange font-24 d-none" to="/forgot_password" >Forgot Password</Link>
+                  <Button className="btn btn-md btn-primary btn-auth w-100 d-block mt-4 mb-4" size="md" variant="primary" type="submit">Log In</Button>
                   <div>Don't have an account yet? <span style={{fontWeight:"bold"}}><a href="/register">Sign up here</a></span></div>
                 </Form>
             </div>

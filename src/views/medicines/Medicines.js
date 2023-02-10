@@ -68,7 +68,7 @@ export default function Medicines() {
     } else {
       const response = await new MedicinesAPI().createMedicine(data);
       if (response.ok) {
-        toast.success("Successfully Created Term");
+        toast.success("Successfully Created Drug");
         handleGetAllMedicines();
         reset();
         setShowForm(false);
@@ -84,7 +84,7 @@ export default function Medicines() {
     setResetNotify(false);
     const response = await new MedicinesAPI().deleteMedicine(id);
     if (response.ok) {
-      toast.success("Successfully Deleted Animal");
+      toast.success("Successfully Deleted Medicine");
       handleGetAllMedicines();
     } else {
       toast.error("Something went wrong while deleting user");
@@ -148,13 +148,13 @@ export default function Medicines() {
                       onClick={() => {
                         setValue('name', row.original.name)
                         setValue('description', row.original.description)
-                        setValue('formatType', row.original.formatType)
+                        setValue('productFormatId', (row.original.productFormatId))
                         setSelectedMedicine(row.original);
                         setShowForm(true);
                       }}
                       className='btn btn-info btn-sm m-r-5'
                     >
-                      Edit
+                      Edit 
                     </button>
                     <button
                       onClick={() => {
@@ -181,15 +181,16 @@ export default function Medicines() {
         showCancel
         show={resetNotify}
         onConfirm={() => handleDeleteMedicine(selectedMedicine.id)}
-        confirmBtnText='Confirm'
+        confirmBtnText='Confirm' 
         confirmBtnBsStyle='danger'
         cancelBtnBsStyle='secondary'
-        title='Are you sure to delete this animal?'
+        title='Are you sure to delete this medicine?' 
         onCancel={() => setResetNotify(false)}
       >
       </SweetAlert>
       <Modal show={showForm} onHide={() => handleCloseModal()}>
         <form onSubmit={handleSubmit(submitForm)}>
+          
           <Modal.Header className='font-10' closeButton>
             <span className='font-20'>
               {selectedMedicine != null
@@ -199,7 +200,7 @@ export default function Medicines() {
           </Modal.Header>
           <Modal.Body>
             <div className='col-md-12 m-b-15'>
-              <label className='control-label mb-2'>Name</label>
+              <label className='control-label mb-2'>Antibiotic Class</label>
                 <input
                 {...register("name", {
                   required: "Name is required",
@@ -211,7 +212,7 @@ export default function Medicines() {
               />
               <p className='text-danger'>{errors.name?.message}</p>
 
-              <label className='control-label mb-2'>Description</label>
+              <label className='control-label mb-2'>Molecule</label>
                 <input
                 {...register("description", {
                   required: "Description is required",
@@ -223,12 +224,12 @@ export default function Medicines() {
               />
               <p className='text-danger'>{errors.description?.message}</p>
 
-              <label className='control-label mb-2'>Type</label>
+              <label className='control-label mb-2'>Product Format</label>
               <Form.Select {...register("productFormatId", { required: true })}>
                   <option value="">Select Type</option>
-                  {typeData && 
-                    typeData.map((item, index) => (
-                        <option key={index} value={item.id}>
+                  {
+                    typeData.map((item) => (
+                        <option value={item.id}>
                             {item.name}
                         </option>
                     ))}

@@ -8,6 +8,13 @@ export default class Auth extends Base {
     });
   };
 
+  usertypedispenser = async data => {
+    return this.sendRequest({
+      path: `/api/User/usertype/3`,
+      method: 'GET',
+    });
+  };
+
   userregister = async data => {
     return this.sendRequest({
       path: `/api/User/register`,

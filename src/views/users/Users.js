@@ -122,7 +122,7 @@ export default function Users() {
               {
                 Header: "Type",
                 id: "userTypeId",
-                accessor: (d) => d.userTypeId,
+                accessor: (d) => d.userTypeId === 2 && "Veterinarian",
               },
 
               {

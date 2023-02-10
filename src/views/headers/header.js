@@ -33,7 +33,8 @@ function HeaderMain() {
         <Navbar.Toggle aria-controls="responsive-navbar-nav"/>
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-          {usertype === "Veterenarian" && prcno !== "" && <Nav.Link href="/prescriptions">VDO</Nav.Link>}
+          {/* {usertype === "Veterenarian" && prcno !== "" && <Nav.Link href="/prescriptions">VDO</Nav.Link>} */}
+          {<Nav.Link href="/prescriptions">VDO</Nav.Link>}
           {usertype === "Dispenser" && <Nav.Link href="/dispensingdrugs">Dispensing</Nav.Link>}
             
             {usertype === "Admin" && <Nav.Link href="/users">Users</Nav.Link>}

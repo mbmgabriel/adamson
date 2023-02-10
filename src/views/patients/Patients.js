@@ -216,7 +216,7 @@ export default function Patients() {
               />
               <p className='text-danger'>{errors.address?.message}</p>
 
-              <label className='control-label mb-2'>Birthdate</label>
+              <label className='control-label mb-2'>Date Registered</label>
                 <input
                 {...register("birthDate", {
                   required: "Birthdate is required",
@@ -228,7 +228,7 @@ export default function Patients() {
               />
               <p className='text-danger'>{errors.birthDate?.message}</p>
 
-              <label className='control-label mb-2'>Contact Number</label>
+              <label className='control-label mb-2'>TIN Number</label>
                 <input
                 {...register("contactNumber", {
                   required: "Contact Number is required",

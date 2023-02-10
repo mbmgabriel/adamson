@@ -17,6 +17,7 @@ import ReactTable from "react-table-v6";
 function Home() {
 
   const [loading, setLoading] = useState(true);
+  const [dData, setDData]=useState([]);
   const [medicineData, setMedicineData] = useState([]);
   const [dispensersData, setDispenserData] = useState([]);
   const [dateFrom, setDateFrom] = useState([])
@@ -31,6 +32,7 @@ function Home() {
   const storeid = localStorage.getItem("storeID")
   // const storeId = localStorage.getItem("userID")
   const [drugDispensed, setdrugDispensed] = useState([])
+  const [drugDispensed1, setdrugDispensed1] = useState([])
  
 
   const handleAddrTypeChange = (e) => { 
@@ -64,10 +66,12 @@ function Home() {
 
   useEffect(() => {
     handleGetAllMedicines();
+    handleGetAllDispensed();
     handleGetDispensers();
     getLabelMedicine();
     getLabelDispensed();
     getDataDispensed();
+    // handleGetDispensers();
   }, []);   
 
   const handleGetAllMedicines = async () => {
@@ -75,6 +79,29 @@ function Home() {
     const response = await new MedicinesAPI().medicines();
     if (response.ok) {
         setMedicineData(response.data);
+    } else {
+      toast.error("Something went wrong while fetching user");
+    }
+    setLoading(false);
+  };
+
+  const handleGetDispensers = async () => {
+    setLoading(true);
+    const response = await new UsersAPI().usertypedispenser();
+    if (response.ok) {
+        setDData(response.data);
+    } else {
+      toast.error("Something went wrong while fetching user");
+    }
+    setLoading(false);
+  };
+
+  const handleGetAllDispensed = async () => {
+    setLoading(true);
+    const response = await new DispensersAPI().getAllDispensed();
+    if (response.ok) {
+        setdrugDispensed1(response.data);
+        // console.log(response.data.productDispersed)
     } else {
       toast.error("Something went wrong while fetching user");
     }
@@ -113,17 +140,37 @@ function Home() {
     setDisData(tempData)
   }
 
+  const getDataDispensed1 = () => {
+    let tempData = []
+    drugDispensed1.map((item, index) => (
+      item.productDispersed.map((item1, index) => {
+        let temp = '';
+        let name = `${item1?.amount}`
+        temp  = name;
+        tempData.push(temp)
+      })
+  ))
+    // setDisData(tempData)
+    return tempData
+  }
 
-  const handleGetDispensers = async () => {
-    setLoading(true);
-    const response = await new UsersAPI().users();
-    if (response.ok) {
-        setDispenserData(response.data);
-    } else {
-      toast.error("Something went wrong while fetching user");
-    }
-    setLoading(false);
-  };
+  const aa = drugDispensed1.map((item, index) => (
+    item.productDispersed.map((item1, index) => {
+      return `${item1?.amount}`
+    })
+  ))
+
+  const ac = drugDispensed1.map((item, index) => (
+    item.productDispersed.map((item1, index) => {
+      let tempData = []
+      return `${item1?.amount}`
+    })
+  ))
+
+  const ab = drugDispensed1.map((item, index) => {
+      return `${item.product.name}`
+  })
+
 
   const submitForm = async (data) => {
     setLoading(true);
@@ -131,9 +178,8 @@ function Home() {
     const response = await new DispensersAPI().rangeReport(storeid, data);
       if (response.ok) {
         setdrugDispensed(response.data);
-				console.log(response.data)
         getDataDispensed();
-        reset();
+        // reset();
         // setShowForm(false);
       } else {
         toast.error(response.data.errorMessage);
@@ -207,7 +253,7 @@ function Home() {
           </Col>
         </Row>
         {/* {disData} */}
-        {/* <Row>
+        <Row>
           <Col md={6}>
           <div>{disData}</div>
             <Card className="dash-card">
@@ -218,10 +264,10 @@ function Home() {
                 //   'Blue',
                 //   'Yellow'
                 // ],
-                data={{labels:disLabel,
+                data={{labels:ab,
                 datasets: [{
                   label: 'My Dataset',
-                  data: disData,
+                  data: getDataDispensed1(),
                   backgroundColor: [
                     'rgb(255, 99, 132)',
                     'rgb(54, 162, 235)',
@@ -233,36 +279,16 @@ function Home() {
               </Card.Body>
             </Card>
           </Col>
-          <Col md={6}>
-            <Card className="dash-card">
-              <Card.Body>
-                <Line
-                  data={{
-                    // labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                    labels: [dispensersData.map((item, index)=>(
-                      item.productName
-                    ))],
-                    datasets: [{
-                      label: 'My First dataset',
-                      backgroundColor: 'rgb(255, 99, 132)',
-                      borderColor: 'rgb(255, 99, 132)',
-                      data: [0, 10, 5, 2, 20, 30, 45],
-                    }]
-                  }}
-                />
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row> */}
+        </Row>
         
         {usertype === "Admin" &&
         <>
         <form onSubmit={handleSubmit(submitForm)}>
           <label className='control-label mb-2'>Type</label>
-            <Form.Select onChange={getStoreID}>
+          <Form.Select onChange={getStoreID}>
               <option value="">Select Dispensing</option>
               {
-                dispensersData.map((item, index) => (
+                dData.map((item, index) => (
                     <option key={index} value={item.storeId}>
                         {item.userTypeId === 3 && item.fullname}
                     </option>

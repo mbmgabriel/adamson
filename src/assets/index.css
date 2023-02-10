@@ -10,7 +10,7 @@
   }
   
   body{
-    --primary-color: #367588;
+    --primary-color: #7daafb;
     margin: 0;
     background-color: #F5F5F5;
   }
@@ -932,9 +932,9 @@
   
 
   .login-bg-image{
-    background-image: url("../assets/images/bgve1.jpeg");
-    /* background-size:700px,500px; */
-    /* background-repeat: no-repeat; */
+    background-image: url("../assets/images/5086.jpg");
+    background-size:700px,500px;
+    /* background-repeat: repeat; */
     background-color: #cccccc;
   }
 

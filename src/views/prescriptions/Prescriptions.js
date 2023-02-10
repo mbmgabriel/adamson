@@ -263,6 +263,8 @@ export default function Prescriptions() {
             {prc !== "" && usertype === "Veterenarian" && <button className='btn btn-primary' size="sm" >
               <i className="fa fa-plus fa-2xl"></i>
             </button>}
+            <button className='btn btn-primary' size="sm" >
+              <i className="fa fa-plus fa-2xl"></i></button>
             {/* 
             <button className='btn btn-primary' size="sm" >
               <i className="fa fa-plus fa-2xl"></i>
@@ -304,6 +306,11 @@ export default function Prescriptions() {
                 Header: "Description",
                 id: "description",
                 accessor: (d) => d.description,
+              },
+              {
+                Header: "Date Prescribed",
+                id: "datePrescribed",
+                accessor: (d) => d.datePrescribed,
               },
               {
                 Header: "Status",
