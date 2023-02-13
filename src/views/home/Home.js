@@ -255,7 +255,7 @@ function Home() {
         {/* {disData} */}
         <Row>
           <Col md={6}>
-          <div>{disData}</div>
+          <div>{getDataDispensed1()}</div>
             <Card className="dash-card">
               <Card.Body>
               <Doughnut 

@@ -128,9 +128,9 @@ export default function Register() {
 								<label className='control-label mb-2'>Type</label>
 								<Form.Select {...register("userTypeId", { required: "User type is required" })}>
 										<option value="">Select User Type</option>
-										<option value='1'>Client/Farmer</option>
+										<option value='1'>Farmer</option>
 										<option value='2'>Veterinarian</option>
-										<option value='3'>Dispensing</option>
+										<option value='3'>Dispensing Unit</option>
 								</Form.Select>
 								<p className='text-danger'>{errors.userTypeId?.message}</p>
 

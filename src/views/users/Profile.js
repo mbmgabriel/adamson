@@ -362,7 +362,7 @@ export default function Profile() {
                           <i className="fa fa-plus fa-2xl"></i> Upload Profile Pic
                         </button>  
                         : <img className="img-fluid img-thumbnail" src={piclink} 
-                        onError={handleImageErrorPic}
+                        onError={handleImageErrorPic} style={{width:"100px", height:"100px"}}
                         ></img>}
                         <h5 className="my-3">{userfullname}</h5>
                         <p className="text-muted mb-1">{usertype}</p>
@@ -393,8 +393,11 @@ export default function Profile() {
                         <button className='btn btn-primary m-l-10' size="xs" onClick={() =>  setShowUploadModalPRC(true)}> 
                           <i className="fa fa-plus fa-2xl"></i> Upload PRC ID
                         </button> 
-                        : <img className="img-fluid img-thumbnail" src={prcimage} 
+                        : <img className="img-fluid img-thumbnail" src={prcimage} style={{width:"100px", height:"100px"}}
                         ></img>}
+                        {/* <button className='btn btn-primary m-l-10' size="xs" onClick={() =>  setShowUploadModalPRC(true)}> 
+                          <i className="fa fa-plus fa-2xl"></i> Upload PRC ID
+                        </button> */}
                         <h5 className="my-3">PRC No.</h5>
                         <p className="text-muted mb-1">{prc}</p>
                         {/* <div className="d-flex justify-content-center mb-2">

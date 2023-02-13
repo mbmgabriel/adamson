@@ -122,7 +122,9 @@ export default function Users() {
               {
                 Header: "Type",
                 id: "userTypeId",
-                accessor: (d) => d.userTypeId === 2 && "Veterinarian",
+                accessor: (d) => d.userTypeId === 2 && "Veterinarian"
+                                || d.userTypeId === 3 && "Dispensing"
+                                || d.userTypeId === 1 && "Farmer",
               },
 
               {
@@ -226,9 +228,9 @@ export default function Users() {
               <label className='control-label mb-2'>Type</label>
               <select {...register("userTypeId", { required: true })}>
                   <option value="">Select User Type</option>
-                  <option value='1'>Client/Farmer</option>
+                  <option value='1'>Farmer</option>
                   <option value='2'>Veterinarian</option>
-                  <option value='3'>Dispensing</option>
+                  <option value='3'>Dispensing Unit</option>
               </select>
             </div>
           </Modal.Body>

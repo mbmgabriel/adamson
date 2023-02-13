@@ -15,6 +15,29 @@ export default class Auth extends Base {
     });
   };
 
+  createFormat = async data => {
+    return this.sendRequest({
+      path: `/api/ProductFormat`,
+      method: 'POST',
+      data,
+    });
+  };
+
+  updateFormat = async (id, data) => {
+    return this.sendRequest({
+      path: `/api/ProductFormat/${id}`,
+      method: 'PUT',
+      data,
+    });
+  };
+
+  deleteFormat = async (id) => {
+    return this.sendRequest({
+      path: `/api/ProductFormat/${id}`,
+      method: 'DELETE'
+    })
+  }
+
 
   createMedicine = async data => {
     return this.sendRequest({

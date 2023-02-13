@@ -266,7 +266,7 @@ export default function Prescribed() {
 										{
 											medicineData.map((item, index) => (
 													<option key={index} value={item.id}>
-															{item.name}<span>{item.description}</span>{item.formatType}
+															{item.name}<span> - {item.description}</span> - {item.formatType}
 													</option>
 											))}
 									</Form.Select>
@@ -285,12 +285,13 @@ export default function Prescribed() {
 										className='form-control m-b-10'
 										placeholder='quantity of products'
 									/>
-                  {/* <Form.Select {...register(`prescriptionProduct.measurement`)} >
-										<option value="">Select </option>
-                    <option value="milligram">bag</option>
-                    <option value="gram">cannister</option>
-                    <option value="kilogram">bottle</option>
-									</Form.Select> */}
+                  <Form.Select {...register(`prescriptionProduct.amountMeasurement`)} >
+										<option value="">Select Measurement</option>
+                    <option value="bottle/s">bottle</option>
+                    <option value="cannister/s">cannister</option>
+                    <option value="sack/s">sack</option>
+                    <option value="bag/s">bag</option>
+									</Form.Select>
                   <span style={{color:"blue", fontSize:"12px"}}>*Number of product unit sizes to dispense</span>
                 </div>
                 </div>
@@ -310,12 +311,11 @@ export default function Prescribed() {
                   
                   <Form.Select {...register(`prescriptionProduct.measurement`)} >
 										<option value="">Select Measurement</option>
-                    <option value="milligram">milligram</option>
-                    <option value="gram">gram</option>
-                    <option value="kilogram">kilogram</option>
-                    <option value="milliliter">milliliter</option>
-                    <option value="liter">liter</option>
-                    <option value="sack">sack</option>
+                    <option value="milligram/s">milligram</option>
+                    <option value="gram/s">gram</option>
+                    <option value="kilogram/s">kilogram</option>
+                    <option value="milliliter/s">milliliter</option>
+                    <option value="liter/s">liter</option>
 									</Form.Select>
                   <span style={{color:"blue", fontSize:"12px"}}>Volume of product in each format bag, cannister, bottle etc...</span>
                   </div></div>

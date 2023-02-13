@@ -69,8 +69,8 @@ export default function PrescriptionCerttificate() {
                 prescriptionDrug.map((pp,index)=>(
                   <div>
                   <div>Drug: {pp.productName}</div>
-                  <div>Unit Size: {pp.unitSize}</div>
-                  <div>Amount: {pp.amount}</div>
+                  <div>Unit Size: {pp.unitSize + " " + pp.amountMeasurement}</div>
+                  <div>Amount: {pp.amount + " " + pp.measurement}</div>
                   <div>Strength: {pp.strength}</div>
                   <hr></hr>
                   </div>

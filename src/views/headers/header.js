@@ -34,20 +34,19 @@ function HeaderMain() {
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
           {/* {usertype === "Veterenarian" && prcno !== "" && <Nav.Link href="/prescriptions">VDO</Nav.Link>} */}
-          {<Nav.Link href="/prescriptions">VDO</Nav.Link>}
+          {usertype === "Veterenarian" && <Nav.Link href="/prescriptions">VDO</Nav.Link>}
           {usertype === "Dispenser" && <Nav.Link href="/dispensingdrugs">Dispensing</Nav.Link>}
             
             {usertype === "Admin" && <Nav.Link href="/users">Users</Nav.Link>}
             {usertype === "Admin" && <Nav.Link href="/animals">Animals</Nav.Link>}
-            {usertype === "Admin" && <NavDropdown title="Others" id="collasible-nav-dropdown">
-            {usertype === "Admin" && <NavDropdown.Item href="/medicines">Medicines</NavDropdown.Item>}
-            {usertype === "Admin" && <NavDropdown.Item href="/dispensers">
+            {usertype === "Admin" && <Nav.Link href="/medicines">Medicines</Nav.Link>}
+            {/* {usertype === "Admin" && <NavDropdown.Item href="/dispensers">
                 Dispenser
-              </NavDropdown.Item>}
-              {usertype === "Admin" && <NavDropdown.Item href="/patients">
+              </NavDropdown.Item>} */}
+              {/* {usertype === "Admin" && <NavDropdown.Item href="/patients">
                 Patients
-              </NavDropdown.Item>}
-            </NavDropdown>}
+              </NavDropdown.Item>} */}
+            {/* </NavDropdown>} */}
           </Nav>
           <Nav>
             <Nav.Link eventKey={3} href="/profile">
