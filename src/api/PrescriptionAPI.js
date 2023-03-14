@@ -15,6 +15,13 @@ export default class Auth extends Base {
     });
   };
 
+  getUserPrescription = async (id) => {
+    return this.sendRequest({
+      path: `/api/Patient/${id}/prescription`,
+      method: 'GET',
+    });
+  };
+
   getPrescriptionUser = async (id) => {
     return this.sendRequest({
       path: `/api/Prescription/createdBy/${id}`,

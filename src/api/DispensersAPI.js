@@ -36,6 +36,13 @@ export default class Auth extends Base {
     });
   };
 
+  getUserDispensed = async (id) => {
+    return this.sendRequest({
+      path: `/api/Product/dispense?userid=${id}`,
+      method: 'GET',
+    });
+  };
+
   getDispensedReport = async id => {
     return this.sendRequest({
       path: `/api/Store/${id}/product/disperse`,

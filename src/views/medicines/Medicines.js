@@ -194,7 +194,6 @@ export default function Medicines() {
                 id: "formatType",
                 accessor: (d) => d.formatType,
               },
-
               {
                 Header: "Actions",
                 id: "edit",

@@ -15,6 +15,11 @@ import HeaderMain from "../headers/header";
 import "../../../node_modules/font-awesome/css/font-awesome.css"
 import DispensersAPI from "../../api/DispensersAPI"
 import Dispensed from "./CreateDispense";
+import Moment from 'react-moment';
+// import 'moment-timezone';
+import { CSVLink, CSVDownload } from "react-csv";
+import {writeFileXLSX, utils} from "xlsx";
+
 
 export default function DispensingDrugs() {
   const [loading, setLoading] = useState(true);
@@ -34,6 +39,7 @@ export default function DispensingDrugs() {
   const presId = localStorage.getItem("pId")
 	const [drugDispensed, setDrugDispensed] = useState([])
 	const storeId = localStorage.getItem("userID")
+  var moment = require('moment');
 
   const {
     register,
@@ -239,6 +245,14 @@ export default function DispensingDrugs() {
     setLoading(false);
   };
 
+  const downloadxls = () => {
+    const ws =utils.json_to_sheet(drugDispensed);
+    const wb =utils.book_new();
+    utils.book_append_sheet(wb, ws, "SheetJS");
+    // writeFileXLSX(wb, `${testName}_exam_report.xlsx`);
+    writeFileXLSX(wb, `test.xlsx`);
+  };
+
   const handleCloseModal = () => {
     setShowForm(false);
     setSelectedPrescription(null);
@@ -361,12 +375,17 @@ export default function DispensingDrugs() {
               {
                 Header: "Date Dispensed",
                 id: "dispersedDate",
-                accessor: (d) => d.dispersedDate,
+                accessor: (d) =>  moment(d.dispersedDate).format('MMMM D YYYY'),
               },
 							{
                 Header: "Drug",
                 id: "productName",
                 accessor: (d) => d.productName,
+              },
+              {
+                Header: "Brand",
+                id: "brandName",
+                accessor: (d) => d.brandName,
               },
 							{
                 Header: "Quantity",
@@ -381,6 +400,7 @@ export default function DispensingDrugs() {
         defaultPageSize={10}
         className='-highlight'
       />
+      <Button onClick={() => downloadxls()} className='btn btn-primary'  size='xs' variant="outline"><b> Export </b></Button>
       <ToastContainer
         position="top-right"
         autoClose={5000}

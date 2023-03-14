@@ -62,6 +62,8 @@ function HeaderMain() {
                         localStorage.removeItem("pId");
                         localStorage.removeItem("userID");
                         localStorage.removeItem("user");
+                        localStorage.removeItem("lto");
+                        localStorage.removeItem("prc");
                       }}>
               Logout
             </Nav.Link>

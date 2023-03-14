@@ -45,6 +45,7 @@ function Login() {
       await window.localStorage.setItem('prcimage', response.data.prcImage)
       await window.localStorage.setItem('ptr', response.data.ptrNo)
       await window.localStorage.setItem('lto', response.data.ltoNo)
+      await window.localStorage.setItem('pId', response.data.patientId)
       window.location.href = "/home"
     }else{
       toast.error(response.data.errorMessage)

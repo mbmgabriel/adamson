@@ -11,8 +11,10 @@ import MedicinesAPI from "../../api/MedicinesAPI"
 import {Doughnut, Bar, Line} from 'react-chartjs-2';
 import DispensersAPI from "../../api/DispensersAPI"
 import UsersAPI from "../../api/UsersAPI"
+import PrescriptionAPI   from "../../api/PrescriptionAPI"
 import Alert from 'react-bootstrap/Alert';
 import ReactTable from "react-table-v6";
+
 
 function Home() {
 
@@ -29,11 +31,15 @@ function Home() {
   const prc = localStorage.getItem("prc")
   const lto = localStorage.getItem("lto")
   const usertype = localStorage.getItem("userType")
+  const userid = localStorage.getItem("userID")
   const storeid = localStorage.getItem("storeID")
+  const pId = localStorage.getItem("pId")
   // const storeId = localStorage.getItem("userID")
   const [drugDispensed, setdrugDispensed] = useState([])
   const [drugDispensed1, setdrugDispensed1] = useState([])
- 
+  const [drugDispensed2, setdrugDispensed2] = useState([])
+  const [userPrescription, setUserPrescription] = useState([])
+  const [prescriptionProduct, setPrescriptionProduct] = useState([])
 
   const handleAddrTypeChange = (e) => { 
     // console.clear(); 
@@ -67,10 +73,13 @@ function Home() {
   useEffect(() => {
     handleGetAllMedicines();
     handleGetAllDispensed();
+    handleGetUserDispensed();
     handleGetDispensers();
     getLabelMedicine();
     getLabelDispensed();
     getDataDispensed();
+    handleGetUserPrescriptions();
+    handleGetUserPrescriptionsProduct();
     // handleGetDispensers();
   }, []);   
 
@@ -79,6 +88,30 @@ function Home() {
     const response = await new MedicinesAPI().medicines();
     if (response.ok) {
         setMedicineData(response.data);
+    } else {
+      toast.error("Something went wrong while fetching user");
+    }
+    setLoading(false);
+  };
+
+  const handleGetUserPrescriptions = async () => {
+    setLoading(true);
+    const response = await new PrescriptionAPI().getUserPrescription(pId);
+    if (response.ok) {
+        setUserPrescription(response.data);
+        console.log(response.data)
+    } else {
+      toast.error("Something went wrong while fetching user");
+    }
+    setLoading(false);
+  };
+
+  const handleGetUserPrescriptionsProduct = async () => {
+    setLoading(true);
+    const response = await new PrescriptionAPI().getUserPrescription(pId);
+    if (response.ok) {
+        setPrescriptionProduct(response.data.prescriptionProduct);
+        console.log(response.data.prescriptionProduct)
     } else {
       toast.error("Something went wrong while fetching user");
     }
@@ -101,6 +134,18 @@ function Home() {
     const response = await new DispensersAPI().getAllDispensed();
     if (response.ok) {
         setdrugDispensed1(response.data);
+        // console.log(response.data.productDispersed)
+    } else {
+      toast.error("Something went wrong while fetching user");
+    }
+    setLoading(false);
+  };
+
+  const handleGetUserDispensed = async () => {
+    setLoading(true);
+    const response = await new DispensersAPI().getUserDispensed(userid);
+    if (response.ok) {
+        setdrugDispensed2(response.data);
         // console.log(response.data.productDispersed)
     } else {
       toast.error("Something went wrong while fetching user");
@@ -154,6 +199,20 @@ function Home() {
     return tempData
   }
 
+  const getDataDispensed2 = () => {
+    let tempData = []
+    drugDispensed2.map((item, index) => (
+      item.productDispersed.map((item1, index) => {
+        let temp = '';
+        let name = `${item1?.amount}`
+        temp  = name;
+        tempData.push(temp)
+      })
+  ))
+    // setDisData(tempData)
+    return tempData
+  }
+
   const aa = drugDispensed1.map((item, index) => (
     item.productDispersed.map((item1, index) => {
       return `${item1?.amount}`
@@ -170,6 +229,21 @@ function Home() {
   const ab = drugDispensed1.map((item, index) => {
       return `${item.product.name}`
   })
+
+  const ab1 = drugDispensed2.map((item, index) => {
+    return `${item.product.name}`
+})
+
+
+
+const pproduct = userPrescription.map((item, index) => (
+  item.prescriptionProduct.map((item1, index) => {
+   return `${item1.productName}`
+  })
+))
+
+
+
 
 
   const submitForm = async (data) => {
@@ -255,9 +329,30 @@ function Home() {
         {/* {disData} */}
         <Row>
           <Col md={6}>
-          <div>{getDataDispensed1()}</div>
             <Card className="dash-card">
+              {usertype === "Veterenarian" ?
               <Card.Body>
+              <Doughnut 
+                // data={{labels: [
+                //   'Red',
+                //   'Blue',
+                //   'Yellow'
+                // ],
+                data={{labels:ab1,
+                datasets: [{
+                  label: 'My Dataset',
+                  data: getDataDispensed2(),
+                  backgroundColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(54, 162, 235)',
+                    'rgb(255, 205, 86)'
+                  ],
+                  hoverOffset: 4
+                }]}}
+              />
+              </Card.Body>
+            : 
+            <Card.Body>
               <Doughnut 
                 // data={{labels: [
                 //   'Red',
@@ -277,6 +372,7 @@ function Home() {
                 }]}}
               />
               </Card.Body>
+            }
             </Card>
           </Col>
         </Row>
@@ -351,6 +447,29 @@ function Home() {
         />
         </>
       }
+        {/* {userPrescription} */}{pproduct}
+        <ReactTable
+          pageCount={100}
+          list={pproduct}
+          filterable
+          data={pproduct}
+          columns={[
+            {
+              Header: "",
+              columns: [
+                {
+                  Header: "Drug Name",
+                  id: "productName",
+                  accessor: (d) => d.productName,
+                },
+              ],
+            },
+          ]}
+          csv
+          edited={pproduct}
+          defaultPageSize={10}
+          className='-highlight'
+        />
       </div>
     </div>
   );

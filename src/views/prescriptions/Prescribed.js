@@ -228,7 +228,9 @@ export default function Prescribed() {
 
               <div class="mb-3 row">
               <label className='col-sm-2 col-form-label'>Animal Type</label>
-              <div class="col-sm-10">
+              <div class="col-sm-10"><button type='button' className='btn btn-primary' onClick={() => handleGetAllAnimals()}>
+                                      <i className="fa fa-refresh"></i>
+                                    </button>
               <Form.Select {...register("petTypeId", { required: true })}>
                   <option value="">Select Animal</option>
                   {
