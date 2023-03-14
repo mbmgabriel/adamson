@@ -39,6 +39,7 @@ export default function Medicines() {
     const response = await new MedicinesAPI().medicines();
     if (response.ok) {
         setMedicineData(response.data);
+        alert("Success Load")
     } else {
       toast.error("Something went wrong while fetching user");
     }
@@ -350,19 +351,14 @@ export default function Medicines() {
               <p className='text-danger'>{errors.description?.message}</p>
 
               <label className='control-label mb-2'>Product Format</label>
-              <Form.Select {...register("productFormatId", { required: true })}>
+              <Form.Select {...register("formatType", { required: true })}>
                   <option value="">Select Type</option>
                   {
                     typeData.map((item) => (
-                        <option value={item.id}>
+                        <option value={item.name}>
                             {item.name}
                         </option>
                     ))}
-                    {/* <option value="">Select Type</option>
-                    <option value='2'>Water</option>
-                    <option value='3'>Oral</option>
-                    <option value='4'>In-feed</option>
-                    <option value='5'>Injectible</option> */}
               </Form.Select>
             </div>
           </Modal.Body>

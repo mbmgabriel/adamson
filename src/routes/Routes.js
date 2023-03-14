@@ -1,4 +1,4 @@
-import React, {  } from "react";
+import React, { useEffect, useState } from "react";
 import {
   BrowserRouter,
   Route,
@@ -21,26 +21,53 @@ import DispensingDrugs from "../views/dispensers/DispensingDrugs";
 import Dispensed from "../views/dispensers/CreateDispense";
 
 export default function Routing() {
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const token = window.localStorage.getItem("token")
+    console.log({token})
+    if(token != null){
+      setIsLoggedIn(true)
+      setLoading(false)
+    }
+  }, [])
+
+
   return (
     <div className="content">
       <BrowserRouter>
         <Routes>
           {/* <Route path='/' element={<Home/>}/> */}
-          <Route path='/' element={<Login/>}/>
-          <Route path='/home' element={<Home/>}/>
-          <Route path='/users' element={<Users/>}/>
-          <Route path='/animals' element={<Animals/>}/>
-          <Route path='/medicines' element={<Medicines/>}/>
-          <Route path='/dispensers' element={<Dispensers/>}/>
-          <Route path='/prescriptions' element={<Prescriptions/>}/>
-          <Route path='/patients' element={<Patients/>}/>
-          <Route path='/generate/:id' element={<PrescriptionCerttificate/>}/>
-          <Route path='/viewrecord/:id' element={<HealthRecord/>}/>
-          <Route path='/register' element={<Register/>}/>
-          <Route path='/profile' element={<Profile/>}/>
-          <Route path='/prescribed' element={<Prescribed/>}/>
-          <Route path='/dispensingdrugs' element={<DispensingDrugs/>}/>
-          <Route path='/dispensed' element={<Dispensed/>}/>
+
+          {
+            !loading && isLoggedIn ? (
+              <>
+                <Route path='/home' element={<Home/>}/>
+                <Route path='/users' element={<Users/>}/>
+                <Route path='/animals' element={<Animals/>}/>
+                <Route path='/medicines' element={<Medicines/>}/>
+                <Route path='/dispensers' element={<Dispensers/>}/>
+                <Route path='/prescriptions' element={<Prescriptions/>}/>
+                <Route path='/patients' element={<Patients/>}/>
+                <Route path='/generate/:id' element={<PrescriptionCerttificate/>}/>
+                <Route path='/viewrecord/:id' element={<HealthRecord/>}/>
+                <Route path='/profile' element={<Profile/>}/>
+                <Route path='/prescribed' element={<Prescribed/>}/>
+                <Route path='/dispensingdrugs' element={<DispensingDrugs/>}/>
+                <Route path='/dispensed' element={<Dispensed/>}/>
+              </>
+            ) : (
+              <>
+                <Route path='/register' element={<Register/>}/>
+                <Route path='/' element={<Login/>}/>
+              </>
+            )
+          }
+          
+
+          
         </Routes>
       </BrowserRouter>
     </div>

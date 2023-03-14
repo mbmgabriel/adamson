@@ -369,7 +369,7 @@ export default function DispensingDrugs() {
                 accessor: (d) => d.productName,
               },
 							{
-                Header: "Amount",
+                Header: "Quantity",
                 id: "amount",
                 accessor: (d) => d.amount,
               },
