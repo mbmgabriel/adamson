@@ -110,8 +110,13 @@ function Home() {
     setLoading(true);
     const response = await new PrescriptionAPI().getUserPrescription(pId);
     if (response.ok) {
-        setPrescriptionProduct(response.data.prescriptionProduct);
-        console.log(response.data.prescriptionProduct)
+        setPrescriptionProduct(response?.data?.prescriptionProduct);
+        let temp = []
+        response.data.map(i => {
+          temp.push(i?.prescriptionProduct)
+        })
+        setPrescriptionProduct(temp);
+        console.log("M",temp)
     } else {
       toast.error("Something went wrong while fetching user");
     }
@@ -447,7 +452,8 @@ const pproduct = userPrescription.map((item, index) => (
         />
         </>
       }
-        {/* {userPrescription} */}{pproduct}
+        {/* {userPrescription} */}{prescriptionProduct},
+        {pproduct}
         <ReactTable
           pageCount={100}
           list={pproduct}
