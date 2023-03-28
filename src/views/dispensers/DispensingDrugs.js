@@ -36,9 +36,9 @@ export default function DispensingDrugs() {
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [filesToUpload, setFilesToUpload] = useState({});
   const navigate = useNavigate();
-  const presId = localStorage.getItem("pId")
+  const presId = sessionStorage.getItem("pId")
 	const [drugDispensed, setDrugDispensed] = useState([])
-	const storeId = localStorage.getItem("userID")
+	const storeId = sessionStorage.getItem("userID")
   var moment = require('moment');
 
   const {
@@ -337,10 +337,10 @@ export default function DispensingDrugs() {
 											<button
 												onClick={() => {
 													setSelectedPrescription(dispenseData);
-													localStorage.setItem("trackingNo", dispenseData.trackingNo)
-                          localStorage.setItem("productid", presDrugs[0].productId)
-                          localStorage.setItem("pname", presDrugs[0].productName)
-                          localStorage.setItem("amount", presDrugs[0].amount)
+													sessionStorage.setItem("trackingNo", dispenseData.trackingNo)
+                          sessionStorage.setItem("productid", presDrugs[0].productId)
+                          sessionStorage.setItem("pname", presDrugs[0].productName)
+                          sessionStorage.setItem("amount", presDrugs[0].amount)
 													window.open(`http://localhost:3000/dispensed`, '_blank')
 													// window.open(`http://localhost:3000/dispensed/${row.original.id}`, '_blank')
 												}}

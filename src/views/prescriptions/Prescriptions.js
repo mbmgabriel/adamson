@@ -28,13 +28,13 @@ export default function Prescriptions() {
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [filesToUpload, setFilesToUpload] = useState({});
   const navigate = useNavigate();
-  const presId = localStorage.getItem("pId")
-  const userid = localStorage.getItem("userID")
-  const userfullname = localStorage.getItem("name")
-  const prc = localStorage.getItem("prc")
-  const lto = localStorage.getItem("lto")
-  const usertype = localStorage.getItem("userType")
-  const storeid = localStorage.getItem("storeID")
+  const presId = sessionStorage.getItem("pId")
+  const userid = sessionStorage.getItem("userID")
+  const userfullname = sessionStorage.getItem("name")
+  const prc = sessionStorage.getItem("prc")
+  const lto = sessionStorage.getItem("lto")
+  const usertype = sessionStorage.getItem("userType")
+  const storeid = sessionStorage.getItem("storeID")
   const {
     register,
     handleSubmit,
@@ -349,7 +349,7 @@ export default function Prescriptions() {
                         
                         setSelectedPrescription(row.original);
                         window.open(`http://localhost:3000/generate/${row.original.id}`, '_blank')
-                        localStorage.setItem("pId", row.original.id)
+                        sessionStorage.setItem("pId", row.original.id)
                       }}
                       className='btn btn-info btn-sm m-r-5'
                     >
@@ -358,7 +358,7 @@ export default function Prescriptions() {
                     {/* <button
                       onClick={() => {
                         setShowUploadModal(true)
-                        localStorage.setItem("pId", row.original.id)
+                        sessionStorage.setItem("pId", row.original.id)
                       }}
                       className='btn btn-info btn-sm m-r-5'
                     >
@@ -368,7 +368,7 @@ export default function Prescriptions() {
                     <button
                       onClick={() => {
                         window.open(`http://localhost:3000/viewrecord/${row.original.id}`, '_blank')
-                        localStorage.setItem("pId", row.original.id)
+                        sessionStorage.setItem("pId", row.original.id)
                       }}
                       className='btn btn-info btn-sm m-r-5'
                     >

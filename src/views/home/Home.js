@@ -4,6 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
+import Table from 'react-bootstrap/Table';
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
@@ -27,19 +28,20 @@ function Home() {
   const [medLabel, setMedLabel] = useState([])
   const [disLabel, setDisLabel] = useState([])
   const [disData, setDisData] = useState([])
-  const userfullname = localStorage.getItem("name")
-  const prc = localStorage.getItem("prc")
-  const lto = localStorage.getItem("lto")
-  const usertype = localStorage.getItem("userType")
-  const userid = localStorage.getItem("userID")
-  const storeid = localStorage.getItem("storeID")
-  const pId = localStorage.getItem("pId")
-  // const storeId = localStorage.getItem("userID")
+  const userfullname = sessionStorage.getItem("name")
+  const prc = sessionStorage.getItem("prc")
+  const lto = sessionStorage.getItem("lto")
+  const usertype = sessionStorage.getItem("userType")
+  const userid = sessionStorage.getItem("userID")
+  const storeid = sessionStorage.getItem("storeID")
+  const pId = sessionStorage.getItem("pId")
+  // const storeId = sessionStorage.getItem("userID")
   const [drugDispensed, setdrugDispensed] = useState([])
   const [drugDispensed1, setdrugDispensed1] = useState([])
   const [drugDispensed2, setdrugDispensed2] = useState([])
   const [userPrescription, setUserPrescription] = useState([])
   const [prescriptionProduct, setPrescriptionProduct] = useState([])
+  const [prescriptionProduct1, setPrescriptionProduct1] = useState([])
 
   const handleAddrTypeChange = (e) => { 
     // console.clear(); 
@@ -48,7 +50,7 @@ function Home() {
       }
 
   const getStoreID = (e) => {
-    localStorage.setItem('storeID', e.target.value)
+    sessionStorage.setItem('storeID', e.target.value)
   }
 
   const productsSet = () => {
@@ -80,6 +82,7 @@ function Home() {
     getDataDispensed();
     handleGetUserPrescriptions();
     handleGetUserPrescriptionsProduct();
+    handleGetUserPrescriptionsProduct1();
     // handleGetDispensers();
   }, []);   
 
@@ -106,11 +109,22 @@ function Home() {
     setLoading(false);
   };
 
+  const handleGetUserPrescriptionsProduct1 = async () => {
+    setLoading(true);
+    const response = await new PrescriptionAPI().getUserPrescription(pId);
+    if (response.ok) {
+        setPrescriptionProduct1(response?.data);
+    } else {
+      toast.error("Something went wrong while fetching user");
+    }
+    setLoading(false);
+  };
+
   const handleGetUserPrescriptionsProduct = async () => {
     setLoading(true);
     const response = await new PrescriptionAPI().getUserPrescription(pId);
     if (response.ok) {
-        setPrescriptionProduct(response?.data?.prescriptionProduct);
+        // setPrescriptionProduct(response?.data?.prescriptionProduct);
         let temp = []
         response.data.map(i => {
           temp.push(i?.prescriptionProduct)
@@ -332,6 +346,7 @@ const pproduct = userPrescription.map((item, index) => (
           </Col>
         </Row>
         {/* {disData} */}
+        {usertype === "Admin" && "Veterenarian" &&
         <Row>
           <Col md={6}>
             <Card className="dash-card">
@@ -381,6 +396,7 @@ const pproduct = userPrescription.map((item, index) => (
             </Card>
           </Col>
         </Row>
+        }
         
         {usertype === "Admin" &&
         <>
@@ -452,30 +468,34 @@ const pproduct = userPrescription.map((item, index) => (
         />
         </>
       }
-        {/* {userPrescription} */}{prescriptionProduct},
-        {pproduct}
-        <ReactTable
-          pageCount={100}
-          list={pproduct}
-          filterable
-          data={pproduct}
-          columns={[
-            {
-              Header: "",
-              columns: [
-                {
-                  Header: "Drug Name",
-                  id: "productName",
-                  accessor: (d) => d.productName,
-                },
-              ],
-            },
-          ]}
-          csv
-          edited={pproduct}
-          defaultPageSize={10}
-          className='-highlight'
-        />
+        {/* {userPrescription} */}
+        {/* {prescriptionProduct} */}
+      {usertype === "Patient" &&
+      <div>
+      Prescribed Medicines
+      <Table striped bordered hover size="sm">
+        <thead>
+          <tr>
+            <th>Track No.</th>
+            <th>Prescription Name</th>
+            <th>Date Prescribed</th>
+          </tr>
+        </thead>
+        <tbody>
+          {prescriptionProduct1?.map((item,index)=>(
+          <tr>
+            <td>{item?.trackingNo}</td>
+            <td>{item?.title}</td>
+            <td>{item?.datePrescribed}</td>
+            {item.prescriptionProduct.map((pp,index)=>(
+              <td>{pp?.productName}</td>
+            ))}
+          </tr>
+          ))}
+        </tbody>
+      </Table>
+      </div>
+      }
       </div>
     </div>
   );

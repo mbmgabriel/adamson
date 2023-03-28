@@ -10,7 +10,7 @@ export default class Base {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
         'X-LMS-KEY': `Web|${subdomain.includes("localhost") ? 'dev' : subdomain }.tekteachlms.com`,
-        Authorization: `Bearer ${await window.localStorage.getItem("token")}`,
+        Authorization: `Bearer ${await window.sessionStorage.getItem("token")}`,
       },
       method: method,
     };
@@ -46,7 +46,7 @@ export default class Base {
     }
 
     // if(response.status == 401){
-    //   await localStorage.removeItem("token")
+    //   await sessionStorage.removeItem("token")
     //   window.location.href = '/login?message=You have been logged out! Please login again'
     //   return
     // }
