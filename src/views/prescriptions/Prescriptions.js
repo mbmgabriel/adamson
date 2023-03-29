@@ -348,7 +348,8 @@ export default function Prescriptions() {
                       onClick={() => {
                         
                         setSelectedPrescription(row.original);
-                        window.open(`http://localhost:3000/generate/${row.original.id}`, '_blank')
+                        // window.open(`http://localhost:3000/generate/${row.original.id}`, '_blank')
+                        window.open(`http://vetdrums.org/generate/${row.original.id}`, '_blank')
                         sessionStorage.setItem("pId", row.original.id)
                       }}
                       className='btn btn-info btn-sm m-r-5'

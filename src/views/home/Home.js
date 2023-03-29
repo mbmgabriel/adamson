@@ -346,7 +346,7 @@ const pproduct = userPrescription.map((item, index) => (
           </Col>
         </Row>
         {/* {disData} */}
-        {usertype === "Admin" && "Veterenarian" &&
+        {usertype === "Admin" && 
         <Row>
           <Col md={6}>
             <Card className="dash-card">
