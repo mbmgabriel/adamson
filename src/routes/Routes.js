@@ -19,6 +19,7 @@ import Profile from "../views/users/Profile";
 import Prescribed from "../views/prescriptions/Prescribed";
 import DispensingDrugs from "../views/dispensers/DispensingDrugs";
 import Dispensed from "../views/dispensers/CreateDispense";
+import ProductFormat from "../views/medicines/ProductFormat";
 
 export default function Routing() {
 
@@ -57,6 +58,7 @@ export default function Routing() {
                 <Route path='/prescribed' element={<Prescribed/>}/>
                 <Route path='/dispensingdrugs' element={<DispensingDrugs/>}/>
                 <Route path='/dispensed' element={<Dispensed/>}/>
+                <Route path='/format' element={<ProductFormat/>}/>
               </>
             ) : (
               <>

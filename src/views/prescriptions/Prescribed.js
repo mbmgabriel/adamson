@@ -22,7 +22,7 @@ export default function Prescribed() {
   const [patientData, setPatientData] = useState([]);
 	const presId = sessionStorage.getItem("pId")
   const userid = sessionStorage.getItem("userID")
-  const siglink = `http://tfismartasp-001-site18.btempurl.com/user/${userid}/Signature/Signature.png`
+  const siglink = `https://cdn.vetdrums.org/user/${userid}/Signature/Signature.png`
 
 	
 	const navigate = useNavigate()

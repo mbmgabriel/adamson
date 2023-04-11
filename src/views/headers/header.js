@@ -40,6 +40,7 @@ function HeaderMain() {
             {usertype === "Admin" && <Nav.Link href="/users">Users</Nav.Link>}
             {usertype === "Admin" && <Nav.Link href="/animals">Animals</Nav.Link>}
             {usertype === "Admin" && <Nav.Link href="/medicines">Medicines</Nav.Link>}
+            {usertype === "Admin" && <Nav.Link href="/format">Product Format</Nav.Link>}
             {/* {usertype === "Admin" && <NavDropdown.Item href="/dispensers">
                 Dispenser
               </NavDropdown.Item>} */}

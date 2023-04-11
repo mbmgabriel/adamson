@@ -22,7 +22,7 @@ export default function PrescriptionCerttificate() {
   const prc = sessionStorage.getItem("prc")
   const ptr = sessionStorage.getItem("ptr")
   const userid = sessionStorage.getItem("userID")
-  const siglink = `http://tfismartasp-001-site18.btempurl.com/user/${userid}/Signature/Signature.png`
+  const siglink = `https://cdn.vetdrums.org/user/${userid}/Signature/Signature.png`
 
   const {
     register,

@@ -33,8 +33,8 @@ export default function Profile() {
   const prcimage = sessionStorage.getItem("prcimage")
   const lto = sessionStorage.getItem("lto")
   const usertype = sessionStorage.getItem("userType")
-  const siglink = `http://tfismartasp-001-site18.btempurl.com/user/${userid}/Signature/Signature.png`
-  const piclink = `http://tfismartasp-001-site18.btempurl.com/user/${userid}/Profile/Profile.png`
+  const siglink = `https://cdn.vetdrums.org/user/${userid}/Signature/Signature.png`
+  const piclink = `https://cdn.vetdrums.org/user/${userid}/Profile/Profile.png`
   const [sigLinkDataError, setSigLinkDataError] = useState('');
   const [picLinkDataError, setPicLinkDataError] = useState('');
 

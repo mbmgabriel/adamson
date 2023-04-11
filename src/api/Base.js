@@ -1,4 +1,4 @@
-const BASE_URL = "http://tfismartasp-001-site13.btempurl.com"
+const BASE_URL = "https://api.vetdrums.org"
 export default class Base {
   sendRequest = async ({path, method = 'GET', data = {}, base, headers}) => {
     let url = base ? base + path : BASE_URL + path;
@@ -9,7 +9,8 @@ export default class Base {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
-        'X-LMS-KEY': `Web|${subdomain.includes("localhost") ? 'dev' : subdomain }.tekteachlms.com`,
+        // 'X-LMS-KEY': `Web|${subdomain.includes("localhost") ? 'dev' : subdomain }.tekteachlms.com`,
+        'X-LMS-KEY': `Web|${subdomain.includes("vetdrums") ? 'dev' : subdomain }.vetdrums.org`,
         Authorization: `Bearer ${await window.sessionStorage.getItem("token")}`,
       },
       method: method,
