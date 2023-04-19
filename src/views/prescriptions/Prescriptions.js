@@ -28,13 +28,13 @@ export default function Prescriptions() {
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [filesToUpload, setFilesToUpload] = useState({});
   const navigate = useNavigate();
-  const presId = sessionStorage.getItem("pId")
-  const userid = sessionStorage.getItem("userID")
-  const userfullname = sessionStorage.getItem("name")
-  const prc = sessionStorage.getItem("prc")
-  const lto = sessionStorage.getItem("lto")
-  const usertype = sessionStorage.getItem("userType")
-  const storeid = sessionStorage.getItem("storeID")
+  const presId = localStorage.getItem("pId")
+  const userid = localStorage.getItem("userID")
+  const userfullname = localStorage.getItem("name")
+  const prc = localStorage.getItem("prc")
+  const lto = localStorage.getItem("lto")
+  const usertype = localStorage.getItem("userType")
+  const storeid = localStorage.getItem("storeID")
   const {
     register,
     handleSubmit,
@@ -44,6 +44,7 @@ export default function Prescriptions() {
   } = useForm();
 
   useEffect(() => {
+    alert('i fire once')
     handleGetAllPrescriptions();
     handleGetAllMedicines();
     handleGetAllAnimals();
@@ -115,14 +116,15 @@ export default function Prescriptions() {
     }
   }
 
-  const handleGetAllPrescriptions = async () => {
+  const handleGetAllPrescriptions = () => {
     setLoading(true);
-    const response = await new PrescriptionAPI().prescriptions();
+    const response = new PrescriptionAPI().prescriptions();
     if (response.ok) {
         setPrescriptionData(response.data);
     } else {
       // toast.error("Something went wrong while fetching user");
-      handleGetAllPrescriptions()
+      // handleGetAllPrescriptions()
+      alert('second run')
     }
     setLoading(false);
   };
@@ -344,22 +346,29 @@ export default function Prescriptions() {
                         <i className="fa fa-edit"></i>
                       </button>
                     } */}
-                    <button
-                      onClick={() => {
-                        
+                    <div><Link to={`/generate/${row.original.id}`}
+                    onClick={() => {
+                      setSelectedPrescription(row.original);
+                      localStorage.setItem("pId", row.original.id)
+                    }}><button className="btn btn-info btn-sm m-r-5"><i className="fa fa-book"></i>Generate</button>
+                    </Link></div>
+                    {/* <a href={/generate/} */}
+                    {/* <button
+                      onClick={(e) => {
+                        e.preventDefault();
                         setSelectedPrescription(row.original);
                         // window.open(`http://localhost:3000/generate/${row.original.id}`, '_blank')
-                        window.open(`http://vetdrums.org/generate/${row.original.id}`, '_blank')
-                        sessionStorage.setItem("pId", row.original.id)
+                        window.open(`https://vetdrums.org/generate/${row.original.id}`, '_blank')
+                        localStorage.setItem("pId", row.original.id)
                       }}
                       className='btn btn-info btn-sm m-r-5'
                     >
                       <i className="fa fa-book"></i> Generate Prescription
-                    </button>
+                    </button> */}
                     {/* <button
                       onClick={() => {
                         setShowUploadModal(true)
-                        sessionStorage.setItem("pId", row.original.id)
+                        localStorage.setItem("pId", row.original.id)
                       }}
                       className='btn btn-info btn-sm m-r-5'
                     >
@@ -369,7 +378,7 @@ export default function Prescriptions() {
                     <button
                       onClick={() => {
                         window.open(`http://localhost:3000/viewrecord/${row.original.id}`, '_blank')
-                        sessionStorage.setItem("pId", row.original.id)
+                        localStorage.setItem("pId", row.original.id)
                       }}
                       className='btn btn-info btn-sm m-r-5'
                     >

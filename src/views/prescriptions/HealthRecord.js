@@ -16,7 +16,7 @@ export default function HealthRecord() {
   const [loading, setLoading] = useState(true);
   const [healthRecord, setHealthRecord] = useState([]);
   const [prescriptionData, setPrescriptionData] = useState([]);
-  const presId = sessionStorage.getItem("pId")
+  const presId = localStorage.getItem("pId")
 
   const {
     register,

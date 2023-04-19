@@ -21,7 +21,7 @@ export default function Dispensed({setSelectedPrescription, selectedPrescription
 	const [medicineData, setMedicineData] = useState([]);
   const [animalData, setAnimalData] = useState([]);
   const [patientData, setPatientData] = useState([]);
-	const presId = sessionStorage.getItem("pId")
+	const presId = localStorage.getItem("pId")
 	const [presDrugs, setPresDrugs] = useState([]);
 	const [trackingNo, setTrackingNo] = useState('');
 	const [dispenseData, setDispenseData] = useState([]);
@@ -44,11 +44,11 @@ export default function Dispensed({setSelectedPrescription, selectedPrescription
     name: "test", // unique name for your Field Array
   });
 
-	const trackId = sessionStorage.getItem("trackingNo")
-	const storeId = JSON.parse(sessionStorage.getItem("userID"))
-	const productid = sessionStorage.getItem("productid")
-	const pname = sessionStorage.getItem("pname")
-	const amountD = sessionStorage.getItem("amount")
+	const trackId = localStorage.getItem("trackingNo")
+	const storeId = JSON.parse(localStorage.getItem("userID"))
+	const productid = localStorage.getItem("productid")
+	const pname = localStorage.getItem("pname")
+	const amountD = localStorage.getItem("amount")
 
 	const notifySuccess = () => 
   toast("Successfully dispensed");

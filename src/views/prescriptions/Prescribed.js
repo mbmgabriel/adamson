@@ -20,8 +20,8 @@ export default function Prescribed() {
 	const [medicineData, setMedicineData] = useState([]);
   const [animalData, setAnimalData] = useState([]);
   const [patientData, setPatientData] = useState([]);
-	const presId = sessionStorage.getItem("pId")
-  const userid = sessionStorage.getItem("userID")
+	const presId = localStorage.getItem("pId")
+  const userid = localStorage.getItem("userID")
   const siglink = `https://cdn.vetdrums.org/user/${userid}/Signature/Signature.png`
 
 	

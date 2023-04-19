@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Form, Button, Select, Row, Col } from "react-bootstrap";
+import { Link, redirect, BrowserRouter, useNavigate } from 'react-router-dom'
 import ReactTable from "react-table-v6";
 import "react-table-v6/react-table.css";
 import { toast } from "react-toastify";
@@ -17,11 +18,11 @@ export default function PrescriptionCerttificate() {
   const [loading, setLoading] = useState(true);
   const [prescriptionData, setPrescriptionData] = useState([]);
   const [prescriptionDrug, setPrescriptionDrug] = useState([]);
-	const presId = sessionStorage.getItem("pId")
-  const fullname = sessionStorage.getItem("name")
-  const prc = sessionStorage.getItem("prc")
-  const ptr = sessionStorage.getItem("ptr")
-  const userid = sessionStorage.getItem("userID")
+	const presId = localStorage.getItem("pId")
+  const fullname = localStorage.getItem("name")
+  const prc = localStorage.getItem("prc")
+  const ptr = localStorage.getItem("ptr")
+  const userid = localStorage.getItem("userID")
   const siglink = `https://cdn.vetdrums.org/user/${userid}/Signature/Signature.png`
 
   const {
@@ -121,6 +122,9 @@ export default function PrescriptionCerttificate() {
                 </div>
               </Col>
             </Row>
+            <br></br>
+            <Link to={`/prescriptions`}
+            ><button className="btn btn-info btn-sm m-r-5 text-light">Close</button></Link>
           </div>
         </div>
       </div>

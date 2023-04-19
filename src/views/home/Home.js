@@ -28,14 +28,14 @@ function Home() {
   const [medLabel, setMedLabel] = useState([])
   const [disLabel, setDisLabel] = useState([])
   const [disData, setDisData] = useState([])
-  const userfullname = sessionStorage.getItem("name")
-  const prc = sessionStorage.getItem("prc")
-  const lto = sessionStorage.getItem("lto")
-  const usertype = sessionStorage.getItem("userType")
-  const userid = sessionStorage.getItem("userID")
-  const storeid = sessionStorage.getItem("storeID")
-  const pId = sessionStorage.getItem("pId")
-  // const storeId = sessionStorage.getItem("userID")
+  const userfullname = localStorage.getItem("name")
+  const prc = localStorage.getItem("prc")
+  const lto = localStorage.getItem("lto")
+  const usertype = localStorage.getItem("userType")
+  const userid = localStorage.getItem("userID")
+  const storeid = localStorage.getItem("storeID")
+  const pId = localStorage.getItem("pId")
+  // const storeId = localStorage.getItem("userID")
   const [drugDispensed, setdrugDispensed] = useState([])
   const [drugDispensed1, setdrugDispensed1] = useState([])
   const [drugDispensed2, setdrugDispensed2] = useState([])
@@ -50,7 +50,7 @@ function Home() {
       }
 
   const getStoreID = (e) => {
-    sessionStorage.setItem('storeID', e.target.value)
+    localStorage.setItem('storeID', e.target.value)
   }
 
   const productsSet = () => {

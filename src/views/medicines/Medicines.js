@@ -350,11 +350,11 @@ export default function Medicines() {
               <p className='text-danger'>{errors.description?.message}</p>
 
               <label className='control-label mb-2'>Product Format</label>
-              <Form.Select {...register("formatType", { required: true })}>
+              <Form.Select {...register("productFormatId", { required: true })}>
                   <option value="">Select Type</option>
                   {
                     typeData.map((item) => (
-                        <option value={item.name}>
+                        <option value={item.id}>
                             {item.name}
                         </option>
                     ))}

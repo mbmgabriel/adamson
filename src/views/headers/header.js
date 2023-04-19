@@ -6,8 +6,8 @@ import React, { useEffect, useState } from "react";
 import logo from "../../assets/images/image001.jpg"
 
 function HeaderMain() {
-  const usertype = sessionStorage.getItem("userType")
-  const prcno = sessionStorage.getItem("prc")
+  const usertype = localStorage.getItem("userType")
+  const prcno = localStorage.getItem("prc")
   const [headerColor, setHeaderColor] = ('')
 
   // const getColor = () => {
@@ -56,15 +56,15 @@ function HeaderMain() {
             {usertype === "Client" && 'Client Account Profile'} 
             </Nav.Link>
             <Nav.Link eventKey={2} href="/" onClick={() => {
-                        sessionStorage.removeItem("name");
-                        sessionStorage.removeItem("token");
-                        sessionStorage.removeItem("userType");
-                        sessionStorage.removeItem("trackingNo");
-                        sessionStorage.removeItem("pId");
-                        sessionStorage.removeItem("userID");
-                        sessionStorage.removeItem("user");
-                        sessionStorage.removeItem("lto");
-                        sessionStorage.removeItem("prc");
+                        localStorage.removeItem("name");
+                        localStorage.removeItem("token");
+                        localStorage.removeItem("userType");
+                        localStorage.removeItem("trackingNo");
+                        localStorage.removeItem("pId");
+                        localStorage.removeItem("userID");
+                        localStorage.removeItem("user");
+                        localStorage.removeItem("lto");
+                        localStorage.removeItem("prc");
                       }}>
               Logout
             </Nav.Link>
