@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Modal } from "react-bootstrap";
+import { Modal, Form } from "react-bootstrap";
 import ReactTable from "react-table-v6";
 import "react-table-v6/react-table.css";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import UsersAPI from "../../api/UsersAPI"
+import DispensersAPI from "../../api/DispensersAPI"
 import SweetAlert from "react-bootstrap-sweetalert";
 import HeaderMain from "../headers/header";
 import "../../../node_modules/font-awesome/css/font-awesome.css"
@@ -12,7 +13,9 @@ import "../../../node_modules/font-awesome/css/font-awesome.css"
 export default function Users() {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState([]);
+  const [dispenserData, setDispenserData] = useState([]);
   const [showForm, setShowForm] = useState(false);
+  const [showForm1, setShowForm1] = useState(false);
   const [resetNotify, setResetNotify] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
@@ -21,11 +24,13 @@ export default function Users() {
     handleSubmit,
     reset,
     setValue,
+    setValueAs,
     formState: { errors },
   } = useForm();
 
   useEffect(() => {
     handleGetAllUsers();
+    handleGetAllDispensers();
   }, []);
 
   const handleGetAllUsers = async () => {
@@ -33,6 +38,17 @@ export default function Users() {
     const response = await new UsersAPI().users();
     if (response.ok) {
       setUser(response.data);
+    } else {
+      toast.error("Something went wrong while fetching user");
+    }
+    setLoading(false);
+  };
+
+  const handleGetAllDispensers = async () => {
+    setLoading(true);
+    const response = await new DispensersAPI().dispensers();
+    if (response.ok) {
+        setDispenserData(response.data);
     } else {
       toast.error("Something went wrong while fetching user");
     }
@@ -66,6 +82,34 @@ export default function Users() {
     setLoading(false);
   };
 
+  const submitForm2 = async (data) => {
+    setLoading(true);
+    alert('2')
+    if (selectedUser != null) {
+      const response = await new UsersAPI().updateUser1(selectedUser.id, data);
+      if(response.ok) {
+        toast.success("Successfully Updated Term")
+        handleGetAllUsers()
+        reset()
+        setShowForm1(false)
+        setSelectedUser(null)
+      }else{
+        toast.error("Something went wrong while updating the term");
+      }
+    } else {
+      const response = await new UsersAPI().createUser(data);
+      if (response.ok) {
+        toast.success("Successfully Created Term");
+        handleGetAllUsers();
+        reset();
+        setShowForm1(false);
+      } else {
+        toast.error(response.data.errorMessage);
+      }
+    }
+    setLoading(false);
+  };
+
   const handleDeleteUser = async (id) => {
     setLoading(true);
     setResetNotify(false);
@@ -82,6 +126,11 @@ export default function Users() {
 
   const handleCloseModal = () => {
     setShowForm(false);
+    setSelectedUser(null);
+  };
+
+  const handleCloseModal1 = () => {
+    setShowForm1(false);
     setSelectedUser(null);
   };
 
@@ -120,6 +169,16 @@ export default function Users() {
                 accessor: (d) => d.fullname,
               },
               {
+                Header: "Status",
+                id: "isActive",
+                accessor: (d) => d.isActive === true ? "Active" : "Inactive",
+              },
+              {
+                Header: "Store Id",
+                id: "storeId",
+                accessor: (d) => d.storeId,
+              },
+              {
                 Header: "Type",
                 id: "userTypeId",
                 accessor: (d) => d.userTypeId === 2 && "Veterinarian"
@@ -139,6 +198,8 @@ export default function Users() {
                         setValue('password', row.original.password)
                         setValue('fullname', row.original.fullname)
                         setValue('userTypeId', row.original.userTypeId)
+                        setValue('storeId', row.original.storeId)
+                        setValue('isActive', (row.original.isActive))
                         setSelectedUser(row.original);
                         setShowForm(true);
                       }}
@@ -146,6 +207,21 @@ export default function Users() {
                     >
                       Edit
                     </button>
+                    {/* <button
+                      onClick={() => {
+                        // setValue('username', row.original.username)
+                        // setValue('password', row.original.password)
+                        // setValue('fullname', row.original.fullname)
+                        // setValue('userTypeId', row.original.userTypeId)
+                        setValue('storeId', row.original.storeId)
+                        setValue('isActive', (row.original.isActive))
+                        setSelectedUser(row.original);
+                        setShowForm1(true);
+                      }}
+                      className='btn btn-info btn-sm m-r-5'
+                    >
+                      Edit Status
+                    </button> */}
                     <button
                       onClick={() => {
                         setSelectedUser(row.original);
@@ -206,7 +282,7 @@ export default function Users() {
                 {...register("password", {
                   required: "Password is required",
                 })}
-                type='text'
+                type='password'
                 size='30'
                 className='form-control'
                 placeholder='Enter text here'
@@ -226,14 +302,37 @@ export default function Users() {
               <p className='text-danger'>{errors.fullname?.message}</p>
 
               <label className='control-label mb-2'>Type</label>
-              <select {...register("userTypeId", { required: true })}>
+              <Form.Select {...register("userTypeId", { required: true })}>
                   <option value="">Select User Type</option>
+                  <option value='4'>Admin</option>
                   <option value='1'>Farmer</option>
                   <option value='2'>Veterinarian</option>
                   <option value='3'>Dispensing Unit</option>
-              </select>
+              </Form.Select>
+              <p className='text-danger'>{errors.userTypeId?.message}</p>
             </div>
+
+            <label className='control-label mb-2'>Store Id</label>
+              <Form.Select {...register("storeId", { required: true })}>
+                  <option value="">Select Store</option>
+                  {
+                    dispenserData.map((item) => (
+                        <option value={item.id}>
+                            {item.name}
+                        </option>
+                    ))}
+              </Form.Select>
+              <p className='text-danger'>{errors.storeId?.message}</p>
+
+              <label className='control-label mb-2'>Status</label>
+              <Form.Select {...register("isActive", { required: true,
+              })}>
+                  <option value="">Select User Active</option>
+                  <option value={1}>Active</option>
+                  <option value={0}>Inactive</option>
+              </Form.Select> 
           </Modal.Body>
+
           <Modal.Footer>
             {selectedUser != null ? 
                 <button type='submit' className='btn btn-primary'>
@@ -247,6 +346,54 @@ export default function Users() {
           </Modal.Footer>
         </form>
       </Modal>
+      </div>
+
+      <div>
+      <Modal show={showForm1} onHide={() => handleCloseModal1()}>
+        <form onSubmit={handleSubmit(submitForm2)}>
+          <Modal.Header className='font-10' closeButton>
+            <span className='font-20'>
+              {selectedUser != null
+                ? `Update ${selectedUser.username}`
+                : "Create User"}
+            </span>
+          </Modal.Header>
+          <Modal.Body>
+            <label className='control-label mb-2'>Store Id</label>
+              <select {...register("storeId", { required: true })}>
+                  <option value="">Select Store</option>
+                  {
+                    dispenserData.map((item) => (
+                        <option value={item.id}>
+                            {item.name}
+                        </option>
+                    ))}
+              </select>
+              <p className='text-danger'>{errors.storeId?.message}</p>
+
+              <label className='control-label mb-2'>Status</label>
+              <select {...register("isActive", { required: true,
+              })}>
+                  <option value="">Select User Active</option>
+                  <option value={'1'}>Active</option>
+                  <option value={'2'}>Inactive</option>
+              </select> 
+          </Modal.Body>
+
+          <Modal.Footer>
+            {selectedUser != null ? 
+                <button type='submit' className='btn btn-primary'>
+                Update Save 2
+              </button>  
+              :
+              <button type='submit' className='btn btn-primary'>
+              Save User
+            </button>
+            }
+          </Modal.Footer>
+        </form>
+      </Modal>
+
       </div>
       </div>
     </>

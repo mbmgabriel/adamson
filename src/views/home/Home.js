@@ -5,6 +5,7 @@ import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
+import Badge from 'react-bootstrap/Badge';
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
@@ -51,6 +52,10 @@ function Home() {
 
   const getStoreID = (e) => {
     localStorage.setItem('storeID', e.target.value)
+  }
+
+  const getDisp = (e) => {
+    handleGetDispensers();
   }
 
   const productsSet = () => {
@@ -299,7 +304,7 @@ const pproduct = userPrescription.map((item, index) => (
           Dashboard
         </div>
         <Row>
-          <Col md={4}>
+          {/* <Col md={4}>
             <Card className="dash-card">
               <Card.Body>
                 <Row>
@@ -312,8 +317,8 @@ const pproduct = userPrescription.map((item, index) => (
                 </Row>
               </Card.Body>
             </Card>
-          </Col>
-          <Col md={4}>
+          </Col> */}
+          {/* <Col md={4}>
             <Card className="dash-card">
               <Card.Body>
                 <Row>
@@ -343,12 +348,12 @@ const pproduct = userPrescription.map((item, index) => (
                 </Row>
               </Card.Body>
             </Card>
-          </Col>
+          </Col> */}
         </Row>
         {/* {disData} */}
         {usertype === "Admin" && 
         <Row>
-          <Col md={6}>
+          <Col md={3}>
             <Card className="dash-card">
               {usertype === "Veterenarian" ?
               <Card.Body>
@@ -402,7 +407,7 @@ const pproduct = userPrescription.map((item, index) => (
         <>
         <form onSubmit={handleSubmit(submitForm)}>
           <label className='control-label mb-2'>Type</label>
-          <Form.Select onChange={getStoreID}>
+          <Form.Select onChange={getStoreID} onClick={getDisp} >
               <option value="">Select Dispensing</option>
               {
                 dData.map((item, index) => (
@@ -490,6 +495,14 @@ const pproduct = userPrescription.map((item, index) => (
             {item.prescriptionProduct.map((pp,index)=>(
               <td>{pp?.productName}</td>
             ))}
+            <td>{item?.trackingNo === null ? 
+                <Badge pill bg="success">
+                  Dispensed
+                </Badge>
+                : 
+                <Badge pill bg="info">
+                  Not Dispensed
+                </Badge>}</td>
           </tr>
           ))}
         </tbody>

@@ -46,6 +46,7 @@ function Login() {
       await window.localStorage.setItem('ptr', response.data.ptrNo)
       await window.localStorage.setItem('lto', response.data.ltoNo)
       await window.localStorage.setItem('pId', response.data.patientId)
+      await window.localStorage.setItem('sId', response.data.storeId)
       window.location.href = "/home"
     }else{
       toast.error(response.data.errorMessage)
@@ -89,12 +90,15 @@ function Login() {
     //       </Form>
     //     </div>
     //   </div>
-      <div>
+      <div style={{backgroundColor:"#f7f7f7"}}>
         <main class="form-signin w-100 m-auto" style={{maxWidth:"550px"}}>
-        <Image fluid style={{minHeight:"10vh", display:"flex", marginBottom:10 }} src={bg}></Image>
-          <Form onSubmit={login}>
+        
+        <div style={{fontFamily:"inherit", fontWeight:"bold", fontSize:50, textAlign:"center"}}>VETDRUMS</div>
+        <p style={{fontFamily:"inherit", fontWeight:"bold", fontSize:14, textAlign:"center"}}>Veterinary Drug Monitoring System</p>
+          <Form onSubmit={login} style={{border:"3px #ffffff solid",backgroundColor:"#ffffff", padding:"75px", height:500, borderRadius:"5px 5px 5px 5px"}}>
             {/* <h1 class="h3 mb-3 fw-normal">Please sign in</h1> */}
-
+            {/* <Image fluid style={{minHeight:"10vh", display:"flex", marginBottom:10 }} src={bg}></Image> */}
+            <div style={{fontFamily:"inherit", fontWeight:"bold", fontSize:25, textAlign:"center", marginBottom:10}}>Sign In</div>
             <div class="form-floating" style={{marginBottom:10}}>
               <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com" onChange={(e) => setUsername(e.target.value)}/>
               <label for="floatingInput">Username</label>
@@ -102,7 +106,6 @@ function Login() {
             <div class="form-floating" style={{marginBottom:10}}>
               <input style={{marginBottom:10}} type={showPassword ? 'text' : "password"}  class="form-control" id="floatingPassword" placeholder="Password" onChange={(e) => setPassword(e.target.value)}/>
               <div className=''><i className={showPassword ? 'fa fa-eye' : 'fa fa-eye-slash'} onClick={()=> setShowPassword(!showPassword)} style={{marginRight:120}}>  Show Password </i>
-              Don't have an account yet? <span style={{fontWeight:"bold"}}><a href="/register">Sign up here</a></span>
               </div>
               
               <label for="floatingPassword">Password</label>
@@ -110,17 +113,21 @@ function Login() {
             <button class="w-100 btn btn-lg btn-primary" type="submit" style={{marginBottom:10}}>Sign in</button>
             {/* <div>Don't have an account yet? <span style={{fontWeight:"bold"}}><a href="/register">Sign up here</a></span></div> */}
             {/* <p class="mt-5 mb-3 text-muted">&copy; 2017–2022</p> */}
+            <div style={{fontSize:14}}>Don't have an account yet? <span style={{fontWeight:"bold"}}><a href="/register">Sign up here</a></span>
+              </div>
           </Form>
           
+          
         </main>
-        <div style={{textAlign:"center"}}>
-          <img className="img-fluid img-thumbnail" src={adu} style={{width:"200px", height:"200px"}}></img>
-          <img className="img-fluid img-thumbnail" src={pspp} style={{width:"200px", height:"200px"}}></img>
-          <img className="img-fluid img-thumbnail" src={pcpp} style={{width:"200px", height:"200px"}}></img>
-          <img className="img-fluid img-thumbnail" src={pvda} style={{width:"200px", height:"200px"}}></img>
-          <img className="img-fluid img-thumbnail" src={fava} style={{width:"200px", height:"200px"}}></img>
-          <img className="img-fluid img-thumbnail" src={fao} style={{width:"200px", height:"200px"}}></img>
-          <img className="img-fluid img-thumbnail" src={bai} style={{width:"200px", height:"200px"}}></img>
+        <div style={{textAlign:"center", marginTop:"20", padding:10}}>
+          <img className="img-fluid img-thumbnail" src={adu} style={{width:"130px", height:"130px", marginRight:5}}></img>
+          <img className="img-fluid img-thumbnail" src={pspp} style={{width:"130px", height:"130px", marginRight:5}}></img>
+          <img className="img-fluid img-thumbnail" src={pcpp} style={{width:"130px", height:"130px", marginRight:5}}></img>
+          <img className="img-fluid img-thumbnail" src={pvda} style={{width:"130px", height:"130px", marginRight:5}}></img>
+          <img className="img-fluid img-thumbnail" src={fava} style={{width:"130px", height:"130px", marginRight:5}}></img>
+          <img className="img-fluid img-thumbnail" src={fao} style={{width:"130px", height:"130px", marginRight:5}}></img>
+          <img className="img-fluid img-thumbnail" src={bai} style={{width:"130px", height:"130px", marginRight:5}}></img>
+          <img className="img-fluid img-thumbnail" src={bg} style={{width:"130px", height:"130px", marginRight:5}}></img>
         </div>
       </div>
     
@@ -133,13 +140,13 @@ function Login() {
   //       <div className="flex-grow-1 mx-auto" style={{maxWidth: '28rem'}}>
   //           <div className="text-center mb-5 mb-md-7">
   //             <h1 className="title"></h1>
-  //             <img className="img-fluid img-thumbnail" src={adu} style={{width:"200px", height:"200px"}}></img>
-  //             <img className="img-fluid img-thumbnail" src={pspp} style={{width:"200px", height:"200px"}}></img>
-  //             <img className="img-fluid img-thumbnail" src={pcpp} style={{width:"200px", height:"200px"}}></img>
-  //             <img className="img-fluid img-thumbnail" src={pvda} style={{width:"200px", height:"200px"}}></img>
-  //             <img className="img-fluid img-thumbnail" src={fava} style={{width:"200px", height:"200px"}}></img>
-  //             <img className="img-fluid img-thumbnail" src={fao} style={{width:"200px", height:"200px"}}></img>
-  //             <img className="img-fluid img-thumbnail" src={bai} style={{width:"200px", height:"200px"}}></img>
+  //             <img className="img-fluid img-thumbnail" src={adu} style={{width:"130px", height:"130px"}}></img>
+  //             <img className="img-fluid img-thumbnail" src={pspp} style={{width:"130px", height:"130px"}}></img>
+  //             <img className="img-fluid img-thumbnail" src={pcpp} style={{width:"130px", height:"130px"}}></img>
+  //             <img className="img-fluid img-thumbnail" src={pvda} style={{width:"130px", height:"130px"}}></img>
+  //             <img className="img-fluid img-thumbnail" src={fava} style={{width:"130px", height:"130px"}}></img>
+  //             <img className="img-fluid img-thumbnail" src={fao} style={{width:"130px", height:"130px"}}></img>
+  //             <img className="img-fluid img-thumbnail" src={bai} style={{width:"130px", height:"130px"}}></img>
   //           </div>
   //       </div>
   //      </div>

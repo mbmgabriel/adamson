@@ -341,8 +341,9 @@ export default function DispensingDrugs() {
                           localStorage.setItem("productid", presDrugs[0].productId)
                           localStorage.setItem("pname", presDrugs[0].productName)
                           localStorage.setItem("amount", presDrugs[0].amount)
-													window.open(`https://vetdrums.org/dispensed`, '_blank')
-													// window.open(`http://localhost:3000/dispensed/${row.original.id}`, '_blank')
+													// window.open(`https://vetdrums.org/dispensed`, '_blank')
+													// window.open(`http://localhost:3000/dispensed/${presDrugs.id}`, '_blank')
+                          window.open(`http://localhost:3000/dispensed`, '_blank')
 												}}
 												className='btn btn-danger btn-sm m-r-5'
 											>

@@ -44,7 +44,6 @@ export default function Prescriptions() {
   } = useForm();
 
   useEffect(() => {
-    alert('i fire once')
     handleGetAllPrescriptions();
     handleGetAllMedicines();
     handleGetAllAnimals();
@@ -124,7 +123,7 @@ export default function Prescriptions() {
     } else {
       // toast.error("Something went wrong while fetching user");
       // handleGetAllPrescriptions()
-      alert('second run')
+    
     }
     setLoading(false);
   };

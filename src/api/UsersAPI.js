@@ -46,6 +46,14 @@ export default class Auth extends Base {
     });
   };
 
+  updateUser1 = async (id, data) => {
+    return this.sendRequest({
+      path: `/api/User/${id}/storeandstatus`,
+      method: 'PUT',
+      data,
+    });
+  };
+
   deleteUser = async (id) => {
     return this.sendRequest({
       path: `/api/User/${id}`,

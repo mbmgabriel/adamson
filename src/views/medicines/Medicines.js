@@ -354,7 +354,7 @@ export default function Medicines() {
                   <option value="">Select Type</option>
                   {
                     typeData.map((item) => (
-                        <option value={item.id}>
+                        <option value={item.name}>
                             {item.name}
                         </option>
                     ))}

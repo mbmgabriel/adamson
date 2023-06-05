@@ -9,6 +9,7 @@ function HeaderMain() {
   const usertype = localStorage.getItem("userType")
   const prcno = localStorage.getItem("prc")
   const [headerColor, setHeaderColor] = ('')
+  const userfullname = localStorage.getItem("name")
 
   // const getColor = () => {
   //   if(usertype === "Veterenarian"){
@@ -38,9 +39,12 @@ function HeaderMain() {
           {usertype === "Dispenser" && <Nav.Link href="/dispensingdrugs">Dispensing</Nav.Link>}
             
             {usertype === "Admin" && <Nav.Link href="/users">Users</Nav.Link>}
+
+            {/* {usertype === "Admin" && <Nav.Link href="/users">Users</Nav.Link>} */}
             {usertype === "Admin" && <Nav.Link href="/animals">Animals</Nav.Link>}
             {usertype === "Admin" && <Nav.Link href="/medicines">Medicines</Nav.Link>}
             {usertype === "Admin" && <Nav.Link href="/format">Product Format</Nav.Link>}
+            {usertype === "Admin" && <Nav.Link href="/dispensers">Store</Nav.Link>}
             {/* {usertype === "Admin" && <NavDropdown.Item href="/dispensers">
                 Dispenser
               </NavDropdown.Item>} */}
@@ -55,6 +59,7 @@ function HeaderMain() {
             {usertype === "Dispenser" && 'Dispensing Account Profile'} 
             {usertype === "Client" && 'Client Account Profile'} 
             </Nav.Link>
+            <Nav.Link eventKey={3} href="/profile"><span>{userfullname}</span></Nav.Link>
             <Nav.Link eventKey={2} href="/" onClick={() => {
                         localStorage.removeItem("name");
                         localStorage.removeItem("token");

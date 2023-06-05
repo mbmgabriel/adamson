@@ -4,17 +4,17 @@ import ReactTable from "react-table-v6";
 import "react-table-v6/react-table.css";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
-import DispensersAPI from "../../api/DispensersAPI"
+import UsersAPI from "../../api/UsersAPI"
 import SweetAlert from "react-bootstrap-sweetalert";
 import HeaderMain from "../headers/header";
 import "../../../node_modules/font-awesome/css/font-awesome.css"
 
-export default function Dispensers() {
+export default function CreateStores() {
   const [loading, setLoading] = useState(true);
-  const [dispenserData, setDispenserData] = useState([]);
+  const [user, setUser] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [resetNotify, setResetNotify] = useState(false);
-  const [selectedDispenser, setSelectedDispenser] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
 
   const {
     register,
@@ -25,14 +25,14 @@ export default function Dispensers() {
   } = useForm();
 
   useEffect(() => {
-    handleGetAllDispensers();
-  }, []);   
+    handleGetAllUsers();
+  }, []);
 
-  const handleGetAllDispensers = async () => {
+  const handleGetAllUsers = async () => {
     setLoading(true);
-    const response = await new DispensersAPI().dispensers();
+    const response = await new UsersAPI().users();
     if (response.ok) {
-        setDispenserData(response.data);
+      setUser(response.data);
     } else {
       toast.error("Something went wrong while fetching user");
     }
@@ -41,22 +41,22 @@ export default function Dispensers() {
 
   const submitForm = async (data) => {
     setLoading(true);
-    if (selectedDispenser != null) {
-      const response = await new DispensersAPI().updateDispenser(selectedDispenser.id, data);
+    if (selectedUser != null) {
+      const response = await new UsersAPI().updateUser(selectedUser.id, data);
       if(response.ok) {
-        toast.success("Successfully Updated Dispensing Data")
-        handleGetAllDispensers()
+        toast.success("Successfully Updated Term")
+        handleGetAllUsers()
         reset()
         setShowForm(false)
-        setSelectedDispenser(null)
+        setSelectedUser(null)
       }else{
         toast.error("Something went wrong while updating the term");
       }
     } else {
-      const response = await new DispensersAPI().createDispenser(data);
+      const response = await new UsersAPI().createUser(data);
       if (response.ok) {
         toast.success("Successfully Created Term");
-        handleGetAllDispensers();
+        handleGetAllUsers();
         reset();
         setShowForm(false);
       } else {
@@ -66,23 +66,23 @@ export default function Dispensers() {
     setLoading(false);
   };
 
-  const handleDeleteDispensing = async (id) => {
+  const handleDeleteUser = async (id) => {
     setLoading(true);
     setResetNotify(false);
-    const response = await new DispensersAPI().deleteDispenser(id);
+    const response = await new UsersAPI().deleteUser(id);
     if (response.ok) {
-      toast.success("Successfully Deleted Dispensing");
-      handleGetAllDispensers();
+      toast.success("Successfully Deleted Term");
+      handleGetAllUsers();
     } else {
       toast.error("Something went wrong while deleting user");
     }
-    setSelectedDispenser(null);
+    setSelectedUser(null);
     setLoading(false);
   };
 
   const handleCloseModal = () => {
     setShowForm(false);
-    setSelectedDispenser(null);
+    setSelectedUser(null);
   };
 
   return (
@@ -93,7 +93,7 @@ export default function Dispensers() {
           <HeaderMain/>
         </header>
       <div className="container m-t-10">
-        <div className="main-title-pages m-b-10"> Dispenser / Pharmacy 
+        <div className="main-title-pages m-b-10"> Users 
           <span className="m-l-10"> 
             <button className='btn btn-primary' size="sm" onClick={() => setShowForm(true)}>
               <i className="fa fa-plus fa-2xl"></i>
@@ -102,27 +102,29 @@ export default function Dispensers() {
         </div>
       <ReactTable
         pageCount={100}
-        list={dispenserData}
+        list={user}
         filterable
-        data={dispenserData}
+        data={user}
         columns={[
           {
             Header: "",
             columns: [
               {
-                Header: "Store Id",
-                id: "id",
-                accessor: (d) => d.id,
+                Header: "Username",
+                id: "username",
+                accessor: (d) => d.username,
               },
               {
-                Header: "Name",
-                id: "name",
-                accessor: (d) => d.name,
+                Header: "Full Name",
+                id: "fullname",
+                accessor: (d) => d.fullname,
               },
               {
-                Header: "Location",
-                id: "location",
-                accessor: (d) => d.location,
+                Header: "Type",
+                id: "userTypeId",
+                accessor: (d) => d.userTypeId === 2 && "Veterinarian"
+                                || d.userTypeId === 3 && "Dispensing"
+                                || d.userTypeId === 1 && "Farmer",
               },
 
               {
@@ -133,9 +135,11 @@ export default function Dispensers() {
                   <div style={{textAlign:'center'}} className=''>
                     <button
                       onClick={() => {
-                        setValue('name', row.original.name)
-                        setValue('location', row.original.location)
-                        setSelectedDispenser(row.original);
+                        setValue('username', row.original.username)
+                        setValue('password', row.original.password)
+                        setValue('fullname', row.original.fullname)
+                        setValue('userTypeId', row.original.userTypeId)
+                        setSelectedUser(row.original);
                         setShowForm(true);
                       }}
                       className='btn btn-info btn-sm m-r-5'
@@ -144,7 +148,7 @@ export default function Dispensers() {
                     </button>
                     <button
                       onClick={() => {
-                        setSelectedDispenser(row.original);
+                        setSelectedUser(row.original);
                         setResetNotify(true);
                       }}
                       className='btn btn-danger btn-sm m-r-5'
@@ -158,7 +162,7 @@ export default function Dispensers() {
           },
         ]}
         csv
-        edited={dispenserData}
+        edited={user}
         defaultPageSize={10}
         className='-highlight'
       />
@@ -166,11 +170,11 @@ export default function Dispensers() {
       <SweetAlert
         showCancel
         show={resetNotify}
-        onConfirm={() => handleDeleteDispensing(selectedDispenser.id)}
+        onConfirm={() => handleDeleteUser(selectedUser.id)}
         confirmBtnText='Confirm'
         confirmBtnBsStyle='danger'
         cancelBtnBsStyle='secondary'
-        title='Are you sure to delete this Dispensing?'
+        title='Are you sure to delete this term?'
         onCancel={() => setResetNotify(false)}
       >
       </SweetAlert>
@@ -178,48 +182,66 @@ export default function Dispensers() {
         <form onSubmit={handleSubmit(submitForm)}>
           <Modal.Header className='font-10' closeButton>
             <span className='font-20'>
-              {selectedDispenser != null
-                ? `Update ${selectedDispenser.name}`
-                : "Create Dispensing"}
+              {selectedUser != null
+                ? `Update ${selectedUser.username}`
+                : "Create User"}
             </span>
           </Modal.Header>
           <Modal.Body>
             <div className='col-md-12 m-b-15'>
-              <label className='control-label mb-2'>Name</label>
+              <label className='control-label mb-2'>Username</label>
                 <input
-                {...register("name", {
-                  required: "Name is required",
+                {...register("username", {
+                  required: "Username is required",
                 })}
                 type='text'
                 size='30'
                 className='form-control'
                 placeholder='Enter text here'
               />
-              <p className='text-danger'>{errors.name?.message}</p>
+              <p className='text-danger'>{errors.username?.message}</p>
 
-              <label className='control-label mb-2'>location</label>
+              <label className='control-label mb-2'>Password</label>
                 <input
-                {...register("location", {
-                  required: "location is required",
+                {...register("password", {
+                  required: "Password is required",
                 })}
                 type='text'
                 size='30'
                 className='form-control'
                 placeholder='Enter text here'
               />
-              <p className='text-danger'>{errors.location?.message}</p>
+              <p className='text-danger'>{errors.password?.message}</p>
 
-              
+              <label className='control-label mb-2'>Full Name</label>
+                <input
+                {...register("fullname", {
+                  required: "Full Name is required",
+                })}
+                type='text'
+                size='30'
+                className='form-control'
+                placeholder='Enter text here'
+              />
+              <p className='text-danger'>{errors.fullname?.message}</p>
+
+              <label className='control-label mb-2'>Type</label>
+              <select {...register("userTypeId", { required: true })}>
+                  <option value="">Select User Type</option>
+                  <option value='1'>Farmer</option>
+                  <option value='2'>Veterinarian</option>
+                  <option value='3'>Dispensing Unit</option>
+              </select>
             </div>
           </Modal.Body>
           <Modal.Footer>
-            {selectedDispenser != null ? 
+            {selectedUser != null ? 
                 <button type='submit' className='btn btn-primary'>
                 Update Save
               </button>  
               :
               <button type='submit' className='btn btn-primary'>
-              Save Dispensing
+              Save User
             </button>
             }
           </Modal.Footer>
