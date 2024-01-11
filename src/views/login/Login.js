@@ -50,6 +50,7 @@ function Login() {
       window.location.href = "/home"
     }else{
       toast.error(response.data.errorMessage)
+      console.log('error')
     }
   }
 
@@ -91,6 +92,7 @@ function Login() {
     //     </div>
     //   </div>
       <div style={{backgroundColor:"#f7f7f7"}}>
+        <ToastContainer></ToastContainer>
         <main class="form-signin w-100 m-auto" style={{maxWidth:"550px"}}>
         
         <div style={{fontFamily:"inherit", fontWeight:"bold", fontSize:50, textAlign:"center"}}>VETDRUMS</div>

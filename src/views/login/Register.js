@@ -32,7 +32,7 @@ export default function Register() {
   toast.success("Successfully Created User");
 
   useEffect(() => {
-    handleGetPrescription();
+    // handleGetPrescription();
   }, []);   
 
 	const submitForm = async (data) => {
@@ -48,17 +48,6 @@ export default function Register() {
         toast.error(response.data.errorMessage);
       }
     
-    setLoading(false);
-  };
-
-  const handleGetPrescription = async () => {
-    setLoading(true);
-    const response = await new PrescriptionAPI().getPrescription(presId);
-    if (response.ok) {
-        setPrescriptionData(response.data);
-    } else {
-      // toast.error("Something went wrong while fetching user");
-    }
     setLoading(false);
   };
 

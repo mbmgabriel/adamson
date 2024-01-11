@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Form } from "react-bootstrap";
+import { Modal, Form, Button } from "react-bootstrap";
 import ReactTable from "react-table-v6";
 import "react-table-v6/react-table.css";
 import { toast } from "react-toastify";
@@ -20,6 +20,11 @@ export default function Medicines() {
   const [resetNotify1, setResetNotify1] = useState(false);
   const [selectedMedicine, setSelectedMedicine] = useState(null);
   const [selectedFormat, setSelectedFormat] = useState(null);
+  const [showUploadModal, setShowUploadModal] = useState(false);
+  const [filesToUpload, setFilesToUpload] = useState({});
+
+  const notifyUpload = () => 
+  toast("Uploaded !");
 
   const {
     register,
@@ -39,9 +44,9 @@ export default function Medicines() {
     const response = await new MedicinesAPI().medicines();
     if (response.ok) {
         setMedicineData(response.data);
-        alert("Success Load")
+        // alert("Success Load")
     } else {
-      toast.error("Something went wrong while fetching user");
+      toast.error("Something went wrong while fetching medicines");
     }
     setLoading(false);
   };
@@ -152,6 +157,46 @@ export default function Medicines() {
     setSelectedFormat(null);
   };
 
+  const handleUploadFile = async(e) => {
+    e.preventDefault();
+    setShowUploadModal(false);
+    setLoading(true);
+    let response = await new MedicinesAPI().uploadMedicine(filesToUpload)
+    if(response.ok){
+      setLoading(false);
+      handleGetAllMedicines();
+      // toast.success("Successfully uploaded the class list.")
+      alert('success')
+      notifyUpload()
+    }else{
+      setLoading(false);
+      alert("Something went wrong while uploading medicine list")
+    }
+  }
+
+
+  const handleGetUploadedFile = (file) => {
+    getBase64(file).then(
+      data => {
+        console.log(file.name)
+        let toUpload = {
+          "base64String": data,
+          "fileName": file.name
+        };
+        setFilesToUpload(toUpload)
+      }
+    );
+  }
+
+  const getBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+    });
+  }
+
   return (
     <>
       {/* {loading && <FullScreenLoader />} */}
@@ -165,9 +210,10 @@ export default function Medicines() {
             <button className='btn btn-primary' size="sm" onClick={() => setShowForm(true)}>
               <i className="fa fa-plus fa-2xl"></i>
             </button> 
-            {/* <button className='btn btn-primary' size="sm" onClick={() => setShowForm1(true)}>
-              Add Type<i className="fa fa-plus fa-2xl"></i>
-            </button>  */}
+
+            <button className='btn btn-primary' size="sm" onClick={() => setShowUploadModal(true)}>
+              Upload<i className="fa fa-plus fa-2xl"></i>
+            </button> 
           </span>
         </div>
       <ReactTable
@@ -206,6 +252,7 @@ export default function Medicines() {
                         setValue('description', row.original.description)
                         setValue('formatType', (row.original.formatType))
                         setSelectedMedicine(row.original);
+                        
                         setShowForm(true);
                       }}
                       className='btn btn-info btn-sm m-r-5'
@@ -232,6 +279,24 @@ export default function Medicines() {
         defaultPageSize={10}
         className='-highlight'
       />
+
+      <Modal  size="lg" show={showUploadModal} onHide={()=> setShowUploadModal(false)} aria-labelledby="example-modal-sizes-title-lg">
+        <Modal.Header className='class-modal-header' closeButton>
+          <Modal.Title id="example-modal-sizes-title-lg" >
+            Upload Medicine
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmit={(e) => handleUploadFile(e)} >  
+            <Form.Group className="mb-3">
+              <Form.Control type="file" accept=".xls,.xlsx,.png,.jpg,.ods" onChange={(e) => handleGetUploadedFile(e.target.files[0])} />
+            </Form.Group>
+            <Form.Group className='right-btn'>
+              <Button className='tficolorbg-button' type='submit'>Upload</Button>
+            </Form.Group>
+          </Form> 
+        </Modal.Body>
+      </Modal>
 
       {/* <ReactTable
         pageCount={100}
@@ -354,7 +419,7 @@ export default function Medicines() {
                   <option value="">Select Type</option>
                   {
                     typeData.map((item) => (
-                        <option value={item.name}>
+                        <option value={item.id}>
                             {item.name}
                         </option>
                     ))}

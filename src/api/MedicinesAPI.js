@@ -23,6 +23,14 @@ export default class Auth extends Base {
     });
   };
 
+  uploadMedicine = async data => {
+    return this.sendRequest({
+      path: `/api/Product/Upload`,
+      method: 'POST',
+      data,
+    });
+  };
+
   updateFormat = async (id, data) => {
     return this.sendRequest({
       path: `/api/ProductFormat/${id}`,

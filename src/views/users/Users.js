@@ -60,7 +60,7 @@ export default function Users() {
     if (selectedUser != null) {
       const response = await new UsersAPI().updateUser(selectedUser.id, data);
       if(response.ok) {
-        toast.success("Successfully Updated Term")
+        toast.success("Successfully Updated User")
         handleGetAllUsers()
         reset()
         setShowForm(false)
@@ -71,7 +71,7 @@ export default function Users() {
     } else {
       const response = await new UsersAPI().createUser(data);
       if (response.ok) {
-        toast.success("Successfully Created Term");
+        toast.success("Successfully Created User");
         handleGetAllUsers();
         reset();
         setShowForm(false);
@@ -171,7 +171,7 @@ export default function Users() {
               {
                 Header: "Status",
                 id: "isActive",
-                accessor: (d) => d.isActive === true ? "Active" : "Inactive",
+                accessor: (d) => d.isActive === 1 ? "Active" : "Inactive",
               },
               {
                 Header: "Store Id",
