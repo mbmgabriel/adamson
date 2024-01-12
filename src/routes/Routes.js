@@ -27,7 +27,7 @@ export default function Routing() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const token = window.localStorage.getItem("token")
+    const token = window.sessionStorage.getItem("token")
     console.log({token})
     if(token != null){
       setIsLoggedIn(true)

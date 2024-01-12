@@ -6,10 +6,10 @@ import React, { useEffect, useState } from "react";
 import logo from "../../assets/images/image001.jpg"
 
 function HeaderMain() {
-  const usertype = localStorage.getItem("userType")
-  const prcno = localStorage.getItem("prc")
+  const usertype = sessionStorage.getItem("userType")
+  const prcno = sessionStorage.getItem("prc")
   const [headerColor, setHeaderColor] = ('')
-  const userfullname = localStorage.getItem("name")
+  const userfullname = sessionStorage.getItem("name")
 
   // const getColor = () => {
   //   if(usertype === "Veterenarian"){
@@ -61,15 +61,19 @@ function HeaderMain() {
             </Nav.Link>
             <Nav.Link eventKey={3} href="/profile"><span>{userfullname}</span></Nav.Link>
             <Nav.Link eventKey={2} href="/" onClick={() => {
-                        localStorage.removeItem("name");
-                        localStorage.removeItem("token");
-                        localStorage.removeItem("userType");
-                        localStorage.removeItem("trackingNo");
-                        localStorage.removeItem("pId");
-                        localStorage.removeItem("userID");
-                        localStorage.removeItem("user");
-                        localStorage.removeItem("lto");
-                        localStorage.removeItem("prc");
+                        sessionStorage.removeItem("name");
+                        sessionStorage.removeItem("token");
+                        sessionStorage.removeItem("userType");
+                        sessionStorage.removeItem("trackingNo");
+                        sessionStorage.removeItem("pId");
+                        sessionStorage.removeItem("userID");
+                        sessionStorage.removeItem("user");
+                        sessionStorage.removeItem("lto");
+                        sessionStorage.removeItem("prc");
+                        sessionStorage.removeItem("sId");
+                        sessionStorage.removeItem("ptr");
+                        sessionStorage.removeItem("prcimage");
+                        
                       }}>
               Logout
             </Nav.Link>

@@ -18,11 +18,11 @@ export default function PrescriptionCerttificate() {
   const [loading, setLoading] = useState(true);
   const [prescriptionData, setPrescriptionData] = useState([]);
   const [prescriptionDrug, setPrescriptionDrug] = useState([]);
-	const presId = localStorage.getItem("pId")
-  const fullname = localStorage.getItem("name")
-  const prc = localStorage.getItem("prc")
-  const ptr = localStorage.getItem("ptr")
-  const userid = localStorage.getItem("userID")
+	const presId = sessionStorage.getItem("pId")
+  const fullname = sessionStorage.getItem("name")
+  const prc = sessionStorage.getItem("prc")
+  const ptr = sessionStorage.getItem("ptr")
+  const userid = sessionStorage.getItem("userID")
   const siglink = `https://cdn.vetdrums.org/user/${userid}/Signature/Signature.png`
 
   const {

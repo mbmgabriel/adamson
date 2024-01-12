@@ -36,9 +36,9 @@ export default function DispensingDrugs() {
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [filesToUpload, setFilesToUpload] = useState({});
   const navigate = useNavigate();
-  const presId = localStorage.getItem("pId")
+  const presId = sessionStorage.getItem("pId")
 	const [drugDispensed, setDrugDispensed] = useState([])
-	const storeId = localStorage.getItem("userID")
+	const storeId = sessionStorage.getItem("sId")
   var moment = require('moment');
 
   const {
@@ -317,7 +317,7 @@ export default function DispensingDrugs() {
 												{dispenseData.patientName}
 											</td>
 											<td>
-												{dispenseData.datePrescribed}
+												{moment(dispenseData.datePrescribed).format('MMMM D YYYY')}
 											</td>
 											<td>
 											{presDrugs.map((pd,index)=>(
@@ -329,7 +329,6 @@ export default function DispensingDrugs() {
 													<span>Strength: {pd.strength}</span>
 													<br></br>
 													<span>Unit Size: {pd.unitSize}</span>
-													<hr></hr>
 												</span>
 											))}
 											</td>
@@ -337,13 +336,13 @@ export default function DispensingDrugs() {
 											<button
 												onClick={() => {
 													setSelectedPrescription(dispenseData);
-													localStorage.setItem("trackingNo", dispenseData.trackingNo)
-                          localStorage.setItem("productid", presDrugs[0].productId)
-                          localStorage.setItem("pname", presDrugs[0].productName)
-                          localStorage.setItem("amount", presDrugs[0].amount)
-													window.open(`https://vetdrums.org/dispensed`, '_blank')
+													sessionStorage.setItem("trackingNo", dispenseData.trackingNo)
+                          sessionStorage.setItem("productid", presDrugs[0].productId)
+                          sessionStorage.setItem("pname", presDrugs[0].productName)
+                          sessionStorage.setItem("amount", presDrugs[0].amount)
+													// window.open(`https://vetdrums.org/dispensed`, '_blank')
 													// window.open(`http://localhost:3000/dispensed/${presDrugs.id}`, '_blank')
-                          // window.open(`http://localhost:3000/dispensed`, '_blank')
+                          window.open(`http://localhost:3000/dispensed`, '_blank')
 												}}
 												className='btn btn-danger btn-sm m-r-5'
 											>
@@ -356,8 +355,8 @@ export default function DispensingDrugs() {
 							</div>
             </div>
 					</Form>
-			
-				Dispensed Drugs
+			  <hr></hr>
+				<div className="main-title-pages m-b-10">Dispensed Drugs</div>
 				{/* {drugDispensed.productName} */}
 				<ReactTable
         pageCount={100}

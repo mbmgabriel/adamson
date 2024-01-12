@@ -18,7 +18,7 @@ export default function Register() {
   const [prescriptionData, setPrescriptionData] = useState([]);
 	const [showForm, setShowForm] = useState(false);
   const [resetNotify, setResetNotify] = useState(false);
-	const presId = localStorage.getItem("pId")
+	const presId = sessionStorage.getItem("pId")
 
   const {
     register,

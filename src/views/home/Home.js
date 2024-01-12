@@ -29,14 +29,14 @@ function Home() {
   const [medLabel, setMedLabel] = useState([])
   const [disLabel, setDisLabel] = useState([])
   const [disData, setDisData] = useState([])
-  const userfullname = localStorage.getItem("name")
-  const prc = localStorage.getItem("prc")
-  const lto = localStorage.getItem("lto")
-  const usertype = localStorage.getItem("userType")
-  const userid = localStorage.getItem("userID")
-  const storeid = localStorage.getItem("storeID")
-  const pId = localStorage.getItem("pId")
-  // const storeId = localStorage.getItem("userID")
+  const userfullname = sessionStorage.getItem("name")
+  const prc = sessionStorage.getItem("prc")
+  const lto = sessionStorage.getItem("lto")
+  const usertype = sessionStorage.getItem("userType")
+  const userid = sessionStorage.getItem("userID")
+  const storeid = sessionStorage.getItem("storeID")
+  const pId = sessionStorage.getItem("pId")
+  // const storeId = sessionStorage.getItem("userID")
   const [drugDispensed, setdrugDispensed] = useState([])
   const [drugDispensed1, setdrugDispensed1] = useState([])
   const [drugDispensed2, setdrugDispensed2] = useState([])
@@ -51,7 +51,7 @@ function Home() {
       }
 
   const getStoreID = (e) => {
-    localStorage.setItem('storeID', e.target.value)
+    sessionStorage.setItem('storeID', e.target.value)
   }
 
   const getDisp = (e) => {
@@ -301,7 +301,7 @@ const pproduct = userPrescription.map((item, index) => (
       </Alert>}
       <div className="container">
         <div className="main-title-pages m-t-10 m-b-10">
-          Dashboard
+          {usertype === "admin" ? "Dashboard" : "Welcome to VETDRUMS"}
         </div>
         <Row>
           {/* <Col md={4}>
