@@ -165,7 +165,7 @@ export default function Prescribed() {
         	</div>
 					<form onSubmit={handleSubmit(submitForm)}>
             <div class="mb-3 row">
-              <label className='col-sm-2 col-form-label'>Title</label>
+              <label className='col-sm-2 col-form-label'>Diagnosis</label>
                 <div class="col-sm-10">
                 <input
                   {...register("title", {
@@ -180,7 +180,8 @@ export default function Prescribed() {
               </div>
             </div>
             <div class="mb-3 row">
-              <label className='col-sm-2 col-form-label'>Description</label>
+              <label className='col-sm-2 col-form-label'>Purpose</label>
+              {/* <label className='col-sm-2 col-form-label'>Description</label>
               <div class="col-sm-10">
                 <textarea
                   {...register("description", {
@@ -192,7 +193,14 @@ export default function Prescribed() {
                   placeholder='Enter text here'
                 />
                 <p className='text-danger'>{errors.description?.message}</p>
-              </div>
+              </div> */}
+              <div class="col-sm-10"></div>
+              <Form.Select {...register(`description`)} >
+										<option value="">Select Purpose</option>
+                    <option value="treatment">treatment</option>
+                    <option value="control">control</option>
+                    <option value="prevention">prevention</option>
+									</Form.Select>
             </div>
 
               {/* <label className='col-sm-2 col-form-label'>Amount</label>
