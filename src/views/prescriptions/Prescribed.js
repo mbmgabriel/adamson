@@ -20,6 +20,7 @@ export default function Prescribed() {
 	const [medicineData, setMedicineData] = useState([]);
   const [animalData, setAnimalData] = useState([]);
   const [patientData, setPatientData] = useState([]);
+  const [tempData, setTempData] = useState([]);
 	const presId = sessionStorage.getItem("pId")
   const userid = sessionStorage.getItem("userID")
   const siglink = `https://cdn.vetdrums.org/user/${userid}/Signature/Signature.png`
@@ -99,9 +100,61 @@ export default function Prescribed() {
 
 	const submitForm = async (data) => {
     setLoading(true);
+    console.log({data})
+    const arr = data
+    setTempData([...tempData, arr]);
     
-			console.log({data})
-			let formattedData = {}
+		// 	let formattedData = {}
+		// 	let prescriptionProduct = []
+		// 	Object.keys(data).forEach(item => {
+		// 		console.log({item})
+		// 		if(item.includes('prescriptionProduct')){
+		// 			prescriptionProduct.push(data[item])
+		// 		}else{
+		// 			formattedData[item] = data[item]
+		// 		}
+		// 	})
+		// 	console.log({prescriptionData})
+		// 	formattedData.prescriptionProduct = prescriptionProduct
+		// 	console.log({formattedData})
+
+
+
+    //   const response = await new PrescriptionAPI().createPrescriptions(formattedData);
+    //   if (response.ok) {
+    //     notifySuccessPrescription()
+    //     handleGetPrescription();
+    //     reset();
+    //     // setShowForm(false);
+		// 		navigate('/prescriptions')
+    //   } else {
+    //     toast.error(response.data.errorMessage);
+    //     handleGetPrescription();
+		// handleGetAllMedicines();
+    // handleGetAllAnimals();
+    // handleGetAllPatients();
+    //   }
+    setLoading(false);
+  };
+
+  const clickFile = (link) => {
+    navigator.clipboard.writeText(link)
+    toast.success('File link copied to clipboard.')
+  }
+  console.log({tempData})
+
+  useEffect(() => {
+    console.log({tempData})
+  }, [tempData]);
+
+  const handleSave = async () => {
+    const e = document.getElementById("client");
+    const value = e.value;
+    const text = e.options[e.selectedIndex].text;
+    console.log({tempData, value, text, patientData});
+    tempData.forEach(async data => {
+      data.patientId = value
+      let formattedData = {}
 			let prescriptionProduct = []
 			Object.keys(data).forEach(item => {
 				console.log({item})
@@ -127,17 +180,13 @@ export default function Prescribed() {
       } else {
         toast.error(response.data.errorMessage);
         handleGetPrescription();
-		handleGetAllMedicines();
-    handleGetAllAnimals();
-    handleGetAllPatients();
+        handleGetAllMedicines();
+        handleGetAllAnimals();
+        handleGetAllPatients();
       }
-    setLoading(false);
-  };
-
-  const clickFile = (link) => {
-    navigator.clipboard.writeText(link)
-    toast.success('File link copied to clipboard.')
+    })
   }
+  
 
   return (
     <>
@@ -219,9 +268,9 @@ export default function Prescribed() {
               <label className='col-sm-2 col-form-label'>Signature Link</label>
               <div class="col-sm-10">
                 <input
-                {...register("signatureLink", {
-                  required: "signatureLink is required",
-                })}
+                // {...register("signatureLink", {
+                //   required: "signatureLink is required",
+                // })}
                 type='text'
                 size='30'
                 className='form-control'
@@ -345,13 +394,18 @@ export default function Prescribed() {
                   <span style={{color:"blue", fontSize:"12px"}}>Active ingredient content in %</span>
                   </div></div>
 									<hr></hr>
+							<button type='submit' className='btn btn-primary'>
+              Add Prescription
+            </button>
+
+						</form>
 							<br></br>
 							<br></br>
 
               <div class="mb-3 row">
               <label className='col-sm-2 col-form-label m-b-10'>Client</label>
               <div class="col-sm-10">
-              <Form.Select {...register("patientId", { required: true })}>
+              <select id="client">
                   <option value="">Select Client/Farmer</option>
                   {
                     patientData.map((item, index) => (
@@ -362,13 +416,12 @@ export default function Prescribed() {
                           {item.patientName}
                         </option>
                     ))}
-              </Form.Select>
+              </select>
               </div></div>
 							<br></br>
-							<button type='submit' className='btn btn-primary'>
-              Save Prescription
-            </button>
-						</form>
+              <button onClick={() => handleSave()} className='btn btn-primary'>
+                Add Prescription
+              </button>
             </div>		
       </div>
     </>
