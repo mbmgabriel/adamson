@@ -168,8 +168,7 @@ export default function Prescribed() {
 			formattedData.prescriptionProduct = prescriptionProduct
 			console.log({formattedData})
 
-
-
+ß
       const response = await new PrescriptionAPI().createPrescriptions(formattedData);
       if (response.ok) {
         notifySuccessPrescription()
@@ -243,13 +242,15 @@ export default function Prescribed() {
                 />
                 <p className='text-danger'>{errors.description?.message}</p>
               </div> */}
-              <div class="col-sm-10"></div>
+              <div class="col-sm-10">
               <Form.Select {...register(`description`)} >
 										<option value="">Select Purpose</option>
                     <option value="treatment">treatment</option>
                     <option value="control">control</option>
                     <option value="prevention">prevention</option>
+                    
 									</Form.Select>
+                  </div>
             </div>
 
               {/* <label className='col-sm-2 col-form-label'>Amount</label>
@@ -316,11 +317,13 @@ export default function Prescribed() {
               </div>
               </div>
 
+
+              {/* Medicine Details */}
               <div class="mb-3 row">
               <label className='col-sm-2 col-form-label'>Drug</label>
 							{/* field array */}
                 <div class="col-sm-10">
-									<Form.Select {...register(`prescriptionProduct.productId`)} >
+									<Form.Select {...register(`prescriptionProduct[0].productId`)} >
 										<option value="">Select Drug</option>
 										{
 											medicineData.map((item, index) => (
@@ -336,7 +339,7 @@ export default function Prescribed() {
 									<label className='col-sm-2 col-form-label'>Quantity</label>
                   <div class="col-sm-10">
 										<input
-										{...register(`prescriptionProduct.amount`, {
+										{...register(`prescriptionProduct[0].amount`, {
 											required: "Amount is required",
 										})}
 										type='text'
@@ -344,7 +347,7 @@ export default function Prescribed() {
 										className='form-control m-b-10'
 										placeholder='quantity of products'
 									/>
-                  <Form.Select {...register(`prescriptionProduct.amountMeasurement`)} >
+                  <Form.Select {...register(`prescriptionProduct[0].amountMeasurement`)} >
 										<option value="">Select Measurement</option>
                     <option value="bottle/s">bottle</option>
                     <option value="cannister/s">cannister</option>
@@ -359,7 +362,7 @@ export default function Prescribed() {
 									<label className='col-sm-2 col-form-label'>Unit Size</label>
                   <div class="col-sm-10">
 										<input
-										{...register(`prescriptionProduct.unitSize`, {
+										{...register(`prescriptionProduct[0].unitSize`, {
 											required: "Unit Size is required",
 										})}
 										type='text'
@@ -368,7 +371,7 @@ export default function Prescribed() {
 										placeholder='volume of product in each bag...'
 									/>
                   
-                  <Form.Select {...register(`prescriptionProduct.measurement`)} >
+                  <Form.Select {...register(`prescriptionProduct[0].measurement`)} >
 										<option value="">Select Measurement</option>
                     <option value="milligram/s">milligram</option>
                     <option value="gram/s">gram</option>
@@ -383,7 +386,85 @@ export default function Prescribed() {
 									<label className='col-sm-2 col-form-label'>Strength</label>
                   <div class="col-sm-10">
 										<input
-										{...register(`prescriptionProduct.strength`, {
+										{...register(`prescriptionProduct[0].strength`, {
+											required: "Strength is required",
+										})}
+										type='text'
+										size='30'
+										className='form-control m-b-10'
+										placeholder='active ingredient content in percent'
+									/>
+                  <span style={{color:"blue", fontSize:"12px"}}>Active ingredient content in %</span>
+                  </div></div>
+
+                  <div class="mb-3 row">
+              <label className='col-sm-2 col-form-label'>Drug</label>
+							{/* field array */}
+                <div class="col-sm-10">
+									<Form.Select {...register(`prescriptionProduct[1].productId`)} >
+										<option value="">Select Drug</option>
+										{
+											medicineData.map((item, index) => (
+													<option key={index} value={item.id}>
+															{item.name}<span> - {item.description}</span> - {item.formatType}
+													</option>
+											))}
+									</Form.Select>
+                </div>
+                </div>
+
+                <div class="mb-3 row">
+									<label className='col-sm-2 col-form-label'>Quantity</label>
+                  <div class="col-sm-10">
+										<input
+										{...register(`prescriptionProduct[1].amount`, {
+											required: "Amount is required",
+										})}
+										type='text'
+										size='30'
+										className='form-control m-b-10'
+										placeholder='quantity of products'
+									/>
+                  <Form.Select {...register(`prescriptionProduct[1].amountMeasurement`)} >
+										<option value="">Select Measurement</option>
+                    <option value="bottle/s">bottle</option>
+                    <option value="cannister/s">cannister</option>
+                    <option value="sack/s">sack</option>
+                    <option value="bag/s">bag</option>
+									</Form.Select>
+                  <span style={{color:"blue", fontSize:"12px"}}>*Number of product unit sizes to dispense</span>
+                </div>
+                </div>
+
+                <div class="mb-3 row">
+									<label className='col-sm-2 col-form-label'>Unit Size</label>
+                  <div class="col-sm-10">
+										<input
+										{...register(`prescriptionProduct[1].unitSize`, {
+											required: "Unit Size is required",
+										})}
+										type='text'
+										size='30'
+										className='form-control m-b-10'
+										placeholder='volume of product in each bag...'
+									/>
+                  
+                  <Form.Select {...register(`prescriptionProduct[1].measurement`)} >
+										<option value="">Select Measurement</option>
+                    <option value="milligram/s">milligram</option>
+                    <option value="gram/s">gram</option>
+                    <option value="kilogram/s">kilogram</option>
+                    <option value="milliliter/s">milliliter</option>
+                    <option value="liter/s">liter</option>
+									</Form.Select>
+                  <span style={{color:"blue", fontSize:"12px"}}>Volume of product in each format bag, cannister, bottle etc...</span>
+                  </div></div>
+
+                  <div class="mb-3 row">
+									<label className='col-sm-2 col-form-label'>Strength</label>
+                  <div class="col-sm-10">
+										<input
+										{...register(`prescriptionProduct[1].strength`, {
 											required: "Strength is required",
 										})}
 										type='text'
@@ -394,6 +475,9 @@ export default function Prescribed() {
                   <span style={{color:"blue", fontSize:"12px"}}>Active ingredient content in %</span>
                   </div></div>
 									<hr></hr>
+
+
+
 							<button type='submit' className='btn btn-primary'>
               Add Prescription
             </button>
@@ -420,7 +504,7 @@ export default function Prescribed() {
               </div></div>
 							<br></br>
               <button onClick={() => handleSave()} className='btn btn-primary'>
-                Add Prescription
+                Save Prescription
               </button>
             </div>		
       </div>
