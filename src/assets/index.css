@@ -1856,12 +1856,63 @@
     font-weight: bold;
   }
 
+  .header-title-addpres {
+    font-size: 20px;
+    font-weight: bold;
+    box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,.075);
+    padding: 10px;
+  }
+
+  .header-title-geninfo {
+    font-size: 18px;
+    font-weight: bold;
+  }
+
   .border-1px {
     border: 1px solid black;
   }
 
   .nav-link:hover {
     color:teal !important;
+  }
+
+  .pcard {
+    border: none;
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15);
+    --bs-card-spacer-y: 2rem;
+    --bs-card-spacer-x: 2rem;
+    --bs-card-title-spacer-y: 1rem;
+    --bs-card-border-width: 1px;
+    --bs-card-border-color: transparent;
+    --bs-card-border-radius: 1rem;
+    --bs-card-box-shadow: ;
+    --bs-card-inner-border-radius: calc(1rem - 1px);
+    --bs-card-cap-padding-y: 1rem;
+    --bs-card-cap-padding-x: 2rem;
+    --bs-card-cap-bg: rgba(0,0,0,.03);
+    --bs-card-cap-color: ;
+    --bs-card-height: ;
+    --bs-card-color: ;
+    --bs-card-bg: #fff;
+    --bs-card-img-overlay-padding: 1rem;
+    --bs-card-group-margin: 0.75rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    height: var(--bs-card-height);
+    word-wrap: break-word;
+    background-color: var(--bs-card-bg);
+    background-clip: border-box;
+    border: var(--bs-card-border-width) solid var(--bs-card-border-color);
+    border-radius: var(--bs-card-border-radius);
+    /* padding: 10px; */
+
+    .geninfo {
+      border:1px dashed gray;
+      padding: 10px;
+      border-radius: var(--bs-card-border-radius);
+    }
   }
 
 

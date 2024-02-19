@@ -48,6 +48,8 @@ export default function Dispensed({setSelectedPrescription, selectedPrescription
 	const storeId = JSON.parse(sessionStorage.getItem("userID"))
 	const productid = sessionStorage.getItem("productid")
 	const pname = sessionStorage.getItem("pname")
+	const pname1 = sessionStorage.getItem("pname1")
+	const pname2 = sessionStorage.getItem("pname2")
 	const amountD = sessionStorage.getItem("amount")
 
 	const notifySuccess = () => 
@@ -179,23 +181,22 @@ export default function Dispensed({setSelectedPrescription, selectedPrescription
 
 							<label className='control-label mb-2' style={{fontWeight:"bold"}}>Drug</label>
 							<div>
-							<label className='control-label mb-2' style={{fontWeight:"bold", color:"blue"}}>{pname}</label>
+							<label className='control-label mb-2' style={{fontWeight:"bold", color:"blue"}}>{"1." + pname}</label><br></br>
+							<label className='control-label mb-2' style={{fontWeight:"bold", color:"blue"}}>{pname1 !== '' ? "2." + pname1 : ""}</label><br></br>
+							<label className='control-label mb-2' style={{fontWeight:"bold", color:"blue"}}>{pname2 !== '' ? "3." + pname2 : ""}</label><br></br>
 							</div>
-
-							<span style={{visibility:"hidden"}}>
-							<label className='control-label mb-2' style={{fontWeight:"bold"}}>Product ID</label>
+							{/* <label className='control-label mb-2' style={{fontWeight:"bold"}}>Product ID</label> */}
 							<input
 								{...register(`dispenseProduct.productId`, {
 									required: "Drug is required",
 								})}
+								style={{visibility:"hidden"}}
 								value={productid}
 								type='text'
 								size='30'
 								className='form-control m-b-10'
 								placeholder='Enter text here'
 							/>
-							</span>
-
 							<label className='control-label mb-2' style={{fontWeight:"bold"}}>Brand</label>
 								<input
 								{...register(`dispenseProduct.brand`, {

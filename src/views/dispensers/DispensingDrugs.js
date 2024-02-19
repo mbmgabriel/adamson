@@ -289,7 +289,7 @@ export default function DispensingDrugs() {
         </header>
         <div className="container m-t-10">
 					<Form onSubmit={handleGetDispense}>
-            <div className="main-title-pages m-b-10"> Prescription to Dispense 
+            <div className="m-b-10"> Prescription to Dispense 
 							<div className="m-b-20"> 
 								<input
 									type='text'
@@ -322,13 +322,15 @@ export default function DispensingDrugs() {
 											<td>
 											{presDrugs.map((pd,index)=>(
 												<span>
-													<span>{pd.productName}</span>
+													<span>Drug Name: {pd.productName}</span>
 													<br></br>
-													<span>Amount: {pd.amount}</span>
+													<span>Quantity: {pd.amount + " " + pd.amountMeasurement}</span>
 													<br></br>
 													<span>Strength: {pd.strength}</span>
 													<br></br>
-													<span>Unit Size: {pd.unitSize}</span>
+													<span>Unit Size: {pd.unitSize + " " + pd.measurement}</span>
+                          <br></br>
+                          <hr></hr>
 												</span>
 											))}
 											</td>
@@ -339,6 +341,8 @@ export default function DispensingDrugs() {
 													sessionStorage.setItem("trackingNo", dispenseData.trackingNo)
                           sessionStorage.setItem("productid", presDrugs[0].productId)
                           sessionStorage.setItem("pname", presDrugs[0].productName)
+                          sessionStorage.setItem("pname1", presDrugs[1].productName)
+                          sessionStorage.setItem("pname2", presDrugs[2].productName)
                           sessionStorage.setItem("amount", presDrugs[0].amount)
 													// window.open(`https://vetdrums.org/dispensed`, '_blank')
 													// window.open(`http://localhost:3000/dispensed/${presDrugs.id}`, '_blank')
