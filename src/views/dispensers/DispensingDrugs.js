@@ -40,6 +40,7 @@ export default function DispensingDrugs() {
 	const [drugDispensed, setDrugDispensed] = useState([])
 	const storeId = sessionStorage.getItem("sId")
   var moment = require('moment');
+  const pname2 =  sessionStorage.getItem("pname2")
 
   const {
     register,
@@ -342,7 +343,10 @@ export default function DispensingDrugs() {
                           sessionStorage.setItem("productid", presDrugs[0].productId)
                           sessionStorage.setItem("pname", presDrugs[0].productName)
                           sessionStorage.setItem("pname1", presDrugs[1].productName)
-                          sessionStorage.setItem("pname2", presDrugs[2].productName)
+                          sessionStorage.setItem("pname2", presDrugs[2]?.productName)
+                          // {pname2 === "" && sessionStorage.setItem("pname2", presDrugs[2]?.productName)}
+                          // {pname1 !== "null" && sessionStorage.setItem("pname1", presDrugs[1].productName)}
+                          // {pname2 !== "" && sessionStorage.setItem("pname2", presDrugs[2].productName)}
                           sessionStorage.setItem("amount", presDrugs[0].amount)
 													// window.open(`https://vetdrums.org/dispensed`, '_blank')
 													// window.open(`http://localhost:3000/dispensed/${presDrugs.id}`, '_blank')

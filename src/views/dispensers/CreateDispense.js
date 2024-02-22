@@ -182,8 +182,8 @@ export default function Dispensed({setSelectedPrescription, selectedPrescription
 							<label className='control-label mb-2' style={{fontWeight:"bold"}}>Drug</label>
 							<div>
 							<label className='control-label mb-2' style={{fontWeight:"bold", color:"blue"}}>{"1." + pname}</label><br></br>
-							<label className='control-label mb-2' style={{fontWeight:"bold", color:"blue"}}>{pname1 !== '' ? "2." + pname1 : ""}</label><br></br>
-							<label className='control-label mb-2' style={{fontWeight:"bold", color:"blue"}}>{pname2 !== '' ? "3." + pname2 : ""}</label><br></br>
+							<label className='control-label mb-2' style={{fontWeight:"bold", color:"blue"}}>{pname1 !== 'undefined' ? "2." + pname1 : ""}</label><br></br>
+							<label className='control-label mb-2' style={{fontWeight:"bold", color:"blue"}}>{pname2 !== 'undefined' ? "3." + pname2 : ""}</label><br></br>
 							</div>
 							{/* <label className='control-label mb-2' style={{fontWeight:"bold"}}>Product ID</label> */}
 							<input
