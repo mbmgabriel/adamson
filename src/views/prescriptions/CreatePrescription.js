@@ -31,7 +31,9 @@ export default function Prescriptions1() {
     const [pButton2, setPButton2] = useState(true);
     const [pButton3, setPButton3] = useState(false);
     const [finalizedPrescriptions, setFinalizedPrescriptions] = useState(false);
-    const [prescButton, setPrescButton] = useState(false)
+    const [prescButton, setPrescButton] = useState(false);
+    const [tempDeleteData, setTempDeleteData] = useState([]);
+    const [showForm, setShowForm] = useState(false);
 
     const navigate = useNavigate()
     const { control } = useForm();
@@ -57,6 +59,10 @@ export default function Prescriptions1() {
     handleGetAllAnimals();
     handleGetAllPatients();
   }, []);
+
+  const handleCloseModal = () => {
+    setShowForm(false);
+  };
 
   const handleGetAllMedicines = async () => {
     setLoading(true);
@@ -105,7 +111,10 @@ export default function Prescriptions1() {
     setLoading(false);
   };
 
+  console.log({tempDeleteData})
+
   const submitForm = async (data) => {
+    console.log({data})
     setLoading(true);
     if (
       data.prescriptionProduct[0].amount !== "" &&
@@ -115,12 +124,18 @@ export default function Prescriptions1() {
       data.prescriptionProduct[0].unitSize !== "" &&
       data.prescriptionProduct[0].strength !== ""
     ) {
-      const arr = data
+
+      const arr = data;
+
+      tempDeleteData.push(arr);
+
       setTempData([...tempData, arr]);
       console.log(data)
-      setPrescButton(true)
+      setPrescButton(true);
+      console.log({tempData, "arr" : arr.prescriptionProduct})
+
       if(addForm === true){
-        setAddForm(false)
+        setAddForm(false);
       }
       if(addForm1 === true){
         setAddForm1(false)
@@ -130,6 +145,14 @@ export default function Prescriptions1() {
       }
     }
     setLoading(false);
+  };
+
+  const handleDeleteDrugFromArray = () => {
+    const index = tempDeleteData?.indexOf(0);
+
+    tempDeleteData.splice(index, 1);
+
+    console.log({tempDeleteData})
   };
 
   const clickFile = (link) => {
@@ -145,14 +168,14 @@ export default function Prescriptions1() {
     const value = e.value;
     const text = e.options[e.selectedIndex].text;
 
-    tempData.forEach(async data => {
+    tempDeleteData.forEach(async data => {
       data.patientId = value
       data.petTypeId = parseInt(data?.petTypeId)
       data.patientId = parseInt(data?.patientId)
       data.noOfPets = parseInt(data?.noOfPets)
 
-      let formattedData = {}
-      let prescriptionProduct = []
+      let formattedData = {};
+      let prescriptionProduct = [];
 
       Object.keys(data).forEach(item => {
         if (item.includes('prescriptionProduct')) {
@@ -163,14 +186,16 @@ export default function Prescriptions1() {
               item?.strength !== "" ||
               item?.unitSize !== ""
             ) {
-              prescriptionProduct.push(item)
+              return prescriptionProduct.push(item);
             }
           })
         } else {
-          formattedData[item] = data[item]
+          return formattedData[item] = data[item];
         }
       })
-      formattedData.prescriptionProduct = prescriptionProduct
+      formattedData.prescriptionProduct = prescriptionProduct;
+
+      console.log({formattedData_lenth: formattedData?.prescriptionProduct ?? '' })
 
       const response = await new PrescriptionAPI().createPrescriptions(formattedData);
 
@@ -179,7 +204,7 @@ export default function Prescriptions1() {
         handleGetPrescription();
         reset();
         // setShowForm(false);
-        navigate('/prescriptions')
+        // navigate('/prescriptions')
       } else {
         toast.error(response.data.errorMessage);
         handleGetPrescription();
@@ -228,6 +253,19 @@ export default function Prescriptions1() {
       />
       <ToastContainer />
       {/* End of Toast */}
+
+      <Modal show={showForm} onHide={() => handleCloseModal()}>
+        <Modal.Header className='font-10' closeButton>
+          Prescription Preview
+        </Modal.Header>
+        <Modal.Body>
+          {tempData.map((item) => (
+            item.prescriptionProduct.map((item1)=>(
+              <span>{item1.strength}</span>
+            ))
+          ))}
+        </Modal.Body>
+      </Modal>
 
       <div className="App mb-5">
         <header className="App-header">
@@ -315,6 +353,11 @@ export default function Prescriptions1() {
                     <p className='text-danger'>{errors.signatureLink?.message}</p>
                   </div>
                 </div>
+                {tempData.map((item) => (
+                  item.prescriptionProduct.map((item1)=>(
+                    <span>{item1.strength}</span>
+                  ))
+                ))}
 
                 {
                 addForm &&
@@ -616,11 +659,19 @@ export default function Prescriptions1() {
                   >
                     Confirm Prescription
                   </button>
+                  {/* <button
+                    className='btn btn-primary'
+                    onClick={() => setShowForm(true)}
+                  >
+                    See
+                  </button> */}
                   <p style={{ color: '#f01', fontStyle: 'italic' }}>{`* always add prescription before saving prescription`}</p>
                 </form>
                 {pButton1 && <button className="mx-1" onClick={() => handleAddPrescription()}>{`Add Drug`}</button>}
                 {pButton2 && <button className="btn btn-primary" onClick={() => handleAddPrescription1()}>{`Add Another Drug`}</button>}
                 {pButton3 && <button className="btn btn-primary" onClick={() => handleAddPrescription2()}>{`Add Another Drug`}</button>}
+                {<button className="btn btn-primary" onClick={() => handleDeleteDrugFromArray()}>{`Remove Drug`}</button>}
+
                 <br />
                 <br />
 

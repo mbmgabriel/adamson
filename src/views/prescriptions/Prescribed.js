@@ -114,15 +114,18 @@ export default function Prescribed() {
     ) {
       const arr = data
       setTempData([...tempData, arr]);
-      setPrescButton(true)
+      setPrescButton(true);
+
     }
     setLoading(false);
+    console.log('tempData', tempData)
+
   };
 
   const clickFile = (link) => {
     navigator.clipboard.writeText(link)
     toast.success('File link copied to clipboard.')
-  }
+  };
 
   useEffect(() => {
   }, [tempData]);

@@ -484,6 +484,9 @@ const pproduct = userPrescription.map((item, index) => (
             <th>Track No.</th>
             <th>Prescription Name</th>
             <th>Date Prescribed</th>
+            <th>Prescribed By</th>
+            <th>Drug</th>
+            <th>Status</th>
           </tr>
         </thead>
         <tbody>
@@ -492,9 +495,12 @@ const pproduct = userPrescription.map((item, index) => (
             <td>{item?.trackingNo}</td>
             <td>{item?.title}</td>
             <td>{item?.datePrescribed}</td>
+            <td>{item?.prescribedBy}</td>
+            <td>
             {item.prescriptionProduct.map((pp,index)=>(
-              <td>{pp?.productName}</td>
+              <span>{pp?.productName + " " + "|"}</span>
             ))}
+            </td>
             <td>{item?.trackingNo === null ? 
                 <Badge pill bg="success">
                   Dispensed
